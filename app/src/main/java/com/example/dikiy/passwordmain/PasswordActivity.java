@@ -11,9 +11,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+
 import android.widget.Toast;
 
-import com.example.dikiy.passwordmain.MainRecycler.MainItem;
 import com.example.dikiy.passwordmain.PasswordActivityPac.PasswordList;
 import com.example.dikiy.passwordmain.PasswordActivityPac.PasswordModel;
 import com.example.dikiy.passwordmain.PasswordActivityPac.PasswordPresenter;
@@ -35,7 +35,7 @@ public class PasswordActivity extends AppCompatActivity implements View.OnClickL
     private RecyclerAdapter mAdapter, mAdapter2;
     private RecyclerItem movie, movie2;
     EditText addTag, addTag2, etUrl, etLogin, etPassword, etname, etlog;
-    ImageView addTagB, addTagB2, changeIc, acceptIc, copyurl, copylogin, copypassword;
+    ImageView addTagB, addTagB2, editandclose, acept, copyurl, copylogin, copypassword;
     boolean stat = false;
     String name = "name";
     String url = "url";
@@ -52,15 +52,15 @@ public class PasswordActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.create_password_activity);
 
         init();
-
+        loadDefault();
     }
     private void init(){
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         recyclerView2 = findViewById(R.id.rv2);
         recyclerView = (RecyclerView) findViewById(R.id.rv);
-        changeIc = findViewById(R.id.editandclose);
-        acceptIc = findViewById(R.id.acept);
+        editandclose = findViewById(R.id.editandclose);
+        acept = findViewById(R.id.acept);
         copyurl = findViewById(R.id.copyurl);
         copylogin = findViewById(R.id.copylogin);
         copypassword = findViewById(R.id.copypassword);
@@ -69,8 +69,18 @@ public class PasswordActivity extends AppCompatActivity implements View.OnClickL
         etPassword = findViewById(R.id.etpassword);
         etname = findViewById(R.id.etname);
         etlog = findViewById(R.id.etlog);
-        changeIc.setOnClickListener(this);
-        acceptIc.setOnClickListener(this);
+        editandclose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                modeEdit(1);
+            }
+        });
+        acept.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                modeEdit(0);
+            }
+        });
         copyurl.setOnClickListener(this);
         copylogin.setOnClickListener(this);
         copypassword.setOnClickListener(this);
@@ -82,7 +92,13 @@ public class PasswordActivity extends AppCompatActivity implements View.OnClickL
         addTagB.setOnClickListener(new View.OnClickListener() {
                                        @Override
                                        public void onClick(View v) {
-
+                                           if(addTag.getText().length()!=0) {
+                                               movie = new RecyclerItem(String.valueOf(addTag.getText()));
+                                               movieList.add(movie);
+                                               mAdapter.notifyDataSetChanged();
+                                               recyclerView.scrollBy(1000000000, 1000000000);
+                                               addTag.setText("");
+                                           }
                                        }
                                    }
         );
@@ -96,7 +112,14 @@ public class PasswordActivity extends AppCompatActivity implements View.OnClickL
         addTagB2.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
+                                            if(addTag2.getText().length()!=0) {
+                                                movie2 = new RecyclerItem(String.valueOf(addTag2.getText()));
 
+                                                movieList2.add(movie2);
+                                                mAdapter2.notifyDataSetChanged();
+                                                recyclerView2.scrollBy(1000000000, 1000000000);
+                                                addTag2.setText("");
+                                            }
                                         }
                                     }
         );
@@ -123,50 +146,59 @@ public class PasswordActivity extends AppCompatActivity implements View.OnClickL
            addTag2.setEnabled(b);
     }
     public void loadDefault() {
+        etname.setText(name);
+        etUrl.setText(url);
+        etLogin.setText(login);
+        etPassword.setText(password);
+        etlog.setText(log);
+        movieList2.clear();
+        movieList2.addAll(movieList2D);
+        movieList.clear();
+        movieList.addAll(movieListD);
+        mAdapter2.notifyDataSetChanged();
+        mAdapter.notifyDataSetChanged();
+    }
+    public void saveDefault(){
+        movieList2D.clear();
+        movieList2D.addAll(movieList2);
+        movieListD.clear();
+        movieListD.addAll(movieList);
 
     }
-
+    private void SwitchEdit(boolean i){
+        etlog.setEnabled(i);
+        etname.setEnabled(i);
+        etPassword.setEnabled(i);
+         etLogin.setEnabled(i);
+           etUrl.setEnabled(i);
+          addTag.setEnabled(i);
+         addTag2.setEnabled(i);
+         addTagB.setEnabled(i);
+        addTagB2.setEnabled(i);
+    }
     public void modeEdit(int i) {
         if (!stat) {
-            acceptIc.setVisibility(View.VISIBLE);
-            changeIc.setImageResource(android.R.drawable.ic_delete);
+            acept.setVisibility(View.VISIBLE);
+            editandclose.setImageResource(android.R.drawable.ic_delete);
             mAdapter.switchMode();
             mAdapter2.switchMode();
             mAdapter.notifyDataSetChanged();
             mAdapter2.notifyDataSetChanged();
-            etlog.setEnabled(true);
-            etname.setEnabled(true);
-            etPassword.setEnabled(true);
-            etLogin.setEnabled(true);
-            etUrl.setEnabled(true);
-            addTag.setEnabled(true);
-            addTag2.setEnabled(true);
-            addTagB.setEnabled(true);
-            addTagB2.setEnabled(true);
-
+       SwitchEdit(true);
             stat = true;
         } else {
 
-            acceptIc.setVisibility(View.GONE);
-            changeIc.setImageResource(android.R.drawable.ic_menu_edit);
+            acept.setVisibility(View.GONE);
+            editandclose.setImageResource(android.R.drawable.ic_menu_edit);
             mAdapter.switchMode();
             mAdapter2.switchMode();
             mAdapter.notifyDataSetChanged();
             mAdapter2.notifyDataSetChanged();
-            etlog.setEnabled(false);
-            etname.setEnabled(false);
-            etPassword.setEnabled(false);
-            etLogin.setEnabled(false);
-            etUrl.setEnabled(false);
-            addTag.setEnabled(false);
-            addTag2.setEnabled(false);
-            addTagB.setEnabled(false);
-            addTagB2.setEnabled(false);
+            SwitchEdit(false);
             addTag.setText("");
             addTag2.setText("");
-            if (i == R.id.editandclose) {
+            if (i==1) {
                 loadDefault();
-
             } else {
                 name = String.valueOf(etname.getText());
                 url = String.valueOf(etUrl.getText());
@@ -174,7 +206,7 @@ public class PasswordActivity extends AppCompatActivity implements View.OnClickL
                 password = String.valueOf(etPassword.getText());
                 mAdapter.notifyDataSetChanged();
                 mAdapter2.notifyDataSetChanged();
-
+                saveDefault();
             }
             stat = false;
         }
@@ -198,9 +230,6 @@ public class PasswordActivity extends AppCompatActivity implements View.OnClickL
                 break;
             case R.id.copypassword:
                 copy(String.valueOf(etPassword.getText()));
-                break;
-            default:
-                modeEdit(v.getId());
                 break;
         }
 

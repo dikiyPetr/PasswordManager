@@ -60,6 +60,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     }
 
     public boolean switchMode(){
+
         if(modeEdit){
             modeEdit =false;
             return false;
