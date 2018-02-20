@@ -1,12 +1,16 @@
 package com.example.dikiy.passwordmain;
 
 import android.app.Service;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.IBinder;
+import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -44,7 +48,7 @@ public class Fly extends Service {
         wm.getDefaultDisplay();
         ll = new LinearLayout(this);
         LinearLayout.LayoutParams layoutParameteres = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         ll.setLayoutParams(layoutParameteres);
         int LAYOUT_FLAG;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -54,7 +58,7 @@ public class Fly extends Service {
         }
 
         final WindowManager.LayoutParams parameters = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
 
 //                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
@@ -71,9 +75,9 @@ public class Fly extends Service {
 
                 PixelFormat.TRANSLUCENT
         );
-        parameters.gravity = Gravity.CENTER | Gravity.BOTTOM;
+        parameters.gravity = Gravity.RIGHT | Gravity.TOP ;
         parameters.x = 0;
-        parameters.y = 0;
+        parameters.y = 150;
 
 //        TextView stop = new TextView(this);
 //        stop.setText("Все пиздец, перезагружай");
@@ -81,53 +85,53 @@ public class Fly extends Service {
 //        stop.setLayoutParams(btnParameters);
 
         View itemView = LayoutInflater.from(GetContext.getContext())
-                .inflate(R.layout.flyactivity,ll,false);
+                .inflate(R.layout.flyactivity
+                        ,ll,false);
         ImageView copylogin = itemView.findViewById(R.id.copylogin);
         ImageView copypassword = itemView.findViewById(R.id.copypassword);
-        ImageView close = itemView.findViewById(R.id.close);
+
         ImageView back = itemView.findViewById(R.id.back);
         copylogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(GetContext.getContext(),"copy login",Toast.LENGTH_LONG).show();
+                Toast.makeText(GetContext.getContext(),"copy login",Toast.LENGTH_SHORT).show();
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("123", "Login");
+                clipboard.setPrimaryClip(clip);
             }
         });
         copypassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(GetContext.getContext(),"copy password",Toast.LENGTH_LONG).show();
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText("123", "Password");
+                clipboard.setPrimaryClip(clip);
+                Toast.makeText(GetContext.getContext(),"copy password",Toast.LENGTH_SHORT).show();
             }
         });
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+//        back.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                Intent intent = new Intent(Intent.ACTION_MAIN);
+//                ComponentName componentName = new ComponentName(
+//                        "com.example.dikiy.passwordmain",
+//                        "com.example.dikiy.passwordmain.Main2Activity");
+//                intent.setComponent(componentName);
+//                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                startActivity(intent);
+//                wm.removeView(ll);
+//                stopSelf();
+//                System.exit(0);
+//            }
+//        });
 
-                Intent intent = new Intent(Intent.ACTION_MAIN);
-                ComponentName componentName = new ComponentName(
-                        "com.example.dikiy.passwordmain",
-                        "com.example.dikiy.passwordmain.Main2Activity");
-                intent.setComponent(componentName);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
-                wm.removeView(ll);
-                stopSelf();
-                System.exit(0);
-            }
-        });
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                wm.removeView(ll);
-                stopSelf();
-                System.exit(0);
-            }
-        });
         ll.addView(itemView);
 
 
         wm.addView(ll, parameters);
 
-        ll.setOnTouchListener(new View.OnTouchListener() {
+        back.setOnTouchListener(new View.OnTouchListener() {
             WindowManager.LayoutParams updatedParameters = parameters;
             double x;
             double y;
@@ -140,17 +144,17 @@ public class Fly extends Service {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
 
-//                        x = updatedParameters.x;
+                        x = updatedParameters.x;
                         y = updatedParameters.y;
 
-//                        pressedX = event.getRawX();
+                        pressedX = event.getRawX();
                         pressedY = event.getRawY();
 
                         break;
 
                     case MotionEvent.ACTION_MOVE:
-//                        updatedParameters.x = (int) (x + (event.getRawX() - pressedX));
-                        updatedParameters.y = (int) (y - (event.getRawY() - pressedY));
+                        updatedParameters.x = (int) (x - (event.getRawX() - pressedX));
+                        updatedParameters.y = (int) (y + (event.getRawY() - pressedY));
 
                         wm.updateViewLayout(ll, updatedParameters);
 
@@ -162,15 +166,15 @@ public class Fly extends Service {
             }
         });
 
-//        ll.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                wm.removeView(ll);
-//                stopSelf();
-//                System.exit(0);
-//
-//            }
-//        });
+        ll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                wm.removeView(ll);
+                stopSelf();
+                System.exit(0);
+
+            }
+        });
     }
 
     @Override

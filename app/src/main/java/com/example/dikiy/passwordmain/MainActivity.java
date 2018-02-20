@@ -1,7 +1,10 @@
 package com.example.dikiy.passwordmain;
 
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -28,6 +31,7 @@ import com.example.dikiy.passwordmain.MainActivityPac.MainPresenter;
 import com.example.dikiy.passwordmain.MainRecycler.MainItem;
 import com.example.dikiy.passwordmain.MainRecycler.RecyclerItemClickListener;
 import com.example.dikiy.passwordmain.MainRecycler.RecyclerViewAdapter;
+import com.example.dikiy.passwordmain.Old.Main2Activity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -113,9 +117,42 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         presenter.attachView(this);
         presenter.viewIsReady();
 
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(this, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position, MotionEvent event) {
+                        Log.v("1234555",position+" "+event.getAction());
+                        if(position!=0) {
+                            if(OpenFlyWindow()) {
+                                Uri address = Uri.parse("http://yandex.ru");
+                                Intent openlink = new Intent(Intent.ACTION_VIEW, address);
+                                startActivity(openlink);
+                                MainActivity.super.finish();
+                            }
+                        }
+                    }
+                }));
     }
 
+    private boolean OpenFlyWindow(){
 
+        if(Build.VERSION.SDK_INT >= 23 && !Settings.canDrawOverlays(MainActivity.this) ){
+
+            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    Uri.parse("package:" + getPackageName()));
+            startActivityForResult(intent, 1234);
+
+
+            return false;
+        }
+        else
+        {
+            startService(new Intent(MainActivity.this,Fly.class));
+            Log.v("123444","1");
+        }
+        finish();
+        return true;
+    }
 
     private void closeSearch(){
         headersearchView.onActionViewCollapsed();
