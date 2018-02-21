@@ -150,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             startService(new Intent(MainActivity.this,Fly.class));
             Log.v("123444","1");
         }
-        finish();
+//        finish();
         return true;
     }
 
