@@ -211,7 +211,7 @@ public class Fly extends Service {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
 
-//                        x = updatedParameters.x;
+//                        x = updatedParameters.x;J
                         y = updatedParameters.y;
 
 //                        pressedX = event.getRawX();

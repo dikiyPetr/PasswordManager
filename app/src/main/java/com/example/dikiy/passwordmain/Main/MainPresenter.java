@@ -1,4 +1,4 @@
-package com.example.dikiy.passwordmain.MainActivityPac;
+package com.example.dikiy.passwordmain.Main;
 
 import com.example.dikiy.passwordmain.MainActivity;
 import com.example.dikiy.passwordmain.MainRecycler.MainItem;
@@ -28,16 +28,21 @@ public class MainPresenter {
 
 
     public void viewIsReady() {
+
         loadUsers();
     }
 
     public void loadUsers() {
-      model.loadUsers(new MainModel.LoadUserCallback() {
-          @Override
-          public void onLoad(List<MainItem> users) {
-              view.showUsers(users);
+        model.refreshBd(new MainModel.RefreshBDCallback() {
+            @Override
+            public void onLoad() {
+                model.loadUsers(new MainModel.LoadUserCallback() {
+                    @Override
+                    public void onLoad(List<MainItem> users) {
+                        view.showUsers(users);
+                    }
+                });
+            }
+        });
 
-          }
-      });
-    }
-}
+}}

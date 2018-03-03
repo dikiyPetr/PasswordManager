@@ -1,10 +1,7 @@
-package com.example.dikiy.passwordmain.PasswordActivityPac;
+package com.example.dikiy.passwordmain.Password;
 
 import android.os.AsyncTask;
 
-import com.example.dikiy.passwordmain.MainActivityPac.MainModel;
-import com.example.dikiy.passwordmain.MainRecycler.MainItem;
-import com.example.dikiy.passwordmain.R;
 import com.example.dikiy.passwordmain.RecyclerView.RecyclerItem;
 
 import java.util.ArrayList;

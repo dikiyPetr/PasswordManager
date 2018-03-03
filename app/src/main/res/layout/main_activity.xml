@@ -13,7 +13,7 @@
     android:layout_height="match_parent"
     android:clickable="true"
     android:orientation="vertical"
-    tools:context="com.example.dikiy.passwordmain.Old.Main2Activity">
+    tools:context="com.example.dikiy.passwordmain.OldShit.Main2Activity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"

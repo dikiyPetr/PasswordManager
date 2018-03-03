@@ -3,28 +3,20 @@ package com.example.dikiy.passwordmain;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
 import android.widget.Toast;
 
-import com.example.dikiy.passwordmain.MainRecycler.RecyclerItemClickListener;
-import com.example.dikiy.passwordmain.Old.Main2Activity;
-import com.example.dikiy.passwordmain.PasswordActivityPac.PasswordList;
-import com.example.dikiy.passwordmain.PasswordActivityPac.PasswordModel;
-import com.example.dikiy.passwordmain.PasswordActivityPac.PasswordPresenter;
+import com.example.dikiy.passwordmain.Password.PasswordList;
+import com.example.dikiy.passwordmain.Password.PasswordModel;
+import com.example.dikiy.passwordmain.Password.PasswordPresenter;
 import com.example.dikiy.passwordmain.RecyclerView.RecyclerAdapter;
 import com.example.dikiy.passwordmain.RecyclerView.RecyclerItem;
 
