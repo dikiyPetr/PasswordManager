@@ -10,6 +10,7 @@ import com.example.dikiy.passwordmain.Adapters.Get.GetFolder;
 import com.example.dikiy.passwordmain.Adapters.Get.GetFolder_Item;
 import com.example.dikiy.passwordmain.GetContext;
 import com.example.dikiy.passwordmain.Main.MainModel;
+import com.example.dikiy.passwordmain.MainRecycler.MainItem;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -77,8 +78,8 @@ public class DBWorker {
         List<String> list = new ArrayList<>(Arrays.asList(s.substring(1,s.length()-1).split(",")));
         return list;
     }
-    public void loadData(int id){
-        ArrayList<MainModel> list =new ArrayList<>();
+    public  ArrayList<MainItem> loadData(int id){
+        ArrayList<MainItem> list =new ArrayList<>();
         Cursor cursor = mDb.rawQuery("select children,pass from folders where id="+id, null);
         if(cursor.getColumnCount()!=0){
         cursor.moveToFirst();
@@ -86,11 +87,16 @@ public class DBWorker {
        folderList.addAll(stringToList(cursor.getString(0)));
        List<String> passList= new ArrayList<>();
        passList.addAll(stringToList(cursor.getString(1)));
+       Log.v("12324123123",passList.size()+" "+folderList.size());
        for(int i=0;i<folderList.size();i++){
-
+           list.add(new MainItem(folderList.get(i)));
        }
-        list.add(new MainModel());
+       for(int i=0;i<passList.size();i++){
+           list.add(new MainItem(passList.get(i)));
+       }
+
 
         cursor.close();}
+        return list;
     }
 }

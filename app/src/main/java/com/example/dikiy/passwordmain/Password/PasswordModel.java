@@ -17,9 +17,15 @@ public class PasswordModel
         PasswordModel.LoadUsersTask loadUsersTask = new PasswordModel.LoadUsersTask(callback);
         loadUsersTask.execute();
     }
-
-
+    public void addPassword(PasswordModel.AddPasswordCallback callback) {
+        PasswordModel.AddPasswordTask addPasswordTask = new PasswordModel.AddPasswordTask(callback);
+        addPasswordTask.execute();
+    }
     interface LoadUserCallback {
+        void onLoad(PasswordList users);
+    }
+
+    interface AddPasswordCallback {
         void onLoad(PasswordList users);
     }
     class LoadUsersTask extends AsyncTask<Void, Void, PasswordList> {
@@ -47,6 +53,22 @@ public class PasswordModel
             if (callback != null) {
                 callback.onLoad(users);
             }
+        }
+    }
+    class AddPasswordTask extends AsyncTask<Void, Void, PasswordList>{
+        private final PasswordModel.AddPasswordCallback callback;
+
+        AddPasswordTask(PasswordModel.AddPasswordCallback callback) {
+            this.callback = callback;
+        }
+        @Override
+        protected PasswordList doInBackground(Void... params) {
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(PasswordList users) {
+            callback.onLoad(null);
         }
     }
 }

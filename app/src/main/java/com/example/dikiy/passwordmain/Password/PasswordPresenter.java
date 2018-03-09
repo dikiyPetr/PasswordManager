@@ -26,6 +26,10 @@ public class PasswordPresenter {
     public void viewIsReady() {
         loadUsers();
     }
+    public void clickAddPassword(){addPassword();}
+
+    private void addPassword() {
+    }
 
     public void loadUsers() {
         model.loadUsers(new PasswordModel.LoadUserCallback() {

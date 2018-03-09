@@ -58,12 +58,13 @@ public class MainModel {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            if(response!=null){
             GetFolder getFolder = (GetFolder) response.body();
             ArrayList<GetFolder_Item> getFolder_items= new ArrayList<>();
             getFolder_items.addAll(getFolder.getItems());
             Log.v("12344444","1"+getFolder_items.toString());
             DBWorker dbWorker = new DBWorker();
-            dbWorker.initFolder(getFolder_items);
+            dbWorker.initFolder(getFolder_items);}
             return null;
         }
 
@@ -95,7 +96,7 @@ public class MainModel {
         protected List<MainItem> doInBackground(Void... params) {
         ArrayList<MainItem> items = new ArrayList<>();
         DBWorker dbWorker=new DBWorker();
-        dbWorker.loadData(1);
+        items.addAll(dbWorker.loadData(1));
         return items;
         }
 

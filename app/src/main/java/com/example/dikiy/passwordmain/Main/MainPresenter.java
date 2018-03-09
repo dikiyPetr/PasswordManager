@@ -29,20 +29,34 @@ public class MainPresenter {
 
     public void viewIsReady() {
 
+        refreshUsers();
+    }
+    public void nextView() {
+
         loadUsers();
     }
-
-    public void loadUsers() {
+    public void refreshUsers() {
         model.refreshBd(new MainModel.RefreshBDCallback() {
             @Override
             public void onLoad() {
                 model.loadUsers(new MainModel.LoadUserCallback() {
                     @Override
                     public void onLoad(List<MainItem> users) {
+
                         view.showUsers(users);
                     }
                 });
             }
         });
+    }
+    public void loadUsers() {
+
+                model.loadUsers(new MainModel.LoadUserCallback() {
+                    @Override
+                    public void onLoad(List<MainItem> users) {
+
+                        view.showUsers(users);
+                    }
+                });
 
 }}

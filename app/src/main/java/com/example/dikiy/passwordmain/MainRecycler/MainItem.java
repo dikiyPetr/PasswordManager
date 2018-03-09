@@ -20,6 +20,10 @@ public class MainItem {
         this.id=id;
     }
 
+    public MainItem(String name) {
+        this.name = name;
+    }
+
     public int getChild() {
         return child;
     }
