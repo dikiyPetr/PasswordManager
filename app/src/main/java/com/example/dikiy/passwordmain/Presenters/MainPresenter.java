@@ -1,7 +1,8 @@
-package com.example.dikiy.passwordmain.Main;
+package com.example.dikiy.passwordmain.Presenters;
 
+import com.example.dikiy.passwordmain.Model.MainModel;
 import com.example.dikiy.passwordmain.MainActivity;
-import com.example.dikiy.passwordmain.MainRecycler.MainItem;
+import com.example.dikiy.passwordmain.ItemModel.MainItem;
 
 
 import java.util.List;

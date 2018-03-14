@@ -8,32 +8,30 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 /**
  * Created by dikiy on 09.03.2018.
  */
 
-public class LockActivity extends AppCompatActivity {
-   ImageView mainIcon;
-   LinearLayout tableLayout;
-   RelativeLayout editText;
+public class LoginActivity extends AppCompatActivity {
+    ImageView mainIcon;
+    LinearLayout tableLayout;
+    //   RelativeLayout editText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.lock_activity);
+        setContentView(R.layout.login_activity);
 
         init();
     }
     private void init(){
-    mainIcon = findViewById(R.id.mainicon);
-    tableLayout = findViewById(R.id.textl);
-    editText=findViewById(R.id.buttonl);
+        mainIcon = findViewById(R.id.mainicon1);
+        tableLayout = findViewById(R.id.textl1);
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
         int screenWidth = displaymetrics.widthPixels;
         int screenHeight = displaymetrics.heightPixels;
-            final TranslateAnimation anim = new TranslateAnimation(0,0,0,-screenHeight/2+mainIcon.getDrawable().getIntrinsicHeight());
+        final TranslateAnimation anim = new TranslateAnimation(0,0,0,-screenHeight/2+mainIcon.getDrawable().getIntrinsicHeight());
         anim.setDuration(400);
         anim.setFillAfter(true);
         anim.setAnimationListener(new Animation.AnimationListener() {
@@ -42,11 +40,10 @@ public class LockActivity extends AppCompatActivity {
             }
             @Override
             public void onAnimationEnd(Animation animation) {
-                Animation anim1 = new AnimationUtils().loadAnimation(LockActivity.this,R.anim.flys);
+                Animation anim1 = new AnimationUtils().loadAnimation(LoginActivity.this,R.anim.flys);
                 anim1.setDuration(300);
                 anim1.setFillAfter(true);
                 tableLayout.startAnimation(anim1);
-                editText.startAnimation(anim1);
             }
             @Override
             public void onAnimationRepeat(Animation animation) {

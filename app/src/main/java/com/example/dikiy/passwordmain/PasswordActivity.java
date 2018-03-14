@@ -14,9 +14,9 @@ import android.widget.ImageView;
 
 import android.widget.Toast;
 
-import com.example.dikiy.passwordmain.Password.PasswordList;
-import com.example.dikiy.passwordmain.Password.PasswordModel;
-import com.example.dikiy.passwordmain.Password.PasswordPresenter;
+import com.example.dikiy.passwordmain.ItemModel.PasswordList;
+import com.example.dikiy.passwordmain.Model.PasswordModel;
+import com.example.dikiy.passwordmain.Presenters.PasswordPresenter;
 import com.example.dikiy.passwordmain.RecyclerView.RecyclerAdapter;
 import com.example.dikiy.passwordmain.RecyclerView.RecyclerItem;
 

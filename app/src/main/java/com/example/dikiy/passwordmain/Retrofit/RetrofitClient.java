@@ -31,7 +31,7 @@ public class RetrofitClient {
                     .readTimeout(5, TimeUnit.MINUTES);
 
 //            OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-//        httpClient1.addInterceptor(new TokenRefresherInterceptor()).build();
+        httpClient1.addInterceptor(new TokenRefresherInterceptor()).build();
 httpClient1.build();
 
 

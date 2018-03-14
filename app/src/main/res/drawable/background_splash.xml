@@ -4,9 +4,13 @@
     <item
         android:drawable="@color/white"/>
 
-    <item>
+    <item
+
+        android:gravity="center"
+        >
         <bitmap
             android:gravity="center"
+
             android:src="@drawable/key"/>
     </item>
 

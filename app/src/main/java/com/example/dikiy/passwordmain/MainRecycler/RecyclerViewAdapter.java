@@ -1,6 +1,5 @@
 package com.example.dikiy.passwordmain.MainRecycler;
 
-import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import com.example.dikiy.passwordmain.ItemModel.MainItem;
 import com.example.dikiy.passwordmain.R;
 import com.example.dikiy.passwordmain.ScrollingTextView;
 

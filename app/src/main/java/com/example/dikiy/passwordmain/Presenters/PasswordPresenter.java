@@ -1,5 +1,7 @@
-package com.example.dikiy.passwordmain.Password;
+package com.example.dikiy.passwordmain.Presenters;
 
+import com.example.dikiy.passwordmain.Model.PasswordModel;
+import com.example.dikiy.passwordmain.ItemModel.PasswordList;
 import com.example.dikiy.passwordmain.PasswordActivity;
 
 /**
@@ -35,8 +37,7 @@ public class PasswordPresenter {
         model.loadUsers(new PasswordModel.LoadUserCallback() {
             @Override
             public void onLoad(PasswordList users) {
-                view.showlist2(users);
-                view.showlist1(users);
+
             }
 
         });

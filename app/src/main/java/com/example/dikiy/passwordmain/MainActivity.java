@@ -26,9 +26,9 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.dikiy.passwordmain.Main.MainModel;
-import com.example.dikiy.passwordmain.Main.MainPresenter;
-import com.example.dikiy.passwordmain.MainRecycler.MainItem;
+import com.example.dikiy.passwordmain.Model.MainModel;
+import com.example.dikiy.passwordmain.Presenters.MainPresenter;
+import com.example.dikiy.passwordmain.ItemModel.MainItem;
 import com.example.dikiy.passwordmain.MainRecycler.RecyclerItemClickListener;
 import com.example.dikiy.passwordmain.MainRecycler.RecyclerViewAdapter;
 

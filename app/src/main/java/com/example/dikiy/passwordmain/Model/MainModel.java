@@ -1,4 +1,4 @@
-package com.example.dikiy.passwordmain.Main;
+package com.example.dikiy.passwordmain.Model;
 
 import android.os.AsyncTask;
 import android.util.Log;
@@ -6,7 +6,7 @@ import android.util.Log;
 import com.example.dikiy.passwordmain.Adapters.Get.GetFolder;
 import com.example.dikiy.passwordmain.Adapters.Get.GetFolder_Item;
 import com.example.dikiy.passwordmain.DBase.DBWorker;
-import com.example.dikiy.passwordmain.MainRecycler.MainItem;
+import com.example.dikiy.passwordmain.ItemModel.MainItem;
 import com.example.dikiy.passwordmain.Retrofit.ApiUtils;
 import com.example.dikiy.passwordmain.Retrofit.PostLogin;
 
@@ -31,12 +31,12 @@ public class MainModel {
 
     }
 
-    interface LoadUserCallback {
+    public interface LoadUserCallback {
         void onLoad(List<MainItem> users);
     }
 
 
-    interface RefreshBDCallback {
+    public interface RefreshBDCallback {
         void onLoad();
     }
 

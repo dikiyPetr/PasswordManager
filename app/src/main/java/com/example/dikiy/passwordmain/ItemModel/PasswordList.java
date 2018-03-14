@@ -1,4 +1,4 @@
-package com.example.dikiy.passwordmain.Password;
+package com.example.dikiy.passwordmain.ItemModel;
 
 import com.example.dikiy.passwordmain.RecyclerView.RecyclerItem;
 

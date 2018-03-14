@@ -1,4 +1,4 @@
-package com.example.dikiy.passwordmain.MainRecycler;
+package com.example.dikiy.passwordmain.ItemModel;
 
 public class MainItem {
     String name;

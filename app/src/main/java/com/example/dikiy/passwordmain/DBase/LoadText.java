@@ -14,7 +14,7 @@ public class LoadText extends Activity{
 
 
    public static void setText( String name, String value) {
-       SharedPreferences preferences = GetContext.getContext().getSharedPreferences("response",MODE_PRIVATE);
+       SharedPreferences preferences = GetContext.getContext().getSharedPreferences("Data",MODE_PRIVATE);
 
        if (preferences != null) {
            SharedPreferences.Editor editor = preferences.edit();
@@ -28,7 +28,7 @@ public class LoadText extends Activity{
 
     public static String getText( String key) {
         String value = null;
-        SharedPreferences preferences =  GetContext.getContext().getSharedPreferences("response",MODE_PRIVATE);
+        SharedPreferences preferences =  GetContext.getContext().getSharedPreferences("Data",MODE_PRIVATE);
         if (preferences != null) {
             value = preferences.getString(key, null);
             Log.v("123457",key);
@@ -41,7 +41,7 @@ public class LoadText extends Activity{
     }
 
     public static void setNull() {
-        SharedPreferences preferences = GetContext.getContext().getSharedPreferences("token",MODE_PRIVATE);
+        SharedPreferences preferences = GetContext.getContext().getSharedPreferences("Data",MODE_PRIVATE);
 
         if (preferences != null) {
             SharedPreferences.Editor editor = preferences.edit();

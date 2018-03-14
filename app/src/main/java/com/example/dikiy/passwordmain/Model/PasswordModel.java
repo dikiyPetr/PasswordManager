@@ -1,7 +1,8 @@
-package com.example.dikiy.passwordmain.Password;
+package com.example.dikiy.passwordmain.Model;
 
 import android.os.AsyncTask;
 
+import com.example.dikiy.passwordmain.ItemModel.PasswordList;
 import com.example.dikiy.passwordmain.RecyclerView.RecyclerItem;
 
 import java.util.ArrayList;
@@ -21,11 +22,11 @@ public class PasswordModel
         PasswordModel.AddPasswordTask addPasswordTask = new PasswordModel.AddPasswordTask(callback);
         addPasswordTask.execute();
     }
-    interface LoadUserCallback {
+    public  interface LoadUserCallback {
         void onLoad(PasswordList users);
     }
 
-    interface AddPasswordCallback {
+    public  interface AddPasswordCallback {
         void onLoad(PasswordList users);
     }
     class LoadUsersTask extends AsyncTask<Void, Void, PasswordList> {

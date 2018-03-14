@@ -1,16 +1,13 @@
 package com.example.dikiy.passwordmain.DBase;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.example.dikiy.passwordmain.Adapters.Get.GetFolder;
 import com.example.dikiy.passwordmain.Adapters.Get.GetFolder_Item;
 import com.example.dikiy.passwordmain.GetContext;
-import com.example.dikiy.passwordmain.Main.MainModel;
-import com.example.dikiy.passwordmain.MainRecycler.MainItem;
+import com.example.dikiy.passwordmain.ItemModel.MainItem;
 
 import java.io.IOException;
 import java.util.ArrayList;
