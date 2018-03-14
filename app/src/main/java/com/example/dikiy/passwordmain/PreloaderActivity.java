@@ -20,6 +20,8 @@ public class PreloaderActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        setContentView(R.layout.preloader_activity);
+
         model = new PreloaderModel();
         presenter = new PreloaderPresenter(model);
         presenter.attachView(this);
@@ -28,7 +30,12 @@ public class PreloaderActivity extends AppCompatActivity {
     }
     public void lockview(){
         Intent intent = new Intent(this, LockActivity.class);
+
         startActivity(intent);
+
+
+
+
         finish();
     }
     public void loginview(){

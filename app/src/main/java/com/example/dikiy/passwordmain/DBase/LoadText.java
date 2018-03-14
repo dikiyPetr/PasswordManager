@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import com.example.dikiy.passwordmain.Adapters.Post.PostAdapter;
 import com.example.dikiy.passwordmain.GetContext;
 
 /**
@@ -52,4 +53,25 @@ public class LoadText extends Activity{
             editor.commit();
         }
     }
+    public static void refreshToken(PostAdapter adapter) {
+        SharedPreferences preferences = GetContext.getContext().getSharedPreferences("Data",MODE_PRIVATE);
+
+        if (preferences != null) {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString("access_token", adapter.getAccess_token());
+            editor.putString("refresh_token", adapter.getRefresh_token());
+            editor.commit();
+        }
+    }
+    public static void newId(PostAdapter adapter) {
+        SharedPreferences preferences = GetContext.getContext().getSharedPreferences("Data",MODE_PRIVATE);
+
+        if (preferences != null) {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString("client_secret", adapter.getSecret());
+            editor.putString("client_id", adapter.getId()+"_"+adapter.getRandom_id());
+            editor.commit();
+        }
+    }
+
 }

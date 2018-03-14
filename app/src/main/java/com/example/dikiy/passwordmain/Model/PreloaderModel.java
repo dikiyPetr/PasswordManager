@@ -8,6 +8,7 @@ import com.example.dikiy.passwordmain.Adapters.Get.GetFolder_Item;
 import com.example.dikiy.passwordmain.DBase.DBWorker;
 import com.example.dikiy.passwordmain.DBase.LoadText;
 import com.example.dikiy.passwordmain.Retrofit.ApiUtils;
+import com.example.dikiy.passwordmain.Retrofit.ApiWorker;
 import com.example.dikiy.passwordmain.Retrofit.PostLogin;
 
 import java.io.IOException;
@@ -37,11 +38,15 @@ public class PreloaderModel {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            //проверка аторизации
-            if (!LoadText.getText("refresh_token").equals("")){
-                //обновление токена
 
-                if(){
+            //проверка аторизации
+            Log.v("123123123123","1");
+            if (LoadText.getText("access_token").length()>5){
+                //обновление токена
+                Log.v("123123123123","2");
+
+                if( ApiWorker.RefreshToken()==200){
+                    Log.v("123123123123","3");
                     return true;
                 }else{
                     return false;
@@ -50,7 +55,6 @@ public class PreloaderModel {
             }else {
                 return false;
             }
-            return false;
         }
 
         @Override

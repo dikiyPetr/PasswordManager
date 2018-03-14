@@ -1,11 +1,14 @@
 package com.example.dikiy.passwordmain;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.TranslateAnimation;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -18,6 +21,7 @@ public class LockActivity extends AppCompatActivity {
    ImageView mainIcon;
    LinearLayout tableLayout;
    RelativeLayout editText;
+   EditText editText2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +33,7 @@ public class LockActivity extends AppCompatActivity {
     mainIcon = findViewById(R.id.mainicon);
     tableLayout = findViewById(R.id.textl);
     editText=findViewById(R.id.buttonl);
+    editText2=findViewById(R.id.editText13);
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
         int screenWidth = displaymetrics.widthPixels;
@@ -53,6 +58,20 @@ public class LockActivity extends AppCompatActivity {
             }
         });
         mainIcon.startAnimation(anim);
+    editText2.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(LockActivity.this, MainActivity.class);
+
+            startActivity(intent);
+
+
+
+
+            finish();
+        }
+    });
     }
+
 
 }

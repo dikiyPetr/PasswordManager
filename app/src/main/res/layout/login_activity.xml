@@ -31,7 +31,7 @@
         android:visibility="invisible">
 
         <EditText
-            android:id="@+id/editText10"
+            android:id="@+id/etname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -39,7 +39,7 @@
             android:padding="10dp" />
 
         <EditText
-            android:id="@+id/editText11"
+            android:id="@+id/etpass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -47,7 +47,7 @@
             android:padding="10dp" />
 
         <Button
-            android:id="@+id/button5"
+            android:id="@+id/blogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"

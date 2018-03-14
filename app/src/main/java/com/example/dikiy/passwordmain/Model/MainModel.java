@@ -6,13 +6,16 @@ import android.util.Log;
 import com.example.dikiy.passwordmain.Adapters.Get.GetFolder;
 import com.example.dikiy.passwordmain.Adapters.Get.GetFolder_Item;
 import com.example.dikiy.passwordmain.DBase.DBWorker;
+import com.example.dikiy.passwordmain.DBase.LoadText;
 import com.example.dikiy.passwordmain.ItemModel.MainItem;
 import com.example.dikiy.passwordmain.Retrofit.ApiUtils;
 import com.example.dikiy.passwordmain.Retrofit.PostLogin;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Response;
 
@@ -53,12 +56,14 @@ public class MainModel {
         protected Object doInBackground(Object[] objects) {
             PostLogin postLogin = ApiUtils.getAPIService();
             Response response = null;
+            final Map<String, String> map = new HashMap<>();
+        map.put("Authorization", "Bearer "+ LoadText.getText("access_token"));
             try {
-                response = postLogin.GetFolder().execute();
+                response = postLogin.GetFolder(map).execute();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            if(response!=null){
+            if(response.code()==200){
             GetFolder getFolder = (GetFolder) response.body();
             ArrayList<GetFolder_Item> getFolder_items= new ArrayList<>();
             getFolder_items.addAll(getFolder.getItems());
