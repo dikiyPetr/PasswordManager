@@ -20,7 +20,7 @@ public class PreloaderActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.preloader_activity);
+        setContentView(R.layout.preloader_activity);
 
         model = new PreloaderModel();
         presenter = new PreloaderPresenter(model);

@@ -12,6 +12,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.example.dikiy.passwordmain.DBase.LoadText;
 
 /**
  * Created by dikiy on 09.03.2018.
@@ -22,6 +25,7 @@ public class LockActivity extends AppCompatActivity {
    LinearLayout tableLayout;
    RelativeLayout editText;
    EditText editText2;
+   TextView lotv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +38,7 @@ public class LockActivity extends AppCompatActivity {
     tableLayout = findViewById(R.id.textl);
     editText=findViewById(R.id.buttonl);
     editText2=findViewById(R.id.editText13);
+    lotv = findViewById(R.id.lotv);
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
         int screenWidth = displaymetrics.widthPixels;
@@ -68,6 +73,16 @@ public class LockActivity extends AppCompatActivity {
 
 
 
+            finish();
+        }
+    });
+    lotv.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            LoadText.setNull();
+            Intent intent = new Intent(LockActivity.this, LoginActivity.class);
+
+            startActivity(intent);
             finish();
         }
     });

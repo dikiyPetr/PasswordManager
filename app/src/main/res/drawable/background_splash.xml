@@ -6,12 +6,13 @@
 
     <item
 
-        android:gravity="center"
+        android:bottom="100dp"
+        android:gravity="bottom|center_horizontal"
         >
         <bitmap
-            android:gravity="center"
 
-            android:src="@drawable/key"/>
+
+            android:src="@drawable/back"/>
     </item>
 
 </layer-list>
