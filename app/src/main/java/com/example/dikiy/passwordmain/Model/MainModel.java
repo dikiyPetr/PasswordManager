@@ -69,7 +69,8 @@ public class MainModel {
             getFolder_items.addAll(getFolder.getItems());
             Log.v("12344444","1"+getFolder_items.toString());
             DBWorker dbWorker = new DBWorker();
-            dbWorker.initFolder(getFolder_items);}
+//            dbWorker.initFolder(getFolder_items);
+            }
             return null;
         }
 

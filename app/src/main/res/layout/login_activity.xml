@@ -28,7 +28,7 @@
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:paddingTop="100dp"
-        android:visibility="invisible">
+        android:visibility="visible">
 
         <EditText
             android:id="@+id/etname"

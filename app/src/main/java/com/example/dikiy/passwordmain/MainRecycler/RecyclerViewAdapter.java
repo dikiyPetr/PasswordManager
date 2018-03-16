@@ -89,8 +89,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         personViewHolder.namepass.setText(mainItems.get(i).getName());
         personViewHolder.tag.setText(mainItems.get(i).getTag());
-        personViewHolder.photo.setImageResource(mainItems.get(i).getImageres());
-        personViewHolder.st.setImageResource(mainItems.get(i).getSt());
+//        personViewHolder.photo.setImageResource(mainItems.get(i).getImageres());
+//        personViewHolder.st.setImageResource(mainItems.get(i).getSt());
 
 
 

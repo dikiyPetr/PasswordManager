@@ -32,9 +32,7 @@ public class PreloaderPresenter {
         model.CheckToken(new PreloaderModel.CheckLoadCallback() {
             @Override
             public void onLoad(boolean stat) {
-                if(stat){
-                    view.lockview();
-                }else {view.loginview();}
+               view.anim(stat);
             }
         });
     }

@@ -49,6 +49,7 @@ public class PasswordActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        overridePendingTransition(0,R.anim.flye);
         setContentView(R.layout.create_password_activity);
 
         init();

@@ -13,7 +13,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.example.dikiy.passwordmain.DBase.LoadText;
 import com.example.dikiy.passwordmain.Model.LoginModel;
 import com.example.dikiy.passwordmain.Model.PreloaderModel;
 import com.example.dikiy.passwordmain.Presenters.LoginPresenter;
@@ -34,6 +36,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        overridePendingTransition(0,R.anim.flye);
         setContentView(R.layout.login_activity);
 
         init();
@@ -44,29 +47,31 @@ public class LoginActivity extends AppCompatActivity {
         blogin=findViewById(R.id.blogin);
         mainIcon = findViewById(R.id.mainicon1);
         tableLayout = findViewById(R.id.textl1);
+
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
         int screenWidth = displaymetrics.widthPixels;
         int screenHeight = displaymetrics.heightPixels;
-        final TranslateAnimation anim = new TranslateAnimation(0,0,0,-screenHeight/2+mainIcon.getDrawable().getIntrinsicHeight());
-        anim.setDuration(400);
-        anim.setFillAfter(true);
-        anim.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                Animation anim1 = new AnimationUtils().loadAnimation(LoginActivity.this,R.anim.flys);
-                anim1.setDuration(300);
-                anim1.setFillAfter(true);
-                tableLayout.startAnimation(anim1);
-            }
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-        });
-        mainIcon.startAnimation(anim);
+        mainIcon.setY(-screenHeight/2+mainIcon.getDrawable().getIntrinsicHeight());
+//        final TranslateAnimation anim = new TranslateAnimation(0,0,0,-screenHeight/2+mainIcon.getDrawable().getIntrinsicHeight());
+//        anim.setDuration(400);
+//        anim.setFillAfter(true);
+//        anim.setAnimationListener(new Animation.AnimationListener() {
+//            @Override
+//            public void onAnimationStart(Animation animation) {
+//            }
+//            @Override
+//            public void onAnimationEnd(Animation animation) {
+//                Animation anim1 = new AnimationUtils().loadAnimation(LoginActivity.this,R.anim.flys);
+//                anim1.setDuration(300);
+//                anim1.setFillAfter(true);
+//                tableLayout.startAnimation(anim1);
+//            }
+//            @Override
+//            public void onAnimationRepeat(Animation animation) {
+//            }
+//        });
+//        mainIcon.startAnimation(anim);
         model = new LoginModel();
         presenter = new LoginPresenter(model);
         presenter.attachView(this);
@@ -74,15 +79,23 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 presenter.login(etname.getText().toString(),etpass.getText().toString());
+                etpass.setEnabled(false);
+                etname.setEnabled(false);
             }
         });
     }
     public void loginStat(int stat){
         Log.v("123123123123123", String.valueOf(stat));
+
         if(stat==2){
+            LoadText.setText("pass","");
             Intent intent = new Intent(this, LockActivity.class);
             startActivity(intent);
             finish();
+        }else{
+            etpass.setEnabled(true);
+            etname.setEnabled(true);
+            Toast.makeText(this,"error",Toast.LENGTH_SHORT).show();
         }
     }
 

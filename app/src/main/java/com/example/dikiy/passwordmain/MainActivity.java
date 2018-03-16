@@ -56,7 +56,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
+        overridePendingTransition(0,R.anim.flye);
         setContentView(R.layout.main_activity);
         Log.v("1231","123");
         init();
