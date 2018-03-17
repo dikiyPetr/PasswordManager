@@ -38,12 +38,10 @@
             android:theme="@style/AppTheme">
         </activity>
         <service android:name=".Fly" ></service>
+
         <!--<meta-data-->
             <!--android:name="io.fabric.ApiKey"-->
             <!--android:value="7e8f5d72fd7afb677913b2ba0cb09eae28a0113d" />-->
-        <meta-data
-            android:name="io.fabric.ApiKey"
-            android:value="7e8f5d72fd7afb677913b2ba0cb09eae28a0113d" />
     </application>
 
     <uses-permission android:name="android.permission.  INTERNET" />
