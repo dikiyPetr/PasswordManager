@@ -13,6 +13,9 @@ public class GetFolder_Item_Pass {
     @SerializedName("id")
     @Expose
     private Integer id;
+    @SerializedName("users")
+    @Expose
+    private Integer users;
     @SerializedName("name")
     @Expose
     private String name;
@@ -25,6 +28,15 @@ public class GetFolder_Item_Pass {
     @SerializedName("url")
     @Expose
     private String url;
+    @SerializedName("tag")
+    @Expose
+    private String tag;
+    @SerializedName("group")
+    @Expose
+    private String group;
+    @SerializedName("description")
+    @Expose
+    private String description;
 
     public Integer getId() {
         return id;
@@ -66,4 +78,35 @@ public class GetFolder_Item_Pass {
         this.url = url;
     }
 
+    public Integer getUsers() {
+        return users;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getGroup() {
+        return group;
+    }
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
+    }
+
+    public void setUsers(Integer users) {
+        this.users = users;
+    }
 }

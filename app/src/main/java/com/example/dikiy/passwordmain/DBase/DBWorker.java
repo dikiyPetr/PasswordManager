@@ -39,7 +39,7 @@ public class DBWorker {
         int id=item.getId();
         String name=item.getName();
         List<Integer> idpass=item.getPass();
-        List<Integer> idfolder=item.getChildren();
+        List<Integer> idfolder=item.getParent();
 
         Cursor cursor = mDb.rawQuery("select id from folders where id="+id+"", null);
         if(cursor.isAfterLast()){
@@ -62,7 +62,7 @@ public class DBWorker {
         }
         cursor.close();
     }
-    public void initFolder(ArrayList<GetFolder_Item> items){
+    public void initFolder(List<GetFolder_Item> items){
         for(int i=0;i<items.size();i++){
             GetFolder_Item item=items.get(i);
             folder(item);
@@ -96,4 +96,6 @@ public class DBWorker {
         cursor.close();}
         return list;
     }
+
+
 }

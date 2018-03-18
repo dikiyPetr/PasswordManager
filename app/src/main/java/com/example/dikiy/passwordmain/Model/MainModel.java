@@ -9,6 +9,7 @@ import com.example.dikiy.passwordmain.DBase.DBWorker;
 import com.example.dikiy.passwordmain.DBase.LoadText;
 import com.example.dikiy.passwordmain.ItemModel.MainItem;
 import com.example.dikiy.passwordmain.Retrofit.ApiUtils;
+import com.example.dikiy.passwordmain.Retrofit.ApiWorker;
 import com.example.dikiy.passwordmain.Retrofit.PostLogin;
 
 import java.io.IOException;
@@ -17,6 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
@@ -40,12 +43,12 @@ public class MainModel {
 
 
     public interface RefreshBDCallback {
-        void onLoad();
+        void onLoad(Boolean b);
     }
 
 
 
-    class RefreshBDTask extends AsyncTask{
+    class RefreshBDTask extends AsyncTask<Void, Void, Boolean>{
         private final RefreshBDCallback callback;
 
         RefreshBDTask(RefreshBDCallback callback) {
@@ -53,31 +56,15 @@ public class MainModel {
         }
 
         @Override
-        protected Object doInBackground(Object[] objects) {
-            PostLogin postLogin = ApiUtils.getAPIService();
-            Response response = null;
-            final Map<String, String> map = new HashMap<>();
-        map.put("Authorization", "Bearer "+ LoadText.getText("access_token"));
-            try {
-                response = postLogin.GetFolder(map).execute();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            if(response.code()==200){
-            GetFolder getFolder = (GetFolder) response.body();
-            ArrayList<GetFolder_Item> getFolder_items= new ArrayList<>();
-            getFolder_items.addAll(getFolder.getItems());
-            Log.v("12344444","1"+getFolder_items.toString());
-            DBWorker dbWorker = new DBWorker();
-//            dbWorker.initFolder(getFolder_items);
-            }
-            return null;
+        protected Boolean doInBackground(Void... params) {
+
+            return false;
         }
 
         @Override
-        protected void onPostExecute(Object o) {
+        protected void onPostExecute(Boolean b ) {
             if (callback != null) {
-                callback.onLoad();
+                callback.onLoad(b);
             }
         }
 
@@ -103,14 +90,45 @@ public class MainModel {
         ArrayList<MainItem> items = new ArrayList<>();
         DBWorker dbWorker=new DBWorker();
         items.addAll(dbWorker.loadData(1));
-        return items;
+        final Map<String, String> map = new HashMap<>();
+        map.put("Authorization", "Bearer "+LoadText.getText("access_token"));
+        PostLogin postLogin = ApiUtils.getAPIService();
+        Log.v("Steps","1");
+        postLogin.GetFolder(map).enqueue(new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) {
+                Log.v("Steps","2");
+                ArrayList<MainItem> items = new ArrayList<>();
+                if(response.code()==200) {
+                    GetFolder getFolder;
+                    getFolder = (GetFolder) response.body();
+                    ArrayList<GetFolder_Item> getFolder_items = new ArrayList<>();
+                    getFolder_items.add(getFolder.getItems().get(0));
+                    items.add(new MainItem(getFolder_items.get(0).getName()));
+                    Log.v("Steps","3");
+                }
+               onPostExecute(items);
+            }
+            @Override
+                public void onFailure(Call call, Throwable t) {
+                Log.v("Steps",t.getMessage());
+            }
+        });
+
+        return null;
         }
 
         @Override
         protected void onPostExecute(List<MainItem> users) {
+            Log.v("a12312312312","4");
             if (callback != null) {
+                Log.v("a12312312312","5");
                 callback.onLoad(users);
-            }
-        }
+            }else{
+
+            super.onPreExecute();
+        }}
+
+
     }
 }

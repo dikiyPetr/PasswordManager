@@ -26,12 +26,12 @@ public class RetrofitClient {
 
 // add logging as last interceptor
             httpClient1.addInterceptor(logging);
-            httpClient1.connectTimeout(5, TimeUnit.MINUTES)
-                    .writeTimeout(5, TimeUnit.MINUTES)
-                    .readTimeout(5, TimeUnit.MINUTES);
+//            httpClient1.connectTimeout(30, TimeUnit.SECONDS)
+//                    .writeTimeout(30, TimeUnit.SECONDS)
+//                    .readTimeout(30, TimeUnit.SECONDS);
 
 //            OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-        httpClient1.addInterceptor(new TokenRefresherInterceptor()).build();
+//          httpClient1.addInterceptor(new TokenRefresherInterceptor()).build();
 httpClient1.build();
 
 

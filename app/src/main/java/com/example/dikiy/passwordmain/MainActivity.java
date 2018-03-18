@@ -229,10 +229,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void showUsers(List<MainItem> users) {
-        items=new ArrayList<>();
-        items.addAll(users);
+        if(users!=null) {
+            items = new ArrayList<>();
+            items.addAll(users);
 
-        recyclerViewAdapter = new RecyclerViewAdapter(items);
-        recyclerView.setAdapter(recyclerViewAdapter);
+            recyclerViewAdapter = new RecyclerViewAdapter(items);
+            recyclerView.setAdapter(recyclerViewAdapter);
+        }
     }
 }

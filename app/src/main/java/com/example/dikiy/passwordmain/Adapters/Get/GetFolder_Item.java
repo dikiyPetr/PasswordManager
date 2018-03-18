@@ -16,9 +16,9 @@ public class GetFolder_Item {
     @SerializedName("pass")
     @Expose
     private ArrayList<GetFolder_Item_Pass> pass = null;
-    @SerializedName("children")
+    @SerializedName("parent")
     @Expose
-    private ArrayList<GetFolder_Item_Children> children = null;
+    private ArrayList<GetFolder_Item_Children> parent = null;
 
     public Integer getId() {
         return id;
@@ -51,17 +51,17 @@ public class GetFolder_Item {
         this.pass = pass;
     }
 
-    public List<Integer> getChildren() {
+    public List<Integer> getParent() {
         List<Integer> ret=new ArrayList<>();
-        for(int i=0;i<children.size();i++){
-            ret.add(children.get(i).getId());
+        for(int i = 0; i< parent.size(); i++){
+            ret.add(parent.get(i).getId());
         }
 
         return ret;
     }
 
-    public void setChildren(ArrayList<GetFolder_Item_Children> children) {
-        this.children = children;
+    public void setParent(ArrayList<GetFolder_Item_Children> parent) {
+        this.parent = parent;
     }
 
 }

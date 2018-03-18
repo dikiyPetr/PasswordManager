@@ -12,12 +12,7 @@ public class MainItem {
 
     public MainItem(String name, String tag, String data, int st,int id, int imageres,int child) {
         this.name = name;
-        this.tag = tag;
-        this.data= data;
-        this.st = st;
-        this.child = child;
-        this.imageres = imageres;
-        this.id=id;
+
     }
 
     public MainItem(String name) {

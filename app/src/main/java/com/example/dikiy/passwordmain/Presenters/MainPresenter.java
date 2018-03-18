@@ -39,14 +39,8 @@ public class MainPresenter {
     public void refreshUsers() {
         model.refreshBd(new MainModel.RefreshBDCallback() {
             @Override
-            public void onLoad() {
-                model.loadUsers(new MainModel.LoadUserCallback() {
-                    @Override
-                    public void onLoad(List<MainItem> users) {
-
-                        view.showUsers(users);
-                    }
-                });
+            public void onLoad(Boolean b) {
+             loadUsers();
             }
         });
     }
