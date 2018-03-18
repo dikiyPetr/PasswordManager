@@ -120,12 +120,13 @@ public class MainModel {
 
         @Override
         protected void onPostExecute(List<MainItem> users) {
-            Log.v("a12312312312","4");
-            if (callback != null) {
-                Log.v("a12312312312","5");
+            Log.v("Steps", String.valueOf(users));
+            Log.v("Steps","4");
+            if (users != null) {
+                Log.v("Steps","5");
                 callback.onLoad(users);
             }else{
-
+                Log.v("Steps","!5");
             super.onPreExecute();
         }}
 

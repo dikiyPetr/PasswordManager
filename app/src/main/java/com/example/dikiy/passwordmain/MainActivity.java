@@ -229,7 +229,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void showUsers(List<MainItem> users) {
-        if(users!=null) {
+        if(users!=null && users.size()!=0) {
             items = new ArrayList<>();
             items.addAll(users);
 

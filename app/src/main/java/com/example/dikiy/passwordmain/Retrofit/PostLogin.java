@@ -37,7 +37,7 @@ public interface PostLogin {
     Call<PostAdapter> CheckLogin(@HeaderMap Map<String, String> headers);
 
 
-    @GET("/api/v1/groups")
+    @GET("/api/v1/folders")
     Call<GetFolder> GetFolder(@HeaderMap Map<String, String> headers);
 
 }
