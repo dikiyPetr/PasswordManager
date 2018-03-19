@@ -87,10 +87,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(final PersonViewHolder personViewHolder, int i) {
 
-        personViewHolder.namepass.setText(mainItems.get(i).getName());
-        personViewHolder.tag.setText(mainItems.get(i).getTag());
-//        personViewHolder.photo.setImageResource(mainItems.get(i).getImageres());
-//        personViewHolder.st.setImageResource(mainItems.get(i).getSt());
+        personViewHolder.namepass.setText(mainItems.get(i).getName()+" id="+mainItems.get(i).getId());
+        if(mainItems.get(i).getType()) {
+            personViewHolder.photo.setImageResource(R.drawable.folder);
+        }else {
+            personViewHolder.photo.setImageResource(R.drawable.keyb);
+        }
+
 
 
 

@@ -3,6 +3,8 @@ package com.example.dikiy.passwordmain.Retrofit;
 
 
 import com.example.dikiy.passwordmain.Adapters.Get.GetFolder;
+import com.example.dikiy.passwordmain.Adapters.Get.GetPass;
+import com.example.dikiy.passwordmain.Adapters.Get.GetPass_Item;
 import com.example.dikiy.passwordmain.Adapters.Post.PostAdapter;
 import com.google.gson.JsonObject;
 
@@ -39,5 +41,8 @@ public interface PostLogin {
 
     @GET("/api/v1/folders")
     Call<GetFolder> GetFolder(@HeaderMap Map<String, String> headers);
+
+    @GET("/api/v1/passes")
+    Call<GetPass> GetPass(@HeaderMap Map<String, String> headers);
 
 }

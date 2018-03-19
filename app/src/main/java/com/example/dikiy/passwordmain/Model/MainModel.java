@@ -5,6 +5,8 @@ import android.util.Log;
 
 import com.example.dikiy.passwordmain.Adapters.Get.GetFolder;
 import com.example.dikiy.passwordmain.Adapters.Get.GetFolder_Item;
+import com.example.dikiy.passwordmain.Adapters.Get.GetPass;
+import com.example.dikiy.passwordmain.Adapters.Get.GetPass_Item;
 import com.example.dikiy.passwordmain.DBase.DBWorker;
 import com.example.dikiy.passwordmain.DBase.LoadText;
 import com.example.dikiy.passwordmain.ItemModel.MainItem;
@@ -57,6 +59,44 @@ public class MainModel {
 
         @Override
         protected Boolean doInBackground(Void... params) {
+            Map<String, String> map = new HashMap<>();
+            final DBWorker dbWorker = new DBWorker();
+
+            map.put("Authorization", "Bearer "+LoadText.getText("access_token"));
+            PostLogin postLogin = ApiUtils.getAPIService();
+            postLogin.GetFolder(map).enqueue(new Callback<GetFolder>() {
+                @Override
+                public void onResponse(Call<GetFolder> call, Response<GetFolder> response) {
+                    List<MainItem> items=new ArrayList<>();
+                    ArrayList<GetFolder_Item> getFolder_items =new ArrayList<GetFolder_Item>();
+                    getFolder_items.addAll(response.body().getItems());
+
+                    dbWorker.setData(getFolder_items,true);
+                }
+
+                @Override
+                public void onFailure(Call<GetFolder> call, Throwable t) {
+                    Log.v("steps","!f");
+                }
+            });
+            postLogin.GetPass(map).enqueue(new Callback<GetPass>() {
+                @Override
+                public void onResponse(Call<GetPass> call, Response<GetPass> response) {
+                    List<MainItem> items=new ArrayList<>();
+                    ArrayList<GetPass_Item> getFolder_items =new ArrayList<GetPass_Item>();
+                    getFolder_items.addAll(response.body().getItems());
+                    for(int i=0;i<getFolder_items.size();i++){
+                        items.add(new MainItem(getFolder_items.get(i).getName(),getFolder_items.get(i).getId(),false));
+                    }
+                    dbWorker.setData(items,false);
+                }
+
+                @Override
+                public void onFailure(Call<GetPass> call, Throwable t) {
+                    Log.v("steps",t.getLocalizedMessage());
+                }
+            });
+
 
             return false;
         }
@@ -74,11 +114,12 @@ public class MainModel {
 
 
 
-    class LoadUsersTask extends AsyncTask<Void, Void, List<MainItem>> {
-
+    class LoadUsersTask extends AsyncTask<Void, Void,  List<MainItem>> {
+        private List<MainItem> passlist=new ArrayList<>();
+        private List<MainItem> folderlist=new ArrayList<>();
+        private int stat=0;
         private final LoadUserCallback callback;
         private int id;
-
         LoadUsersTask(LoadUserCallback callback) {
             this.callback = callback;
         }
@@ -87,49 +128,43 @@ public class MainModel {
         }
         @Override
         protected List<MainItem> doInBackground(Void... params) {
-        ArrayList<MainItem> items = new ArrayList<>();
-        DBWorker dbWorker=new DBWorker();
-        items.addAll(dbWorker.loadData(1));
-        final Map<String, String> map = new HashMap<>();
-        map.put("Authorization", "Bearer "+LoadText.getText("access_token"));
-        PostLogin postLogin = ApiUtils.getAPIService();
-        Log.v("Steps","1");
-        postLogin.GetFolder(map).enqueue(new Callback() {
-            @Override
-            public void onResponse(Call call, Response response) {
-                Log.v("Steps","2");
-                ArrayList<MainItem> items = new ArrayList<>();
-                if(response.code()==200) {
-                    GetFolder getFolder;
-                    getFolder = (GetFolder) response.body();
-                    ArrayList<GetFolder_Item> getFolder_items = new ArrayList<>();
-                    getFolder_items.add(getFolder.getItems().get(0));
-                    items.add(new MainItem(getFolder_items.get(0).getName()));
-                    Log.v("Steps","3");
-                }
-               onPostExecute(items);
-            }
-            @Override
-                public void onFailure(Call call, Throwable t) {
-                Log.v("Steps",t.getMessage());
-            }
-        });
 
-        return null;
-        }
+        return }
+
 
         @Override
         protected void onPostExecute(List<MainItem> users) {
-            Log.v("Steps", String.valueOf(users));
-            Log.v("Steps","4");
+
             if (users != null) {
-                Log.v("Steps","5");
+                Log.v("steps1", String.valueOf(users.size()));
                 callback.onLoad(users);
             }else{
-                Log.v("Steps","!5");
             super.onPreExecute();
         }}
 
+        protected void loadList(List<MainItem> users,boolean type) {
+                Log.v("steps","1");
+                if (type) {
+                    folderlist.addAll(users);
+                    stat++;
+                    Log.v("steps", String.valueOf(users.size()));
+                } else {
+                    passlist.addAll(users);
+                    stat++;
+                    Log.v("steps", String.valueOf(users.size()));
+                }
+                if(stat==2){
+                    Log.v("steps", String.valueOf(users.size()));
+                    List<MainItem> mainlist=new ArrayList<>();
+                    Log.v("steps1", String.valueOf(mainlist.size()));
+                    mainlist.addAll(folderlist);
+                    Log.v("steps1", String.valueOf(mainlist.size()));
+                    mainlist.addAll(passlist);
+                    Log.v("steps1", String.valueOf(mainlist.size()));
+                    onPostExecute(mainlist);
+                }
+
+        }
 
     }
 }

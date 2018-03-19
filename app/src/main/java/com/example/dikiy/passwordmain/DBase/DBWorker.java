@@ -75,26 +75,37 @@ public class DBWorker {
         List<String> list = new ArrayList<>(Arrays.asList(s.substring(1,s.length()-1).split(",")));
         return list;
     }
-    public  ArrayList<MainItem> loadData(int id){
-        ArrayList<MainItem> list =new ArrayList<>();
-        Cursor cursor = mDb.rawQuery("select children,pass from folders where id="+id, null);
-        if(cursor.getColumnCount()!=0){
-        cursor.moveToFirst();
-       List<String> folderList= new ArrayList<>();
-       folderList.addAll(stringToList(cursor.getString(0)));
-       List<String> passList= new ArrayList<>();
-       passList.addAll(stringToList(cursor.getString(1)));
-       Log.v("12324123123",passList.size()+" "+folderList.size());
-       for(int i=0;i<folderList.size();i++){
-           list.add(new MainItem(folderList.get(i)));
-       }
-       for(int i=0;i<passList.size();i++){
-           list.add(new MainItem(passList.get(i)));
-       }
-
-
-        cursor.close();}
+    public  List<MainItem> loadData(int id){
+        List<MainItem> list =new ArrayList<>();
+//        Cursor cursor = mDb.rawQuery("select children,pass from folders where id="+id, null);
+//        if(cursor.getColumnCount()!=0){
+//        cursor.moveToFirst();
+//       List<String> folderList= new ArrayList<>();
+//       folderList.addAll(stringToList(cursor.getString(0)));
+//       List<String> passList= new ArrayList<>();
+//       passList.addAll(stringToList(cursor.getString(1)));
+//       Log.v("12324123123",passList.size()+" "+folderList.size());
+//       for(int i=0;i<folderList.size();i++){
+//           list.add(new MainItem(folderList.get(i)));
+//       }
+//       for(int i=0;i<passList.size();i++){
+//           list.add(new MainItem(passList.get(i)));
+//       }
+//
+//
+//        cursor.close();}
         return list;
+    }
+    public void setData(  ArrayList<GetFolder_Item> list ,boolean type){
+        if(type){
+            mDb.execSQL("delete from folders");
+            for (int i=0;i<list.size();i++) {
+                mDb.execSQL("insert into passwords  values (" + list.get(i).getId()+ "," + list.get(i).getParent() + "," + login + "," + pass + "," + url + ")");
+
+            }
+        }else {
+            mDb.execSQL("delete from passwords");
+        }
     }
 
 
