@@ -1,5 +1,6 @@
 package com.example.dikiy.passwordmain.Adapters.Get;
 
+import java.util.ArrayList;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -8,13 +9,11 @@ public class GetPass {
 
     @SerializedName("items")
     @Expose
-    private List<GetPass_Item> items = null;
+    private List<GetPass_Item> items = new ArrayList<>();
     @SerializedName("count")
     @Expose
-    private Integer count;
-    @SerializedName("_time")
-    @Expose
-    private Double time;
+    private Integer count=0;
+
 
     public List<GetPass_Item> getItems() {
         return items;
@@ -32,12 +31,5 @@ public class GetPass {
         this.count = count;
     }
 
-    public Double getTime() {
-        return time;
-    }
-
-    public void setTime(Double time) {
-        this.time = time;
-    }
 
 }

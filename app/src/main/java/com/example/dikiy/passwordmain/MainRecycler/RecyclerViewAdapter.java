@@ -51,7 +51,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
 
-
+    public static OnItemTouchListener listener;
+    public interface OnItemTouchListener {
+        void onItemClick(int i);
+    }
     List<MainItem> mainItems;
 
 
@@ -85,7 +88,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
     @Override
-    public void onBindViewHolder(final PersonViewHolder personViewHolder, int i) {
+    public void onBindViewHolder(final PersonViewHolder personViewHolder, final int i) {
 
         personViewHolder.namepass.setText(mainItems.get(i).getName()+" id="+mainItems.get(i).getId());
         if(mainItems.get(i).getType()) {

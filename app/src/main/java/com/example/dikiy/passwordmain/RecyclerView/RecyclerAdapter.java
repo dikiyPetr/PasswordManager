@@ -28,6 +28,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             imageView = v.findViewById(R.id.imageView);
         }
     }
+
     public RecyclerAdapter(List<RecyclerItem> moviesList) {
         this.mDataset = moviesList;
     }

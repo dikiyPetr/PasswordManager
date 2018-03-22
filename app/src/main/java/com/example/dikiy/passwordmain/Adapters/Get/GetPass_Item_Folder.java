@@ -9,10 +9,10 @@ public class GetPass_Item_Folder {
 
     @SerializedName("id")
     @Expose
-    private Integer id;
+    private Integer id=0;
     @SerializedName("name")
     @Expose
-    private String name;
+    private String name=null;
     public Integer getId() {
         return id;
     }

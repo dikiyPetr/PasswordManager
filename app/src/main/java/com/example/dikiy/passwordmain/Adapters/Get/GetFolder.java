@@ -10,7 +10,7 @@ public class  GetFolder {
 
     @SerializedName("count")
     @Expose
-    private Integer count;
+    private Integer count=0;
 
     @SerializedName("items")
     @Expose
@@ -31,7 +31,7 @@ public class  GetFolder {
         return items;
     }
 
-    public void setItems(ArrayList<GetFolder_Item> items) {
+    public void setItems(List<GetFolder_Item> items) {
         this.items = items;
     }
 

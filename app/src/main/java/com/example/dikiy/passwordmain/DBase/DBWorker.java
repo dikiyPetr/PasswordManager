@@ -1,11 +1,13 @@
 package com.example.dikiy.passwordmain.DBase;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.example.dikiy.passwordmain.Adapters.Get.GetFolder_Item;
+import com.example.dikiy.passwordmain.Adapters.Get.GetPass_Item;
 import com.example.dikiy.passwordmain.GetContext;
 import com.example.dikiy.passwordmain.ItemModel.MainItem;
 
@@ -34,23 +36,24 @@ public class DBWorker {
             throw mSQLException;
         }
         mDb.enableWriteAheadLogging();
+
     }
     public void folder(GetFolder_Item item){
-        int id=item.getId();
-        String name=item.getName();
-        List<Integer> idpass=item.getPass();
-        List<Integer> idfolder=item.getParent();
-
-        Cursor cursor = mDb.rawQuery("select id from folders where id="+id+"", null);
-        if(cursor.isAfterLast()){
-
-            Log.v("12345","INSERT into folders values ("+id+","+name+",'"+idpass.toString()+"','"+idfolder.toString()+"')");
-            mDb.execSQL("INSERT into folders values ("+id+",'"+name+"','"+idpass.toString()+"','"+idfolder.toString()+"')");
-        }else{
-            Log.v("12345","update folders set name='"+name+"',children='"+idfolder+"',pass='"+idpass+"' where id="+id);
-            mDb.execSQL("update folders set name='"+name+"',children='"+idfolder+"',pass='"+idpass+"' where id="+id);
-        }
-        cursor.close();
+//        int id=item.getId();
+//        String name=item.getName();
+//        List<Integer> idpass=item.getPass();
+//        List<Integer> idfolder=item.getParent();
+//
+//        Cursor cursor = mDb.rawQuery("select id from folders where id="+id+"", null);
+//        if(cursor.isAfterLast()){
+//
+//            Log.v("12345","INSERT into folders values ("+id+","+name+",'"+idpass.toString()+"','"+idfolder.toString()+"')");
+//            mDb.execSQL("INSERT into folders values ("+id+",'"+name+"','"+idpass.toString()+"','"+idfolder.toString()+"')");
+//        }else{
+//            Log.v("12345","update folders set name='"+name+"',children='"+idfolder+"',pass='"+idpass+"' where id="+id);
+//            mDb.execSQL("update folders set name='"+name+"',children='"+idfolder+"',pass='"+idpass+"' where id="+id);
+//        }
+//        cursor.close();
     }
     public void password(int id, int folder_id,String login,String pass,String url){
         Cursor cursor = mDb.rawQuery("select id from passwords where id="+id+"", null);
@@ -77,36 +80,53 @@ public class DBWorker {
     }
     public  List<MainItem> loadData(int id){
         List<MainItem> list =new ArrayList<>();
-//        Cursor cursor = mDb.rawQuery("select children,pass from folders where id="+id, null);
-//        if(cursor.getColumnCount()!=0){
-//        cursor.moveToFirst();
-//       List<String> folderList= new ArrayList<>();
-//       folderList.addAll(stringToList(cursor.getString(0)));
-//       List<String> passList= new ArrayList<>();
-//       passList.addAll(stringToList(cursor.getString(1)));
-//       Log.v("12324123123",passList.size()+" "+folderList.size());
-//       for(int i=0;i<folderList.size();i++){
-//           list.add(new MainItem(folderList.get(i)));
-//       }
-//       for(int i=0;i<passList.size();i++){
-//           list.add(new MainItem(passList.get(i)));
-//       }
-//
-//
-//        cursor.close();}
+        Cursor cursor = mDb.rawQuery("select * from folders where folder="+id, null);
+        Log.v("LoadLog", String.valueOf(cursor.getCount()));
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()){
+            list.add(new MainItem(cursor.getString(1), Integer.parseInt(cursor.getString(0)),true));
+        cursor.moveToNext();
+        }
+        cursor.close();
+        cursor = mDb.rawQuery("select * from passwords where folder="+id, null);
+        Log.v("LoadLog", String.valueOf(cursor.getCount()));
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()){
+            list.add(new MainItem(cursor.getString(2), Integer.parseInt(cursor.getString(0)),false));
+            cursor.moveToNext();
+        }
+        cursor.close();
+        Log.v("LoadLog", String.valueOf(list.size()));
         return list;
     }
-    public void setData(  ArrayList<GetFolder_Item> list ,boolean type){
-        if(type){
-            mDb.execSQL("delete from folders");
+    public void setDataPass(ArrayList<GetPass_Item> list ){
+
+            mDb.execSQL("delete from passwords");
             for (int i=0;i<list.size();i++) {
-                mDb.execSQL("insert into passwords  values (" + list.get(i).getId()+ "," + list.get(i).getParent() + "," + login + "," + pass + "," + url + ")");
+                Log.v("DBcheck", String.valueOf(list.get(i).getId()));
+                Log.v("DBcheck", list.get(i).getPass().toString());
+                Log.v("DBcheck", list.get(i).getName());
+                Log.v("DBcheck", String.valueOf(list.get(i).getFolder()));
+                Log.v("DBcheck",list.get(i).getLogin());
+                Log.v("DBcheck",list.get(i).getUrl());
+                Log.v("DBlog1","insert into passwords  values (" + list.get(i).getId()+ ",'" + list.get(i).getPass().toString() + "','" + list.get(i).getName() + "'," + list.get(i).getFolder() + ",'" + list.get(i).getLogin() + "','" + list.get(i).getUrl() +"')");
+                mDb.execSQL("insert into passwords  values (" + list.get(i).getId()+ ",'" + list.get(i).getPass().toString() + "','" + list.get(i).getName() + "'," + list.get(i).getFolder() + ",'" + list.get(i).getLogin() + "','" + list.get(i).getUrl() +"')");
 
             }
-        }else {
-            mDb.execSQL("delete from passwords");
-        }
+
     }
+    public void setDataFolder(  ArrayList<GetFolder_Item> list ){
 
+            mDb.execSQL("delete from folders");
+            for (int i=0;i<list.size();i++) {
+                Log.v("DBcheck", String.valueOf(list.get(i).getId()));
+                Log.v("DBcheck", list.get(i).getName());
+                Log.v("DBcheck", String.valueOf(list.get(i).getParent()));
 
+                Log.v("DBlog2","insert into folders  values (" + list.get(i).getId()+ ",'" + list.get(i).getName() + "'," + list.get(i).getParent() +")");
+
+                mDb.execSQL("insert into folders  values (" + list.get(i).getId()+ ",'" + list.get(i).getName() + "'," + list.get(i).getParent() +")");
+
+            }
+        }
 }

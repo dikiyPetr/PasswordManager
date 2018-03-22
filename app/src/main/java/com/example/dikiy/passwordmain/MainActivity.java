@@ -18,13 +18,17 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyboardShortcutGroup;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.dikiy.passwordmain.Model.MainModel;
 import com.example.dikiy.passwordmain.Presenters.MainPresenter;
@@ -48,9 +52,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FloatingActionButton fButton1,fButton2,fButton3,fButton4;
     private ImageView cloak;
     private SwipeRefreshLayout refreshLayout;
-    private static final String place ="C/123/...";
-    private MainPresenter presenter;
 
+    private MainPresenter presenter;
+    private List<String> way =new ArrayList<>();
 
 
 
@@ -105,35 +109,53 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onRefresh() {refreshLayout.setRefreshing(false);}
+            public void onRefresh() {presenter.refreshUsers();}
         });
-        recyclerView.addOnItemTouchListener(
-                new RecyclerItemClickListener(this, new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position, MotionEvent event) { }})
-        );
 
+        //корень
+           placeV.setText("C");
 
         MainModel usersModel = new MainModel();
         presenter = new MainPresenter(usersModel);
         presenter.attachView(this);
         presenter.viewIsReady();
-
+        recyclerViewAdapter = new RecyclerViewAdapter(null);
         recyclerView.addOnItemTouchListener(
-                new RecyclerItemClickListener(this, new RecyclerItemClickListener.OnItemClickListener() {
+                new RecyclerItemClickListener(this,recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
-                    public void onItemClick(View view, int position, MotionEvent event) {
-                        Log.v("1234555",position+" "+event.getAction());
-                        if(position!=0) {
-                            if(OpenFlyWindow()) {
-                                Uri address = Uri.parse("http://yandex.ru");
-                                Intent openlink = new Intent(Intent.ACTION_VIEW, address);
-                                startActivity(openlink);
-                                MainActivity.super.finish();
-                            }
+                    public void onItemClick(View view, int position) {
+
+                        Log.v("itemClick", String.valueOf(position));
+                        if(position!=-1 && items.get(position).getType()) {
+                            presenter.nextWay(items.get(position).getId());
+                            changeWay(items.get(position).getName());
                         }
                     }
+
+                    @Override
+                    public void onLongClick(View view, int position) {
+                        Log.v("1231312313123","1");
+
+                    }
                 }));
+
+
+
+//        recyclerView.addOnItemTouchListener(
+//                new RecyclerItemClickListener(this, new RecyclerItemClickListener.OnItemClickListener() {
+//                    @Override
+//                    public void onItemClick(View view, int position, MotionEvent event) {
+//                        Log.v("1234555",position+" "+event.getAction());
+//                        if(position!=0) {
+//                            if(OpenFlyWindow()) {
+//                                Uri address = Uri.parse("http://yandex.ru");
+//                                Intent openlink = new Intent(Intent.ACTION_VIEW, address);
+//                                startActivity(openlink);
+//                                MainActivity.super.finish();
+//                            }
+//                        }
+//                    }
+//                }));
     }
 
     private boolean OpenFlyWindow(){
@@ -158,13 +180,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void closeSearch(){
         headersearchView.onActionViewCollapsed();
-        placeV.setText(place);
+        placeV.setVisibility(View.VISIBLE);
         cloak.setVisibility(View.GONE);
+        fButton1.setVisibility(View.VISIBLE);
     }
     private void openSearch(){
-        placeV.setText("");
+        placeV.setVisibility(View.GONE);
         cloak.setVisibility(View.VISIBLE);
+        fButton1.setVisibility(View.GONE);
     }
+    private void changeWay(String s){
+     placeV.setText(placeV.getText()+"/"+s);
+    }
+    private void backWay(){
+        Log.v("test","123");
+        String s=placeV.getText().toString();
+        s=s.substring(0,s.lastIndexOf('/'));
+        placeV.setText(s);
+    }
+
+
 
     private void ClickFabB(int i) {
         if(i==View.VISIBLE){
@@ -223,12 +258,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             drawer.closeDrawer(GravityCompat.START);
         } else if(headersearchView.isFocused()) {
             closeSearch();
+        }else if(presenter.backWay())
+        {
+        backWay();
         }else{
             super.onBackPressed();
         }
     }
-
+    public void fail(){
+        Toast.makeText(this,"error",Toast.LENGTH_SHORT).show();
+    }
     public void showUsers(List<MainItem> users) {
+        refreshLayout.setRefreshing(false);
+
+
         if(users!=null && users.size()!=0) {
 
             items = new ArrayList<>();
@@ -236,6 +279,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             recyclerViewAdapter = new RecyclerViewAdapter(items);
             recyclerView.setAdapter(recyclerViewAdapter);
+        }else{
+            items = new ArrayList<>();
+            recyclerViewAdapter = new RecyclerViewAdapter(items);
+            recyclerView.setAdapter(recyclerViewAdapter);
+            Toast.makeText(this,"empty",Toast.LENGTH_SHORT).show();
         }
     }
+
 }

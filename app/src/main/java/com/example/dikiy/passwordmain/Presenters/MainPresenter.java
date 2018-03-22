@@ -5,6 +5,7 @@ import com.example.dikiy.passwordmain.MainActivity;
 import com.example.dikiy.passwordmain.ItemModel.MainItem;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,9 +15,12 @@ import java.util.List;
 public class MainPresenter {
     private MainActivity view;
     private final MainModel model;
-
+    private List<Integer> way=new ArrayList<>();
     public MainPresenter(MainModel model) {
+
+        way.add(0);
         this.model = model;
+
     }
 
     public void attachView(MainActivity usersActivity) {
@@ -32,15 +36,27 @@ public class MainPresenter {
 
         refreshUsers();
     }
-    public void nextView() {
-
+    public Boolean backWay(){
+        if(way.size()!=1) {
+            way.remove(way.size() - 1);
+            loadUsers();
+        return true;
+        }
+        return false;
+    }
+    public void nextWay(int id){
+        way.add(id);
         loadUsers();
     }
     public void refreshUsers() {
         model.refreshBd(new MainModel.RefreshBDCallback() {
             @Override
             public void onLoad(Boolean b) {
+                if(b){
              loadUsers();
+                } else{
+                    view.fail();
+                }
             }
         });
     }
@@ -52,6 +68,6 @@ public class MainPresenter {
 
                         view.showUsers(users);
                     }
-                });
+                },way.get(way.size()-1));
 
 }}

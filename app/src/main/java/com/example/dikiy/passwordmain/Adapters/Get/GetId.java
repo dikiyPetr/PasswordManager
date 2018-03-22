@@ -9,14 +9,10 @@ import java.util.List;
  * Created by dikiy on 27.02.2018.
  */
 
-public class GetFolder_Item_Children {
+public class GetId {
     @SerializedName("id")
     @Expose
-    private Integer id;
-    @SerializedName("name")
-    @Expose
-    private String name;
-
+    private Integer id=0;
     public Integer getId() {
         return id;
     }
@@ -24,14 +20,5 @@ public class GetFolder_Item_Children {
     public void setId(Integer id) {
         this.id = id;
     }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
 
 }

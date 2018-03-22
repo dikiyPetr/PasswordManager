@@ -1,22 +1,50 @@
 package com.example.dikiy.passwordmain.Adapters.Get;
+
+import android.content.Intent;
+import android.view.KeyEvent;
+
+import java.util.ArrayList;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class GetPass_Item {
 
-    @SerializedName("id")
-    @Expose
-    private Integer id;
-    @SerializedName("name")
-    @Expose
-    private String name;
     @SerializedName("pass")
     @Expose
-    private boolean pass;
+    private Boolean pass=false;
+    @SerializedName("id")
+    @Expose
+    private Integer id=0;
+    @SerializedName("users")
+    @Expose
+    private List<Object> users = new ArrayList<>();
+    @SerializedName("name")
+    @Expose
+    private String name=null;
     @SerializedName("folder")
     @Expose
-    private List<GetPass_Item_Folder> folder = null;
+    private GetPass_Item_Folder folder=null;
+    @SerializedName("login")
+    @Expose
+    private String login=null;
+    @SerializedName("url")
+    @Expose
+    private String url=null;
+    @SerializedName("tag")
+    @Expose
+    private List<Object> tag = new ArrayList<>();
+    @SerializedName("group")
+    @Expose
+    private List<Object> group = new ArrayList<>();
+
+    public Boolean getPass() {
+        return pass;
+    }
+
+    public void setPass(Boolean pass) {
+        this.pass = pass;
+    }
 
     public Integer getId() {
         return id;
@@ -24,6 +52,14 @@ public class GetPass_Item {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public List<Object> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<Object> users) {
+        this.users = users;
     }
 
     public String getName() {
@@ -34,18 +70,45 @@ public class GetPass_Item {
         this.name = name;
     }
 
-    public void setPass(boolean pass) {
-        this.pass = pass;
-    }
-    public boolean getPass() {
-        return pass;
-    }
-    public List<GetPass_Item_Folder> getFolder() {
-        return folder;
+    public int getFolder() {
+        if(folder==null){return 0;}
+        return folder.getId();
     }
 
-    public void setFolder(List<GetPass_Item_Folder> children) {
-        this.folder = children;
+    public void setFolder(GetPass_Item_Folder folder) {
+        this.folder = folder;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public List<Object> getTag() {
+        return tag;
+    }
+
+    public void setTag(List<Object> tag) {
+        this.tag = tag;
+    }
+
+    public List<Object> getGroup() {
+        return group;
+    }
+
+    public void setGroup(List<Object> group) {
+        this.group = group;
     }
 
 }

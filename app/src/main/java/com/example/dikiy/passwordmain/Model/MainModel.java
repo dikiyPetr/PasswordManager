@@ -11,10 +11,8 @@ import com.example.dikiy.passwordmain.DBase.DBWorker;
 import com.example.dikiy.passwordmain.DBase.LoadText;
 import com.example.dikiy.passwordmain.ItemModel.MainItem;
 import com.example.dikiy.passwordmain.Retrofit.ApiUtils;
-import com.example.dikiy.passwordmain.Retrofit.ApiWorker;
 import com.example.dikiy.passwordmain.Retrofit.PostLogin;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,9 +27,11 @@ import retrofit2.Response;
  */
 
 public class MainModel {
-    public void loadUsers(LoadUserCallback callback) {
+    public void loadUsers(LoadUserCallback callback,int folderid) {
         LoadUsersTask loadUsersTask = new LoadUsersTask(callback);
+        loadUsersTask.setId(folderid);
         loadUsersTask.execute();
+
     }
     public void refreshBd(RefreshBDCallback callback) {
         RefreshBDTask refreshBDCallback = new RefreshBDTask(callback);
@@ -52,7 +52,7 @@ public class MainModel {
 
     class RefreshBDTask extends AsyncTask<Void, Void, Boolean>{
         private final RefreshBDCallback callback;
-
+        private int task=0;
         RefreshBDTask(RefreshBDCallback callback) {
             this.callback = callback;
         }
@@ -67,46 +67,54 @@ public class MainModel {
             postLogin.GetFolder(map).enqueue(new Callback<GetFolder>() {
                 @Override
                 public void onResponse(Call<GetFolder> call, Response<GetFolder> response) {
-                    List<MainItem> items=new ArrayList<>();
-                    ArrayList<GetFolder_Item> getFolder_items =new ArrayList<GetFolder_Item>();
-                    getFolder_items.addAll(response.body().getItems());
-
-                    dbWorker.setData(getFolder_items,true);
+                    Log.v("steps1", String.valueOf(response.code()));
+                    ArrayList<GetFolder_Item> getFolder_items=new ArrayList<>();
+                    getFolder_items= (ArrayList<GetFolder_Item>) response.body().getItems();
+                    dbWorker.setDataFolder(getFolder_items);
+                    task++;
+                    onPostExecute(true);
                 }
 
                 @Override
-                public void onFailure(Call<GetFolder> call, Throwable t) {
-                    Log.v("steps","!f");
+                public void onFailure(Call<GetFolder> call, Throwable t)
+                {
+                    Log.v("steps1",t.getLocalizedMessage());
+                    task=task-5;
+                    onPostExecute(true);
                 }
             });
             postLogin.GetPass(map).enqueue(new Callback<GetPass>() {
                 @Override
                 public void onResponse(Call<GetPass> call, Response<GetPass> response) {
-                    List<MainItem> items=new ArrayList<>();
-                    ArrayList<GetPass_Item> getFolder_items =new ArrayList<GetPass_Item>();
-                    getFolder_items.addAll(response.body().getItems());
-                    for(int i=0;i<getFolder_items.size();i++){
-                        items.add(new MainItem(getFolder_items.get(i).getName(),getFolder_items.get(i).getId(),false));
-                    }
-                    dbWorker.setData(items,false);
+                    Log.v("steps1", String.valueOf(response.code()));
+                    ArrayList<GetPass_Item> getPass_items=new ArrayList<>();
+                    getPass_items= (ArrayList<GetPass_Item>) response.body().getItems();
+                    dbWorker.setDataPass(getPass_items);
+                    task++;
+                    onPostExecute(true);
                 }
 
                 @Override
                 public void onFailure(Call<GetPass> call, Throwable t) {
-                    Log.v("steps",t.getLocalizedMessage());
+                    task=task-5;
+                    onPostExecute(true);
                 }
             });
-
-
-            return false;
+        return false;
         }
 
         @Override
-        protected void onPostExecute(Boolean b ) {
-            if (callback != null) {
-                callback.onLoad(b);
+        protected void onPostExecute(Boolean b) {
+            if(b){
+                if(task==2){
+                    callback.onLoad(true);
+                }else if (task<0){
+                    callback.onLoad(false);
+                }
             }
         }
+
+
 
 
     }
@@ -119,52 +127,31 @@ public class MainModel {
         private List<MainItem> folderlist=new ArrayList<>();
         private int stat=0;
         private final LoadUserCallback callback;
-        private int id;
+        private int id=0;
         LoadUsersTask(LoadUserCallback callback) {
             this.callback = callback;
         }
-        protected void setId(int id){
-            this.id=id;
+
+        public void setId(int id){this.id=id;
         }
         @Override
         protected List<MainItem> doInBackground(Void... params) {
+        List<MainItem> list = new ArrayList<>();
+        DBWorker dbWorker = new DBWorker();
+        list.addAll(dbWorker.loadData(id));
 
-        return }
+            Log.v("LoadLog", String.valueOf(list.size()));
+
+
+        return list; }
 
 
         @Override
         protected void onPostExecute(List<MainItem> users) {
-
-            if (users != null) {
-                Log.v("steps1", String.valueOf(users.size()));
-                callback.onLoad(users);
-            }else{
-            super.onPreExecute();
-        }}
-
-        protected void loadList(List<MainItem> users,boolean type) {
-                Log.v("steps","1");
-                if (type) {
-                    folderlist.addAll(users);
-                    stat++;
-                    Log.v("steps", String.valueOf(users.size()));
-                } else {
-                    passlist.addAll(users);
-                    stat++;
-                    Log.v("steps", String.valueOf(users.size()));
-                }
-                if(stat==2){
-                    Log.v("steps", String.valueOf(users.size()));
-                    List<MainItem> mainlist=new ArrayList<>();
-                    Log.v("steps1", String.valueOf(mainlist.size()));
-                    mainlist.addAll(folderlist);
-                    Log.v("steps1", String.valueOf(mainlist.size()));
-                    mainlist.addAll(passlist);
-                    Log.v("steps1", String.valueOf(mainlist.size()));
-                    onPostExecute(mainlist);
-                }
-
+            callback.onLoad(users);
         }
+
+
 
     }
 }
