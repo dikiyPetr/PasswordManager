@@ -55,6 +55,12 @@ public class DBWorker {
 //        }
 //        cursor.close();
     }
+    public void deleteFolder(int id){
+        mDb.execSQL("DELETE FROM folders WHERE id="+id);
+    }
+    public void deletePass(int id){
+        mDb.execSQL("DELETE FROM passwords WHERE id="+id);
+    }
     public void password(int id, int folder_id,String login,String pass,String url){
         Cursor cursor = mDb.rawQuery("select id from passwords where id="+id+"", null);
 

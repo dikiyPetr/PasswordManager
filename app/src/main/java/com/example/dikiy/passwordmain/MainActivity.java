@@ -52,7 +52,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FloatingActionButton fButton1,fButton2,fButton3,fButton4;
     private ImageView cloak;
     private SwipeRefreshLayout refreshLayout;
-
+    final String modeEdit="1";
+    final String modeCreate="0";
     private MainPresenter presenter;
     private List<String> way =new ArrayList<>();
 
@@ -97,9 +98,31 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 ClickFabB(fButton2.getVisibility());
             }
         });
+        //folder
+        fButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(MainActivity.this,PasswordActivity.class);
+                intent.putExtra("folder","1");
+                intent.putExtra("mode",modeCreate);
+                startActivity(intent);
+            }
+        });
+        //user
+        fButton3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        //password
         fButton4.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {startActivity(new Intent(MainActivity.this,PasswordActivity.class));}
+            public void onClick(View v) {
+                Intent intent=new Intent(MainActivity.this,PasswordActivity.class);
+                intent.putExtra("folder","1");
+                intent.putExtra("mode",modeCreate);
+                startActivity(intent);}
         });
         headersearchView.setOnQueryTextFocusChangeListener(this);
         cloak.setOnClickListener(new View.OnClickListener() {
@@ -134,7 +157,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     @Override
                     public void onLongClick(View view, int position) {
-                        Log.v("1231312313123","1");
+                        showPopupMenu(view,position);
+//                       presenter.deleteItem(items.get(position).getId(),items.get(position).getType());
 
                     }
                 }));
@@ -157,6 +181,45 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //                    }
 //                }));
     }
+
+    private void showPopupMenu(View v, final int p) {
+        PopupMenu popupMenu = new PopupMenu(this, v);
+        popupMenu.inflate(R.menu.popupmenu); // Для Android 4.0
+        // для версии Android 3.0 нужно использовать длинный вариант
+        // popupMenu.getMenuInflater().inflate(R.menu.popupmenu,
+        // popupMenu.getMenu());
+
+        popupMenu
+                .setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        // Toast.makeText(PopupMenuDemoActivity.this,
+                        // item.toString(), Toast.LENGTH_LONG).show();
+                        // return true;
+                        switch (item.getItemId()) {
+
+                            case R.id.menu1:
+                                Toast.makeText(getApplicationContext(),
+                                        "delete item...",
+                                        Toast.LENGTH_SHORT).show();
+                                presenter.deleteItem(items.get(p).getId(),items.get(p).getType());
+                                return true;
+                            case R.id.menu2:
+                                Toast.makeText(getApplicationContext(),
+                                        "почините сервак",
+                                        Toast.LENGTH_SHORT).show();
+                                return true;
+                            default:
+                                return false;
+                        }
+                    }
+                });
+
+
+        popupMenu.show();
+    }
+
 
     private boolean OpenFlyWindow(){
 
@@ -266,6 +329,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
     public void fail(){
+
+        refreshLayout.setRefreshing(false);
         Toast.makeText(this,"error",Toast.LENGTH_SHORT).show();
     }
     public void showUsers(List<MainItem> users) {
@@ -287,4 +352,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
+    public void deleteError() {
+        Toast.makeText(this,"folder is not empty",Toast.LENGTH_SHORT).show();
+    }
 }

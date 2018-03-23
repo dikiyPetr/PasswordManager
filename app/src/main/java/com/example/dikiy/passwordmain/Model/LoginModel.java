@@ -1,6 +1,7 @@
 package com.example.dikiy.passwordmain.Model;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.example.dikiy.passwordmain.DBase.LoadText;
 import com.example.dikiy.passwordmain.Retrofit.ApiWorker;
@@ -30,19 +31,24 @@ public class LoginModel {
 
         @Override
         protected Integer doInBackground(Void... params) {
-
-               if( ApiWorker.getRandomId()==200){
-                if(ApiWorker.Login(name,pass)==200){
+            Log.v("112313212313",LoadText.getText("client_id"));
+                if(LoadText.getText("client_id").length()<5){if( ApiWorker.getRandomId()!=200){return 0;}}
+                int code =ApiWorker.Login(name,pass);
+            Log.v("http", String.valueOf(code));
+                if(code==200){
                     return 2;
+                }else if(code==400){
+                    if( ApiWorker.getRandomId()!=200){return 0;}
+                    if(ApiWorker.Login(name,pass)==200){return 2;}
                 }
-                return 1;
-               }
+
             return 0;
         }
 
         @Override
         protected void onPostExecute(Integer stat) {
             if (callback != null) {
+                Log.v("http","code "+stat);
                 callback.onLoad(stat);
             }
         }

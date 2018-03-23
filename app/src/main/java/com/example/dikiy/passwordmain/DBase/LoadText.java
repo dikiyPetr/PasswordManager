@@ -48,8 +48,7 @@ public class LoadText extends Activity{
             SharedPreferences.Editor editor = preferences.edit();
             editor.putString("access_token", null);
             editor.putString("refresh_token", null);
-            editor.putString("client_secret", null);
-            editor.putString("client_id", null);
+
             editor.commit();
         }
     }

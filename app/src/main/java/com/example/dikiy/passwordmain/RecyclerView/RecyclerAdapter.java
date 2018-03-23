@@ -71,7 +71,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     }
     @Override
     public int getItemCount() {
-        return mDataset.size();
+        if(mDataset!=null) {
+            return mDataset.size();
+        }else{
+            return 0;
+        }
     }
 }
 

@@ -3,12 +3,14 @@ package com.example.dikiy.passwordmain;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -41,17 +43,23 @@ public class PasswordActivity extends AppCompatActivity implements View.OnClickL
     String url = "url";
     String login = "login";
     String password = "password";
+    String mode;
+    String folder;
+    Button addpass;
     private List<RecyclerItem> movieListD = new ArrayList<>();
     private List<RecyclerItem> movieList2D = new ArrayList<>();
     String log = "log";
     PasswordModel model;
     PasswordPresenter presenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         overridePendingTransition(0,R.anim.flye);
         setContentView(R.layout.create_password_activity);
-
+        Intent intent=this.getIntent();
+       folder= intent.getStringExtra("folder");
+       mode= intent.getStringExtra("mode");
         init();
         loadDefault();
     }
@@ -64,6 +72,7 @@ public class PasswordActivity extends AppCompatActivity implements View.OnClickL
         acept = findViewById(R.id.acept);
         copyurl = findViewById(R.id.copyurl);
         copylogin = findViewById(R.id.copylogin);
+        addpass = findViewById(R.id.addpass);
         copypassword = findViewById(R.id.copypassword);
         etUrl = findViewById(R.id.eturl);
         etLogin = findViewById(R.id.etlogin);

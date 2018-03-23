@@ -50,7 +50,7 @@ public class ApiWorker {
             LoadText.newId(adapter);
         return response.code();
         }
-        return 0;
+        return response.code();
     }
     public ApiWorker(){
 
@@ -74,10 +74,11 @@ public class ApiWorker {
             LoadText.refreshToken(postAdapter);
             return response.code();
         }
-        return 0;
+        return response.code();
 
     }
-    public static int RefreshToken(){
+
+    public static int refreshToken(){
        JsonObject jsonObject = new JsonObject();
        jsonObject.addProperty("client_id", LoadText.getText("client_id"));
        jsonObject.addProperty("grant_type", "refresh_token");
@@ -98,7 +99,50 @@ public class ApiWorker {
         }
         return 0;
     }
+    public static int deleteFolder(int id){
 
+        final Map<String, String> map = new HashMap<>();
+        map.put("Authorization", "Bearer "+LoadText.getText("access_token"));
+
+        PostLogin postLogin = ApiUtils.getAPIService();
+        Response response=null;
+        try {
+            response = postLogin.DeleteFolder(id,map).execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if(response!=null && response.code()==200) {
+            PostAdapter adapter = (PostAdapter) response.body();
+            LoadText.refreshToken(adapter);
+            return response.code();
+        }
+
+
+        return 0;
+    }
+    public int setFolder(){
+        JsonObject jsonObject = new JsonObject();
+
+
+        final Map<String, String> map = new HashMap<>();
+        map.put("Authorization", "Bearer "+LoadText.getText("access_token"));
+
+
+        PostLogin postLogin = ApiUtils.getAPIService();
+        Response response = null;
+        try {
+            response = postLogin.Login(jsonObject).execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if(response!=null && response.code()==200) {
+            PostAdapter postAdapter = (PostAdapter) response.body();
+            LoadText.refreshToken(postAdapter);
+            return response.code();
+        }
+        return 0;
+    }
     public GetFolder getFolder(){
 //        final Map<String, String> map = new HashMap<>();
 //        map.put("Authorization", "Bearer "+LoadText.getText("access_token"));

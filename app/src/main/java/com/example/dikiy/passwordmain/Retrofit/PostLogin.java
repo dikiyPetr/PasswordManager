@@ -12,16 +12,18 @@ import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.HeaderMap;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 /**
  * Created by dikiy on 23.01.2018.
  */
 
-public interface PostLogin {
+public interface    PostLogin {
 
     @Headers( {"Content-Type: application/json",
             "Accept: */*"
@@ -32,7 +34,11 @@ public interface PostLogin {
     @POST("/api/v1/clients")
     Call<PostAdapter> GetRandomId(@Body JsonObject post);
 
+    @DELETE("/api/v1/folders/{id}")
+    Call<PostAdapter> DeleteFolder(@Path("id") int id,@HeaderMap Map<String, String> headers);
 
+    @DELETE("/api/v1/passes/{id}")
+    Call<PostAdapter> DeletePass(@Path("id") int id,@HeaderMap Map<String, String> headers);
 
 
     @GET("/api/v1/user/current")

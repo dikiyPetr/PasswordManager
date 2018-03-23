@@ -1,5 +1,7 @@
 package com.example.dikiy.passwordmain.Presenters;
 
+import android.util.Log;
+
 import com.example.dikiy.passwordmain.Model.MainModel;
 import com.example.dikiy.passwordmain.MainActivity;
 import com.example.dikiy.passwordmain.ItemModel.MainItem;
@@ -70,4 +72,23 @@ public class MainPresenter {
                     }
                 },way.get(way.size()-1));
 
-}}
+}
+
+    public void deleteItem(int i,boolean type) {
+      model.deleteItem(new MainModel.DeleteItemCallback() {
+          @Override
+          public void onLoad(int id, boolean mode) {
+              Log.v("steps121312","1");
+              if(id==-1){
+                  view.deleteError();
+              }else if(id==-2){
+                  view.fail();
+              }else{
+                  loadUsers();
+              }
+
+
+          }
+      },i,type);
+    }
+}

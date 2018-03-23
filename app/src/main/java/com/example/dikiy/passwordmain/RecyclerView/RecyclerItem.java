@@ -13,6 +13,8 @@ public class RecyclerItem {
         this.name=name;
 
     }
+    public RecyclerItem(){
+    }
 
     public String getName() {
         return name;

@@ -1,5 +1,6 @@
 package com.example.dikiy.passwordmain.Model;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -7,12 +8,15 @@ import com.example.dikiy.passwordmain.Adapters.Get.GetFolder;
 import com.example.dikiy.passwordmain.Adapters.Get.GetFolder_Item;
 import com.example.dikiy.passwordmain.Adapters.Get.GetPass;
 import com.example.dikiy.passwordmain.Adapters.Get.GetPass_Item;
+import com.example.dikiy.passwordmain.Adapters.Post.PostAdapter;
 import com.example.dikiy.passwordmain.DBase.DBWorker;
 import com.example.dikiy.passwordmain.DBase.LoadText;
 import com.example.dikiy.passwordmain.ItemModel.MainItem;
 import com.example.dikiy.passwordmain.Retrofit.ApiUtils;
+import com.example.dikiy.passwordmain.Retrofit.ApiWorker;
 import com.example.dikiy.passwordmain.Retrofit.PostLogin;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +42,11 @@ public class MainModel {
         refreshBDCallback.execute();
 
     }
+    public void deleteItem(DeleteItemCallback callback, int item, boolean mode) {
+        DeleteItemTask deleteItemCallback = new DeleteItemTask(callback, item, mode);
+        deleteItemCallback.execute();
+
+    }
 
     public interface LoadUserCallback {
         void onLoad(List<MainItem> users);
@@ -46,6 +55,100 @@ public class MainModel {
 
     public interface RefreshBDCallback {
         void onLoad(Boolean b);
+    }
+    public interface DeleteItemCallback {
+        void onLoad(int id,boolean mode);
+    }
+
+    class DeleteItemTask extends AsyncTask<Void, Void, Integer>{
+        private final DeleteItemCallback callback;
+        int item;
+        boolean mode;
+        DeleteItemTask(DeleteItemCallback callback, int item, boolean mode) {
+            this.callback = callback;
+            this.item = item;
+            this.mode= mode;
+        }
+
+        @Override
+        protected Integer doInBackground(Void... voids) {
+            if(mode){
+                //delete folder
+                final Map<String, String> map = new HashMap<>();
+                map.put("Authorization", "Bearer "+LoadText.getText("access_token"));
+
+                PostLogin postLogin = ApiUtils.getAPIService();
+                postLogin.DeleteFolder(item,map).enqueue(new Callback<PostAdapter>() {
+
+                    @Override
+                    public void onResponse(Call<PostAdapter> call, Response<PostAdapter> response) {
+                        if(response.code()==200){
+                    DBWorker dbWorker= new DBWorker();
+                    dbWorker.deleteFolder(item);
+                    onPostExecute(1);
+                    }else if(response.code()==409){
+                            onPostExecute(-2);
+                            Log.v("steps121312", String.valueOf(response.code()));
+                        }else{
+                            onPostExecute(-1);
+                        }}
+
+                    @Override
+                    public void onFailure(Call<PostAdapter> call, Throwable t) {
+                        onPostExecute(-1);
+                    }
+                });
+
+
+            }else{
+                //delete pass
+
+                final Map<String, String> map = new HashMap<>();
+                map.put("Authorization", "Bearer "+LoadText.getText("access_token"));
+
+                PostLogin postLogin = ApiUtils.getAPIService();
+                postLogin.DeletePass(item,map).enqueue(new Callback<PostAdapter>() {
+
+                    @Override
+                    public void onResponse(Call<PostAdapter> call, Response<PostAdapter> response) {
+                        if(response.code()==200){
+                        DBWorker dbWorker= new DBWorker();
+                        dbWorker.deletePass(item);
+                        onPostExecute(1);
+                        }else if(response.code()==409){
+                            onPostExecute(-2);
+                        }else{
+                            onPostExecute(-1);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<PostAdapter> call, Throwable t) {
+                        onPostExecute(-1);
+                    }
+                });
+
+
+            }
+            return 0;
+        }
+
+        @Override
+        protected void onPostExecute(Integer code) {
+            switch (code){
+                case 1:
+                    callback.onLoad(item, mode);
+                    break;
+                case -2:
+                    callback.onLoad(-1,mode);
+                    break;
+                case -1:
+                    callback.onLoad(-2,mode);
+                    break;
+            }
+
+
+        }
     }
 
 
