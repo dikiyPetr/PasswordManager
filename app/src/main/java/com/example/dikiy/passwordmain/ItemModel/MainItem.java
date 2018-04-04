@@ -4,6 +4,7 @@ public class MainItem {
     String name;
     boolean type;
     int id;
+    boolean stat=false;
 
 
 
@@ -39,6 +40,12 @@ public class MainItem {
     public void setName(String name) {
         this.name = name;
     }
+    public boolean getStat(){
+        return stat;
+    }
 
-
+    public boolean switchStat() {
+       if(stat){stat=false;}else{stat=true;};
+       return stat;
+    }
 }

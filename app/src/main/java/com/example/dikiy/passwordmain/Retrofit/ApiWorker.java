@@ -74,8 +74,12 @@ public class ApiWorker {
             LoadText.refreshToken(postAdapter);
             return response.code();
         }
-        return response.code();
-
+        if(response!=null) {
+            return response.code();
+        }else
+        {
+            return 0;
+        }
     }
 
     public static int refreshToken(){
@@ -97,7 +101,12 @@ public class ApiWorker {
             LoadText.refreshToken(adapter);
             return response.code();
         }
-        return 0;
+        if(response!=null) {
+            return response.code();
+        }else
+        {
+            return 0;
+        }
     }
     public static int deleteFolder(int id){
 
@@ -119,7 +128,12 @@ public class ApiWorker {
         }
 
 
-        return 0;
+        if(response!=null) {
+            return response.code();
+        }else
+        {
+            return 0;
+        }
     }
     public int setFolder(){
         JsonObject jsonObject = new JsonObject();
@@ -141,7 +155,12 @@ public class ApiWorker {
             LoadText.refreshToken(postAdapter);
             return response.code();
         }
-        return 0;
+        if(response!=null) {
+            return response.code();
+        }else
+        {
+            return 0;
+        }
     }
     public GetFolder getFolder(){
 //        final Map<String, String> map = new HashMap<>();

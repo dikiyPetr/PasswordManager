@@ -47,6 +47,11 @@ public class MainModel {
         deleteItemCallback.execute();
 
     }
+    public void edititem(DeleteItemCallback callback, int item, boolean mode) {
+        DeleteItemTask deleteItemCallback = new DeleteItemTask(callback, item, mode);
+        deleteItemCallback.execute();
+
+    }
 
     public interface LoadUserCallback {
         void onLoad(List<MainItem> users);
@@ -59,7 +64,21 @@ public class MainModel {
     public interface DeleteItemCallback {
         void onLoad(int id,boolean mode);
     }
+    class EditItemTask extends AsyncTask<Void, Void, Integer>{
 
+        @Override
+        protected Integer doInBackground(Void... voids) {
+
+
+
+            return 0;
+        }
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+
+        }
+    }
     class DeleteItemTask extends AsyncTask<Void, Void, Integer>{
         private final DeleteItemCallback callback;
         int item;

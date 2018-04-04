@@ -21,16 +21,16 @@ public class GetPass_Item {
     private List<Object> users = new ArrayList<>();
     @SerializedName("name")
     @Expose
-    private String name=null;
+    private String name="";
     @SerializedName("folder")
     @Expose
     private GetPass_Item_Folder folder=null;
     @SerializedName("login")
     @Expose
-    private String login=null;
+    private String login="";
     @SerializedName("url")
     @Expose
-    private String url=null;
+    private String url="";
     @SerializedName("tag")
     @Expose
     private List<Object> tag = new ArrayList<>();

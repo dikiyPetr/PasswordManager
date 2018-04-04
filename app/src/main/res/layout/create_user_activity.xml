@@ -84,7 +84,7 @@
                         android:text="Название" />
 
                     <EditText
-                        android:id="@+id/eturl"
+                        android:id="@+id/etname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_alignParentTop="true"
@@ -95,16 +95,6 @@
                         android:ems="10"
                         android:inputType="textPersonName" />
 
-                    <ImageView
-                        android:id="@+id/copyurl"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_alignParentTop="true"
-                        android:padding="10dp"
-                        app:srcCompat="?android:attr/actionModeCopyDrawable" />
-
                 </RelativeLayout>
 
                 <LinearLayout
@@ -112,32 +102,32 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
+                    <TextView
+                        android:id="@+id/textView5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:paddingRight="5dp"
+                        android:text="Импорт прав" />
+
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="40dp">
 
-                        <TextView
-                            android:id="@+id/textView5"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
-                            android:layout_alignParentStart="true"
-                            android:layout_centerVertical="true"
-                            android:paddingRight="5dp"
-                            android:text="Импорт прав" />
-
                         <FrameLayout
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="40dp"
                             android:layout_alignParentBottom="true"
                             android:layout_alignParentEnd="true"
+                            android:layout_alignParentLeft="true"
                             android:layout_alignParentRight="true"
-                            android:layout_alignParentTop="true"
-                            android:layout_toEndOf="@+id/textView5"
-                            android:layout_toRightOf="@+id/textView5">
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentTop="true">
 
                             <android.support.v7.widget.RecyclerView
-                                android:id="@+id/rv2"
+                                android:id="@+id/rv"
                                 android:layout_width="match_parent"
                                 android:layout_height="40dp"></android.support.v7.widget.RecyclerView>
 
@@ -162,18 +152,18 @@
                         android:layout_height="match_parent">
 
                         <EditText
-                            android:id="@+id/addgrup"
+                            android:id="@+id/etrole"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
                             android:layout_alignParentStart="true"
-                            android:layout_toLeftOf="@+id/addgrupb"
-                            android:layout_toStartOf="@+id/addgrupb"
+                            android:layout_toLeftOf="@+id/irole"
+                            android:layout_toStartOf="@+id/irole"
                             android:ems="10"
                             android:inputType="textPersonName" />
 
                         <ImageView
-                            android:id="@+id/addgrupb"
+                            android:id="@+id/irole"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"

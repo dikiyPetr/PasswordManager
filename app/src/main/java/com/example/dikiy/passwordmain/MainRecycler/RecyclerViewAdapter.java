@@ -56,7 +56,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         void onItemClick(int i);
     }
     List<MainItem> mainItems;
-
+    int selectItems;
 
     public RecyclerViewAdapter(List<MainItem> mainItems) {
 
@@ -96,7 +96,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }else {
             personViewHolder.photo.setImageResource(R.drawable.keyb);
         }
-
+        if(mainItems.get(i).getStat()){
+            personViewHolder.itemView.setBackgroundResource(R.color.pngBlue);
+        }else{
+            personViewHolder.itemView.setBackgroundResource(R.color.pngPng);
+        }
 
 
 
@@ -106,9 +110,24 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public int getItemCount() {
         return mainItems.size();
     }
+    public boolean selectItem(int id){
 
+  if(mainItems.get(id).switchStat()){
+      selectItems++;
+  }else{
+      selectItems--;
+  }
+    notifyDataSetChanged();
+    Log.v("1233333333333333", String.valueOf(selectItems));
+    if(selectItems==0){
+    return false;
+    }
+    return true;
+    }
 
-
+    public List<MainItem> getItems(){
+        return mainItems;
+    }
 
 //    public void addItem(String name,String categ) {
 //       Log.v("123457623242", String.valueOf(getItemCount()));

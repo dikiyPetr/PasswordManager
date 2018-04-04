@@ -62,6 +62,10 @@ public class MainPresenter {
             }
         });
     }
+    public void editItem(){
+
+
+    }
     public void loadUsers() {
 
                 model.loadUsers(new MainModel.LoadUserCallback() {

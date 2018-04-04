@@ -22,11 +22,15 @@ public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListen
         mListener = listener;
         mGestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
             @Override
-            public boolean onSingleTapUp(MotionEvent e) {
-
-
+            public boolean onDoubleTap(MotionEvent e) {
                 return true;
             }
+
+            @Override
+            public boolean onSingleTapUp(MotionEvent e) {
+                return true;
+            }
+
 
             @Override
             public void onLongPress(MotionEvent e) {

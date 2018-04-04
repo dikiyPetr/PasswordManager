@@ -5,7 +5,7 @@
     <color name="colorAccent">#ff4081</color>
     <color name="pngBlack">#60000000</color>
     <color name="pngPng">#00000000</color>
-
+    <color name="pngBlue">#8f4256af</color>
     <color name="white">#ffffff</color>
     <color name="pngWhite">#ebffffff</color>
 </resources>

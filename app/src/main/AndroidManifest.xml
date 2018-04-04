@@ -37,6 +37,14 @@
         <activity android:name=".LockActivity"
             android:theme="@style/AppTheme">
         </activity>
+        <activity android:name=".FolderActivity"
+            android:theme="@style/AppTheme">
+
+        </activity>
+        <activity android:name=".UserActivity"
+            android:theme="@style/AppTheme">
+
+        </activity>
         <service android:name=".Fly" ></service>
 
         <!--<meta-data-->
