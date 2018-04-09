@@ -15,13 +15,9 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.KeyboardShortcutGroup;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -44,22 +40,23 @@ import java.util.List;
  * Created by dikiy on 16.02.2018.
  */
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnFocusChangeListener {
-    private SearchView headersearchView;
-    private TextView placeV;
+    private android.widget.SearchView headersearchView;
+    private TextView placeV,sizeselect;
     private DrawerLayout drawer;
     private RecyclerView recyclerView;
     private List<MainItem> items = new ArrayList<>();
     private RecyclerViewAdapter recyclerViewAdapter;
     private FloatingActionButton fButton1,fButton2,fButton3,fButton4;
-    private ImageView cloak;
+    private ImageView cloak, closeSelect;
     private SwipeRefreshLayout refreshLayout;
-    final String modeEdit="1";
+    final String    modeEdit="1";
     final String modeCreate="0";
     private MainPresenter presenter;
     private List<String> way =new ArrayList<>();
     private boolean modeSelect=false;
     private RelativeLayout rlSelect;
     private ImageView moveItems,deleteItems;
+    private RelativeLayout ll;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +70,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
     private void init(){
         Log.v("1231","123");
-        headersearchView = findViewById(R.id.mainserch);
+        sizeselect=findViewById(R.id.sizeselect);
+        closeSelect = findViewById(R.id.closeselect);
         placeV = findViewById(R.id.placev);
         fButton1= findViewById(R.id.floatingActionButton);
         fButton2= findViewById(R.id.floatingActionButton2);
@@ -81,13 +79,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fButton4= findViewById(R.id.fbaddpassword);
         moveItems=findViewById(R.id.moveItems);
         deleteItems=findViewById(R.id.deleteItems);
-
-        rlSelect=findViewById(R.id.rlselect);
-
+        ll=findViewById(R.id.ll);
+        rlSelect=findViewById(R.id.rl);
+        headersearchView = findViewById(R.id.mainserch);
         moveItems.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+            }
+        });
+        closeSelect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.v("123sadadae","123");
+                modeSelect=false;
+                switchToolbar();
             }
         });
         deleteItems.setOnClickListener(new View.OnClickListener() {
@@ -131,9 +137,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(MainActivity.this,FolderActivity.class);
-                intent.putExtra("folder","1");
+                Log.v("1231231231", String.valueOf(presenter.getWay()));
+                intent.putExtra("folder",String.valueOf(presenter.getWay()));
                 intent.putExtra("mode",modeCreate);
-                startActivity(intent);
+                startActivityForResult(intent,1);
             }
         });
         //user
@@ -143,7 +150,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Intent intent=new Intent(MainActivity.this,UserActivity.class);
                 intent.putExtra("folder","1");
                 intent.putExtra("mode",modeCreate);
-                startActivity(intent);
+                startActivityForResult(intent,1);
             }
         });
         //password
@@ -151,9 +158,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(MainActivity.this,PasswordActivity.class);
-                intent.putExtra("folder","1");
+                intent.putExtra("folder",String.valueOf(presenter.getWay()));
                 intent.putExtra("mode",modeCreate);
-                startActivity(intent);}
+                startActivityForResult(intent,1);
+            }
         });
         headersearchView.setOnQueryTextFocusChangeListener(this);
         cloak.setOnClickListener(new View.OnClickListener() {
@@ -178,25 +186,43 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 new RecyclerItemClickListener(this,recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        if(modeSelect){
-                            modeSelect=recyclerViewAdapter.selectItem(position);
 
+                        if(modeSelect){
+                            int b=recyclerViewAdapter.selectItem(position);
+                                if(b==0){
+                                    modeSelect=false;
+                                }else{
+                                    modeSelect=true;
+                                }
+                                Log.v("12312312sdsfs", String.valueOf(b));
+                            sizeselect.setText("select "+b+" item(s)");
                             switchToolbar();
                         }else {
 
                             Log.v("itemClick", String.valueOf(position));
-                            if (position != -1 && items.get(position).getType()) {
-                                presenter.nextWay(items.get(position).getId());
-                                changeWay(items.get(position).getName());
+                            if (position != -1) {
+                                if(items.get(position).getType()) {
+                                    presenter.nextWay(items.get(position).getId());
+                                    changeWay(items.get(position).getName());
+                                }else{
+                                    showPopupMenu(view,position);
+
+                                }
                             }
                         }
+                        Log.d("way", String.valueOf(presenter.getWay()));
                     }
 
                     @Override
                     public void onLongClick(View view, int position) {
 //                        showPopupMenu(view,position);
-
-                        modeSelect=recyclerViewAdapter.selectItem(position);
+                        int b=recyclerViewAdapter.selectItem(position);
+                        if(b==0){
+                            modeSelect=false;
+                        }else{
+                            modeSelect=true;
+                        }
+                        sizeselect.setText("select "+b+" item(s)");
                         switchToolbar();
                     }
                 }));
@@ -220,50 +246,75 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //                }));
     }
 
-//    private void showPopupMenu(View v, final int p) {
-//        PopupMenu popupMenu = new PopupMenu(this, v);
-//        popupMenu.inflate(R.menu.popupmenu); // Для Android 4.0
-//        // для версии Android 3.0 нужно использовать длинный вариант
-//        // popupMenu.getMenuInflater().inflate(R.menu.popupmenu,
-//        // popupMenu.getMenu());
-//
-//        popupMenu
-//                .setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-//
-//                    @Override
-//                    public boolean onMenuItemClick(MenuItem item) {
-//                        // Toast.makeText(PopupMenuDemoActivity.this,
-//                        // item.toString(), Toast.LENGTH_LONG).show();
-//                        // return true;
-//                        switch (item.getItemId()) {
-//
-//                            case R.id.menu1:
+    private void showPopupMenu(View v, final int p) {
+        PopupMenu popupMenu = new PopupMenu(this, v);
+        popupMenu.inflate(R.menu.popupmenu); // Для Android 4.0
+        // для версии Android 3.0 нужно использовать длинный вариант
+        // popupMenu.getMenuInflater().inflate(R.menu.popupmenu,
+        // popupMenu.getMenu());
+
+        popupMenu
+                .setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        // Toast.makeText(PopupMenuDemoActivity.this,
+                        // item.toString(), Toast.LENGTH_LONG).show();
+                        // return true;
+                        switch (item.getItemId()) {
+
+                            case R.id.menu1:
+
+
+
+
 //                                Toast.makeText(getApplicationContext(),
 //                                        "delete item...",
 //                                        Toast.LENGTH_SHORT).show();
 //                                presenter.deleteItem(items.get(p).getId(),items.get(p).getType());
-//                                return true;
-//                            case R.id.menu2:
+                                return true;
+                            case R.id.menu2:
+
+                                Intent intent=new Intent(MainActivity.this,PasswordActivity.class);
+                                intent.putExtra("folder",p);
+                                intent.putExtra("mode",modeEdit);
+                                startActivity(intent);
+
+
 //                                Intent intent=new Intent(MainActivity.this,UserActivity.class);
 //                                intent.putExtra("folder","1");
 //                                intent.putExtra("mode",modeCreate);
 //                                startActivity(intent);
-//                                return true;
-//                            default:
-//                                return false;
-//                        }
-//                    }
-//                });
-//
-//
-//        popupMenu.show();
-//    }
+                                return true;
+                            default:
+                                return false;
+                        }
+                    }
+                });
+
+
+        popupMenu.show();
+    }
+
+@Override
+protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+
+    if(requestCode==1){
+        refreshLayout.setRefreshing(true);
+        presenter.refreshUsers();
+    }
+}
     public void switchToolbar(){
         if(modeSelect) {
 
+            ll.setVisibility(View.GONE);
             rlSelect.setVisibility(View.VISIBLE);
-        }else{
 
+        }else{
+            recyclerViewAdapter.closeSelect();
+            recyclerViewAdapter.notifyDataSetChanged();
+            ll.setVisibility(View.VISIBLE);
             rlSelect.setVisibility(View.GONE);
 
         }
@@ -308,6 +359,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String s=placeV.getText().toString();
         s=s.substring(0,s.lastIndexOf('/'));
         placeV.setText(s);
+        Log.d("way", String.valueOf(presenter.getWay()));
     }
 
 
@@ -382,6 +434,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Toast.makeText(this,"error",Toast.LENGTH_SHORT).show();
     }
     public void showUsers(List<MainItem> users) {
+
         refreshLayout.setRefreshing(false);
 
 
@@ -398,9 +451,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             recyclerView.setAdapter(recyclerViewAdapter);
             Toast.makeText(this,"empty",Toast.LENGTH_SHORT).show();
         }
+
+        if(recyclerViewAdapter.getSizeSelect()==0){
+            modeSelect=false;
+        }
+            switchToolbar();
     }
 
     public void deleteError() {
         Toast.makeText(this,"folder is not empty",Toast.LENGTH_SHORT).show();
+    }
+
+    public void failRefresh() {
+        items = new ArrayList<>();
+        recyclerViewAdapter = new RecyclerViewAdapter(items);
+        recyclerView.setAdapter(recyclerViewAdapter);
+        refreshLayout.setRefreshing(false);
+        Toast.makeText(this,"error",Toast.LENGTH_SHORT).show();
     }
 }

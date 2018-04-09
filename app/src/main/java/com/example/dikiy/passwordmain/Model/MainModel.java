@@ -191,9 +191,12 @@ public class MainModel {
                 public void onResponse(Call<GetFolder> call, Response<GetFolder> response) {
                     Log.v("steps1", String.valueOf(response.code()));
                     ArrayList<GetFolder_Item> getFolder_items=new ArrayList<>();
+                    if(response.code()==200){
                     getFolder_items= (ArrayList<GetFolder_Item>) response.body().getItems();
                     dbWorker.setDataFolder(getFolder_items);
-                    task++;
+                    task++;}else{
+                        task=-5;
+                    }
                     onPostExecute(true);
                 }
 
@@ -210,9 +213,13 @@ public class MainModel {
                 public void onResponse(Call<GetPass> call, Response<GetPass> response) {
                     Log.v("steps1", String.valueOf(response.code()));
                     ArrayList<GetPass_Item> getPass_items=new ArrayList<>();
-                    getPass_items= (ArrayList<GetPass_Item>) response.body().getItems();
-                    dbWorker.setDataPass(getPass_items);
-                    task++;
+                    if(response.code()==200) {
+                        getPass_items = (ArrayList<GetPass_Item>) response.body().getItems();
+                        dbWorker.setDataPass(getPass_items);
+                        task++;
+                    }else{
+                        task=-5;
+                    }
                     onPostExecute(true);
                 }
 

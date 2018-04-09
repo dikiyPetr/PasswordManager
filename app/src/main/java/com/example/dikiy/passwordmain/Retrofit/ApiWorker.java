@@ -30,6 +30,31 @@ import retrofit2.Response;
  */
 
 public class ApiWorker {
+    public static int createFolder(String name,String parent){
+        final Map<String, String> map = new HashMap<>();
+        map.put("Authorization", "Bearer "+LoadText.getText("access_token"));
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("name", name);
+        if(!parent.equals("0")) {
+            jsonObject.addProperty("parent", String.valueOf(parent));
+        }
+        PostLogin postLogin = ApiUtils.getAPIService();
+        Response response = null;
+        try {
+            response = postLogin.CreateFolder(map,jsonObject).execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if(response!=null && response.code()==200) {
+            return response.code();
+        }
+        if(response!=null) {
+            return response.code();
+        }else
+        {
+            return 0;
+        }
+    }
     public static int getRandomId() {
         JsonObject jsonObject= new JsonObject();
         JsonArray jsonArray= new JsonArray();
@@ -201,5 +226,36 @@ public class ApiWorker {
             return postAdapter;
         }
         return null;
+    }
+
+    public static int createPass(String name,String parent, String url, String pass,String login,String description) {
+        final Map<String, String> map = new HashMap<>();
+        map.put("Authorization", "Bearer "+LoadText.getText("access_token"));
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("name", name);
+        if(!parent.equals("0")) {
+            jsonObject.addProperty("folder", String.valueOf(parent));
+        }
+        jsonObject.addProperty("url", url);
+        jsonObject.addProperty("pass", pass);
+        jsonObject.addProperty("login", login);
+        jsonObject.addProperty("description", description);
+        jsonObject.addProperty("secretKey", "123");
+        PostLogin postLogin = ApiUtils.getAPIService();
+        Response response = null;
+        try {
+            response = postLogin.CreatePass(map,jsonObject).execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if(response!=null && response.code()==200) {
+            return response.code();
+        }
+        if(response!=null) {
+            return response.code();
+        }else
+        {
+            return 0;
+        }
     }
 }

@@ -1,5 +1,7 @@
 package com.example.dikiy.passwordmain.Adapters.Get;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
 import com.google.gson.annotations.Expose;
@@ -12,10 +14,10 @@ public class GetFolder_Item {
     private Integer id=0;
     @SerializedName("name")
     @Expose
-    private String name=null;
-    @SerializedName("parent")
+    private String name="";
+    @SerializedName("parrent_id")
     @Expose
-    private GetId parent =null;
+    private String parent ="";
 
     public Integer getId() {
         return id;
@@ -34,11 +36,15 @@ public class GetFolder_Item {
     }
 
     public int getParent() {
-        if(parent==null){return 0;}
-        return parent.getId();
+
+        if(parent.equals("")){
+
+            return 0;
+        }
+        return Integer.valueOf(parent);
     }
 
-    public void setParent(GetId parent) {
+    public void setParent(String parent) {
         this.parent = parent;
     }
 

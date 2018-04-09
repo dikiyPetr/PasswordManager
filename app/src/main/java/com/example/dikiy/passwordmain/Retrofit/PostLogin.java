@@ -31,6 +31,12 @@ public interface    PostLogin {
     @POST("/oauth/v2/token")
     Call<PostAdapter> Login(@Body JsonObject post);
 
+    @POST("/api/v1/folders")
+    Call<PostAdapter> CreateFolder(@HeaderMap Map<String, String> headers,@Body JsonObject post);
+
+    @POST("/api/v1/passes")
+    Call<PostAdapter> CreatePass(@HeaderMap Map<String, String> headers,@Body JsonObject post);
+
     @POST("/api/v1/clients")
     Call<PostAdapter> GetRandomId(@Body JsonObject post);
 

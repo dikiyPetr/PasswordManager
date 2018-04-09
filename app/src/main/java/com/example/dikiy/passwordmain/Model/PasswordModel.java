@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 
 import com.example.dikiy.passwordmain.ItemModel.PasswordList;
 import com.example.dikiy.passwordmain.RecyclerView.RecyclerItem;
+import com.example.dikiy.passwordmain.Retrofit.ApiWorker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,15 +19,7 @@ public class PasswordModel
         PasswordModel.LoadUsersTask loadUsersTask = new PasswordModel.LoadUsersTask(callback);
         loadUsersTask.execute();
     }
-    public void addPassword(PasswordModel.AddPasswordCallback callback) {
-        PasswordModel.AddPasswordTask addPasswordTask = new PasswordModel.AddPasswordTask(callback);
-        addPasswordTask.execute();
-    }
     public  interface LoadUserCallback {
-        void onLoad(PasswordList users);
-    }
-
-    public  interface AddPasswordCallback {
         void onLoad(PasswordList users);
     }
     class LoadUsersTask extends AsyncTask<Void, Void, PasswordList> {
@@ -56,20 +49,31 @@ public class PasswordModel
             }
         }
     }
-    class AddPasswordTask extends AsyncTask<Void, Void, PasswordList>{
-        private final PasswordModel.AddPasswordCallback callback;
 
-        AddPasswordTask(PasswordModel.AddPasswordCallback callback) {
+
+    public void CreatePass(CreatePassCallback callback,String name,String folder, String url, String pass,String login,String description) {
+        CreatePassTask createPassTask = new CreatePassTask(callback,name,folder, url,  pass,login, description);
+        createPassTask.execute();
+    }
+    public  interface CreatePassCallback {
+        void onLoad(int stat);
+    }
+    class CreatePassTask extends AsyncTask<Void, Void, Integer> {
+        private final CreatePassCallback callback;
+        String name,folder,url, pass,login,description;
+        CreatePassTask(CreatePassCallback callback,String name,String folder, String url, String pass,String login,String description) {
+            this.name=name;
+            this.folder=folder;
+            this.url=url;
+            this.pass=pass;
+            this.login=login;
+            this.description=description;
             this.callback = callback;
         }
         @Override
-        protected PasswordList doInBackground(Void... params) {
-            return null;
+        protected Integer doInBackground(Void... voids) {
+            ApiWorker.createPass(name,folder,url,pass,login,description);
+            callback.onLoad(200);
+            return 0;
         }
-
-        @Override
-        protected void onPostExecute(PasswordList users) {
-            callback.onLoad(null);
-        }
-    }
-}
+    }}

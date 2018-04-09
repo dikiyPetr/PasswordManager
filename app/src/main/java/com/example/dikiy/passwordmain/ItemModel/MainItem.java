@@ -44,6 +44,10 @@ public class MainItem {
         return stat;
     }
 
+    public void setStat(boolean stat) {
+        this.stat = stat;
+    }
+
     public boolean switchStat() {
        if(stat){stat=false;}else{stat=true;};
        return stat;

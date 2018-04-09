@@ -42,4 +42,12 @@ public class PasswordPresenter {
 
         });
     }
+    public void createPass(String name,String folder, String url, String pass,String login,String description){
+        model.CreatePass(new PasswordModel.CreatePassCallback() {
+            @Override
+            public void onLoad(int stat) {
+                view.execute();
+            }
+        }, name, folder,url, pass, login, description);
+    }
 }

@@ -19,6 +19,7 @@ public class  TokenRefresherInterceptor implements Interceptor {
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request(); // получили запрос который вы отправили на сервер.
+        Log.v("123sad123asd", String.valueOf(request.body()));
         Response response = chain.proceed(request); //тут выполняется запрос и результат в response.
 
         String thistoken=request.header("Authorization");

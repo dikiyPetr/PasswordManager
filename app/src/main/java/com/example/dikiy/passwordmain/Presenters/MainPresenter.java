@@ -50,6 +50,9 @@ public class MainPresenter {
         way.add(id);
         loadUsers();
     }
+    public int getWay(){
+        return way.get(way.size()-1);
+    }
     public void refreshUsers() {
         model.refreshBd(new MainModel.RefreshBDCallback() {
             @Override
@@ -57,7 +60,8 @@ public class MainPresenter {
                 if(b){
              loadUsers();
                 } else{
-                    view.fail();
+
+                    view.failRefresh();
                 }
             }
         });

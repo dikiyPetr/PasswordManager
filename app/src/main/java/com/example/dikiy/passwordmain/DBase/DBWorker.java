@@ -121,6 +121,27 @@ public class DBWorker {
             }
 
     }
+
+    public void getPass(int id){
+        Cursor cursor = mDb.rawQuery("select * from pass where folder="+id, null);
+        Log.v("LoadLog", String.valueOf(cursor.getCount()));
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()){
+            list.add(new MainItem(cursor.getString(1), Integer.parseInt(cursor.getString(0)),true));
+            cursor.moveToNext();
+        }
+        cursor.close();
+        cursor = mDb.rawQuery("select * from passwords where folder="+id, null);
+        Log.v("LoadLog", String.valueOf(cursor.getCount()));
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()){
+            list.add(new MainItem(cursor.getString(2), Integer.parseInt(cursor.getString(0)),false));
+            cursor.moveToNext();
+        }
+        cursor.close();
+        Log.v("LoadLog", String.valueOf(list.size()));
+        return list;
+    }
     public void setDataFolder(  ArrayList<GetFolder_Item> list ){
 
             mDb.execSQL("delete from folders");

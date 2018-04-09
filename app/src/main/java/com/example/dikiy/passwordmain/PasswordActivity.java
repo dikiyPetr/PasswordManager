@@ -39,27 +39,33 @@ public class PasswordActivity extends AppCompatActivity implements View.OnClickL
     EditText addTag, addTag2, etUrl, etLogin, etPassword, etname, etlog;
     ImageView addTagB, addTagB2, editandclose, acept, copyurl, copylogin, copypassword;
     boolean stat = false;
-    String name = "name";
-    String url = "url";
-    String login = "login";
-    String password = "password";
+    String name = "";
+    String url = "";
+    String login = "";
+    String password = "";
     String mode;
-    String folder;
+    String folder="0";
     Button addpass;
     private List<RecyclerItem> movieListD = new ArrayList<>();
     private List<RecyclerItem> movieList2D = new ArrayList<>();
-    String log = "log";
+    String log = "";
     PasswordModel model;
     PasswordPresenter presenter;
+    Intent thisIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         overridePendingTransition(0,R.anim.flye);
         setContentView(R.layout.create_password_activity);
-        Intent intent=this.getIntent();
-       folder= intent.getStringExtra("folder");
-       mode= intent.getStringExtra("mode");
+        thisIntent=this.getIntent();
+       folder= thisIntent.getStringExtra("folder");
+       mode= thisIntent.getStringExtra("mode");
+
+
+
+
+
         init();
         loadDefault();
     }
@@ -79,6 +85,18 @@ public class PasswordActivity extends AppCompatActivity implements View.OnClickL
         etPassword = findViewById(R.id.etpassword);
         etname = findViewById(R.id.etname);
         etlog = findViewById(R.id.etlog);
+
+
+
+
+        addpass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addpass.setEnabled(false);
+                presenter.createPass(etname.getText().toString(),folder,etUrl.getText().toString(),etPassword.getText().toString(),etLogin.getText().toString(),etlog.getText().toString());
+            }
+        });
+
         editandclose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,11 +151,7 @@ public class PasswordActivity extends AppCompatActivity implements View.OnClickL
                                         }
                                     }
         );
-        movie2 = new RecyclerItem(String.valueOf("tag"));
-        movieList2.add(movie2);
-        movieList.add(movie2);
-        movieList2D.add(movie2);
-        movieListD.add(movie2);
+
         recyclerView2.setLayoutManager(layoutManager2);
         recyclerView2.setAdapter(mAdapter2);
         setEnabled(false);
@@ -146,8 +160,16 @@ public class PasswordActivity extends AppCompatActivity implements View.OnClickL
         presenter.attachView(this);
         presenter.viewIsReady();
 
-
-
+        if(mode.equals("1")){
+         addpass.setVisibility(View.GONE);
+        }else{
+            editandclose.setVisibility(View.GONE);
+            copyurl.setVisibility(View.GONE);
+            copylogin.setVisibility(View.GONE);
+            copypassword.setVisibility(View.GONE);
+            acept.setVisibility(View.GONE);
+            setEnabled(true);
+        }
 
     }
 
@@ -161,6 +183,9 @@ public class PasswordActivity extends AppCompatActivity implements View.OnClickL
            addTag2.setEnabled(b);
     }
     public void loadDefault() {
+        if(mode.equals("1")){
+
+        }
         etname.setText(name);
         etUrl.setText(url);
         etLogin.setText(login);
@@ -256,6 +281,13 @@ public class PasswordActivity extends AppCompatActivity implements View.OnClickL
     }
     public void showlist2(PasswordList list) {
 
+    }
+
+
+    public void execute() {
+        Intent intent = new Intent();
+        setResult(RESULT_OK, intent);
+        finish();
     }
 }
 

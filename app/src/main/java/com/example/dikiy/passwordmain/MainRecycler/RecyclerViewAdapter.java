@@ -23,6 +23,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
 
+
     public static class PersonViewHolder extends RecyclerView.ViewHolder {
 
         CardView cv;
@@ -110,7 +111,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public int getItemCount() {
         return mainItems.size();
     }
-    public boolean selectItem(int id){
+    public int getSizeSelect(){
+        return selectItems;
+    }
+    public int selectItem(int id){
 
   if(mainItems.get(id).switchStat()){
       selectItems++;
@@ -119,12 +123,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
   }
     notifyDataSetChanged();
     Log.v("1233333333333333", String.valueOf(selectItems));
-    if(selectItems==0){
-    return false;
+   return selectItems;
     }
-    return true;
+    public void closeSelect() {
+        for(int i=0;i<mainItems.size();i++){
+            mainItems.get(i).setStat(false);
+        }
     }
-
     public List<MainItem> getItems(){
         return mainItems;
     }
