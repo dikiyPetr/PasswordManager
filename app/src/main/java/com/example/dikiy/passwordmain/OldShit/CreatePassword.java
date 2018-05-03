@@ -73,7 +73,12 @@ public class CreatePassword extends AppCompatActivity implements View.OnClickLis
 copyurl.setOnClickListener(this);
 copylogin.setOnClickListener(this);
 copypassword.setOnClickListener(this);
-        mAdapter = new RecyclerAdapter(movieList);
+        mAdapter = new RecyclerAdapter(movieList, new RecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(String s) {
+
+            }
+        });
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         addTag = findViewById(R.id.addtag);
@@ -96,7 +101,12 @@ copypassword.setOnClickListener(this);
         recyclerView.setAdapter(mAdapter);
 
 
-        mAdapter2 = new RecyclerAdapter(movieList2);
+        mAdapter2 = new RecyclerAdapter(movieList2, new RecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(String s) {
+
+            }
+        });
         LinearLayoutManager layoutManager2
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         addTag2 = findViewById(R.id.addgrup);

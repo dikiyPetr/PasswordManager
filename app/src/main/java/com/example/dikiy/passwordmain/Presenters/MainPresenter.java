@@ -2,6 +2,7 @@ package com.example.dikiy.passwordmain.Presenters;
 
 import android.util.Log;
 
+import com.example.dikiy.passwordmain.Adapters.Model.CutItem;
 import com.example.dikiy.passwordmain.Model.MainModel;
 import com.example.dikiy.passwordmain.MainActivity;
 import com.example.dikiy.passwordmain.ItemModel.MainItem;
@@ -54,6 +55,7 @@ public class MainPresenter {
         return way.get(way.size()-1);
     }
     public void refreshUsers() {
+
         model.refreshBd(new MainModel.RefreshBDCallback() {
             @Override
             public void onLoad(Boolean b) {
@@ -75,7 +77,7 @@ public class MainPresenter {
                 model.loadUsers(new MainModel.LoadUserCallback() {
                     @Override
                     public void onLoad(List<MainItem> users) {
-
+                        view.refreshClose();
                         view.showUsers(users);
                     }
                 },way.get(way.size()-1));
@@ -83,9 +85,11 @@ public class MainPresenter {
 }
 
     public void deleteItem(int i,boolean type) {
+        view.refreshStart();
       model.deleteItem(new MainModel.DeleteItemCallback() {
           @Override
           public void onLoad(int id, boolean mode) {
+              view.refreshClose();
               Log.v("steps121312","1");
               if(id==-1){
                   view.deleteError();
@@ -98,5 +102,17 @@ public class MainPresenter {
 
           }
       },i,type);
+
+    }
+
+        public void moveItem(List<CutItem> cutItems,int folderId) {
+        view.refreshStart();
+        model.moveItem(new MainModel.MoveItemCallback() {
+            @Override
+            public void onLoad() {
+                refreshUsers();
+
+            }
+        },cutItems,folderId);
     }
 }

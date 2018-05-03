@@ -21,17 +21,26 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.dikiy.passwordmain.Adapters.Model.CutItem;
+import com.example.dikiy.passwordmain.Adapters.Model.FlyVItem;
+import com.example.dikiy.passwordmain.Adapters.Model.SearchItem;
+import com.example.dikiy.passwordmain.DBase.DBWorker;
+import com.example.dikiy.passwordmain.DBase.LoadText;
 import com.example.dikiy.passwordmain.Model.MainModel;
+
 import com.example.dikiy.passwordmain.Presenters.MainPresenter;
 import com.example.dikiy.passwordmain.ItemModel.MainItem;
 import com.example.dikiy.passwordmain.MainRecycler.RecyclerItemClickListener;
 import com.example.dikiy.passwordmain.MainRecycler.RecyclerViewAdapter;
+import com.example.dikiy.passwordmain.SearchRecycler.RVSearchAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,13 +50,14 @@ import java.util.List;
  */
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnFocusChangeListener {
     private android.widget.SearchView headersearchView;
-    private TextView placeV,sizeselect;
+    private TextView placeV,sizeselect,pasteState;
     private DrawerLayout drawer;
-    private RecyclerView recyclerView;
+    private RecyclerView recyclerView,rvSearch;
     private List<MainItem> items = new ArrayList<>();
     private RecyclerViewAdapter recyclerViewAdapter;
+    private RVSearchAdapter searchViewAdapter;
     private FloatingActionButton fButton1,fButton2,fButton3,fButton4;
-    private ImageView cloak, closeSelect;
+    private ImageView  closeSelect;
     private SwipeRefreshLayout refreshLayout;
     final String    modeEdit="1";
     final String modeCreate="0";
@@ -55,9 +65,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private List<String> way =new ArrayList<>();
     private boolean modeSelect=false;
     private RelativeLayout rlSelect;
-    private ImageView moveItems,deleteItems;
-    private RelativeLayout ll;
-
+    private ImageView moveItems, menuSelect,pasteI,closeP;
+    private RelativeLayout ll,fLayout,cloak,pasteL;
+    private List<SearchItem> searchItems= new ArrayList<>();
+    private FrameLayout progressl;
+    FlyVItem flyVItem=null;
+    private List<CutItem> cutItems=new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -70,43 +83,183 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
     private void init(){
         Log.v("1231","123");
+        pasteState=findViewById(R.id.pasteStat);
+        closeP=findViewById(R.id.closeP);
         sizeselect=findViewById(R.id.sizeselect);
         closeSelect = findViewById(R.id.closeselect);
         placeV = findViewById(R.id.placev);
+        pasteI= findViewById(R.id.paste);
+        pasteL= findViewById(R.id.pl);
         fButton1= findViewById(R.id.floatingActionButton);
         fButton2= findViewById(R.id.floatingActionButton2);
         fButton3= findViewById(R.id.floatingActionButton3);
         fButton4= findViewById(R.id.fbaddpassword);
-        moveItems=findViewById(R.id.moveItems);
-        deleteItems=findViewById(R.id.deleteItems);
+
+        menuSelect =findViewById(R.id.menus);
         ll=findViewById(R.id.ll);
+        rvSearch=findViewById(R.id.searchRV);
+        progressl=findViewById(R.id.progressl);
+        fLayout=findViewById(R.id.fLayout);
         rlSelect=findViewById(R.id.rl);
         headersearchView = findViewById(R.id.mainserch);
-        moveItems.setOnClickListener(new View.OnClickListener() {
+
+        closeP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                switchToolbar(0);
             }
         });
+        headersearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if(newText.length()>=1) {
+                    searchItems = new ArrayList<>();
+                    searchItems.addAll(LoadPasswordList(newText));
+                    searchViewAdapter = new RVSearchAdapter(searchItems);
+                    searchViewAdapter.notifyDataSetChanged();
+                    rvSearch.setAdapter(searchViewAdapter);
+                    Log.v("12zxcdadads", newText);
+                }else{
+                    searchItems = new ArrayList<>();
+                    searchViewAdapter = new RVSearchAdapter(searchItems);
+                    searchViewAdapter.notifyDataSetChanged();
+                    rvSearch.setAdapter(searchViewAdapter);
+                }  return false;
+            }
+        });
+        pasteI.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                presenter.moveItem(cutItems,presenter.getWay());
+                switchToolbar(0);
+                cutItems=new ArrayList<>();
+            }
+        });
+//        moveItems.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                cutItems=new ArrayList<>();
+//                for(int i=0;i<items.size();i++){
+//                    if(items.get(i).getStat()){
+//                      cutItems.add(new CutItem(items.get(i).getId(),items.get(i).getType()));
+//                        items.get(i).switchStat();
+//                    }
+//                }
+//                recyclerViewAdapter.setSizeSelect(0);
+//                modeSelect=false;
+//                switchToolbar(2);
+//                recyclerViewAdapter.notifyDataSetChanged();
+//            }
+//        });
         closeSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.v("123sadadae","123");
+                recyclerViewAdapter.setSizeSelect(0);
                 modeSelect=false;
-                switchToolbar();
+                switchToolbar(0);
             }
         });
-        deleteItems.setOnClickListener(new View.OnClickListener() {
+        menuSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                for(int i=0;i<items.size();i++){
-                    if(items.get(i).getStat()){
-                        presenter.deleteItem(items.get(i).getId(),items.get(i).getType());
-                        items.get(i).switchStat();
-                    }
+                PopupMenu popupMenu = new PopupMenu(MainActivity.this, v);
+                popupMenu.inflate(R.menu.selectmenu);
+                if(recyclerViewAdapter.getSizeSelect()==1){
+                    popupMenu.getMenu().add(1,1,1,"edit");
                 }
-                recyclerViewAdapter.notifyDataSetChanged();
+               // Для Android 4.0
+                // для версии Android 3.0 нужно использовать длинный вариант
+                // popupMenu.getMenuInflater().inflate(R.menu.popupmenu,
+                // popupMenu.getMenu());
+
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+                            @Override
+                            public boolean onMenuItemClick(MenuItem item) {
+                                switch (item.getItemId()) {
+
+                                    case R.id.mD:
+                                        for(int i=0;i<items.size();i++){
+                                            if(items.get(i).getStat()){
+                                                   presenter.deleteItem(items.get(i).getId(),items.get(i).getType());
+                                                   items.get(i).switchStat();
+                                               }
+                                           }
+                                           recyclerViewAdapter.setSizeSelect(0);
+                                           modeSelect=false;
+                                           switchToolbar(0);
+                                           recyclerViewAdapter.notifyDataSetChanged();
+                                        return true;
+                                    case R.id.mM:
+                                        cutItems=new ArrayList<>();
+                                        for(int i=0;i<items.size();i++){
+                                            if(items.get(i).getStat()){
+                                                cutItems.add(new CutItem(items.get(i).getId(),items.get(i).getType()));
+                                                items.get(i).switchStat();
+                                            }
+                                        }
+                                        recyclerViewAdapter.setSizeSelect(0);
+                                        modeSelect=false;
+                                        switchToolbar(2);
+                                        recyclerViewAdapter.notifyDataSetChanged();
+
+                                        return true;
+                                    case 1:
+                                        int itemId=0;
+                                        boolean itemType=false;
+                                        for(int i=0;i<items.size();i++){
+                                            if(items.get(i).getStat()){
+                                               itemId=items.get(i).getId();
+                                               itemType=items.get(i).getType();
+                                               items.get(i).switchStat();
+                                                recyclerViewAdapter.setSizeSelect(0);
+                                                modeSelect=false;
+                                                switchToolbar(0);
+                                                recyclerViewAdapter.notifyDataSetChanged();
+                                             break;
+                                            }
+                                        }
+                                        Intent intent;
+                                        Log.v("12312sadzcsd", String.valueOf(itemType));
+                                        if(!itemType) {
+                                            intent = new Intent(MainActivity.this, PasswordActivity.class);
+                                        }else{
+                                            intent = new Intent(MainActivity.this, FolderActivity.class);
+                                        }
+                                        Log.v("123sda1223", String.valueOf(itemId));
+                                        intent.putExtra("folder",String.valueOf(itemId));
+                                        intent.putExtra("mode",modeEdit);
+                                        startActivityForResult(intent,1234);
+                                        return true;
+                                        default:
+                                            return false;
+                                }
+
+                            }
+                        });
+                popupMenu.show();
+
+
+
+
+//                for(int i=0;i<items.size();i++){
+//                    if(items.get(i).getStat()){
+//                        presenter.deleteItem(items.get(i).getId(),items.get(i).getType());
+//                        items.get(i).switchStat();
+//                    }
+//                }
+//                recyclerViewAdapter.setSizeSelect(0);
+//                modeSelect=false;
+//                switchToolbar(0);
+//                recyclerViewAdapter.notifyDataSetChanged();
             }
         });
 
@@ -122,6 +275,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
+        RecyclerView.LayoutManager llmS = new LinearLayoutManager(this);
+        rvSearch.setLayoutManager(llmS);
+        rvSearch.setHasFixedSize(true);
+
+        searchViewAdapter = new RVSearchAdapter(searchItems);
+        rvSearch.setAdapter(searchViewAdapter);
+
+
+
         recyclerView=(RecyclerView)findViewById(R.id.rv);
         RecyclerView.LayoutManager llm = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(llm);
@@ -129,7 +293,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ClickFabB(fButton2.getVisibility());
+                ClickFabB();
             }
         });
         //folder
@@ -167,6 +331,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         cloak.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.v("313asas","1");
                 closeSearch();}
         });
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -175,13 +340,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         //корень
-           placeV.setText("C");
+           placeV.setText("");
 
         MainModel usersModel = new MainModel();
         presenter = new MainPresenter(usersModel);
         presenter.attachView(this);
         presenter.viewIsReady();
         recyclerViewAdapter = new RecyclerViewAdapter(null);
+        rvSearch.addOnItemTouchListener(new RecyclerItemClickListener(this,rvSearch, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Log.v("12zxcdadads", String.valueOf(position));
+                        if(position!=-1){
+                        Intent intent=new Intent(MainActivity.this,PasswordActivity.class);
+
+                        intent.putExtra("folder",String.valueOf(searchItems.get(position).getId()));
+                        intent.putExtra("mode",modeEdit);
+                        startActivityForResult(intent,1234);
+                    }}
+
+                    @Override
+                    public void onLongClick(View view, int position) {
+
+                    }
+                }));
         recyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(this,recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
@@ -191,12 +373,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             int b=recyclerViewAdapter.selectItem(position);
                                 if(b==0){
                                     modeSelect=false;
+                                    switchToolbar(0);
                                 }else{
                                     modeSelect=true;
                                 }
                                 Log.v("12312312sdsfs", String.valueOf(b));
                             sizeselect.setText("select "+b+" item(s)");
-                            switchToolbar();
+
                         }else {
 
                             Log.v("itemClick", String.valueOf(position));
@@ -205,7 +388,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                     presenter.nextWay(items.get(position).getId());
                                     changeWay(items.get(position).getName());
                                 }else{
-                                    showPopupMenu(view,position);
+                                    showPopupMenu(view,items.get(position).getId());
 
                                 }
                             }
@@ -219,11 +402,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         int b=recyclerViewAdapter.selectItem(position);
                         if(b==0){
                             modeSelect=false;
+                            switchToolbar(0);
                         }else{
                             modeSelect=true;
+                            switchToolbar(1);
                         }
                         sizeselect.setText("select "+b+" item(s)");
-                        switchToolbar();
+
                     }
                 }));
 
@@ -264,21 +449,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         switch (item.getItemId()) {
 
                             case R.id.menu1:
+                                DBWorker dbWorker = new DBWorker();
+                                flyVItem=dbWorker.getDataToFlyV(p);
 
+                                if(OpenFlyWindow(flyVItem)) {
 
-
-
-//                                Toast.makeText(getApplicationContext(),
-//                                        "delete item...",
-//                                        Toast.LENGTH_SHORT).show();
-//                                presenter.deleteItem(items.get(p).getId(),items.get(p).getType());
+                                    Uri address = Uri.parse("http://"+flyVItem.getUrl());
+                                    Intent openlink = new Intent(Intent.ACTION_VIEW, address);
+                                    startActivity(openlink);
+                                    onStop();
+                                }
                                 return true;
                             case R.id.menu2:
 
                                 Intent intent=new Intent(MainActivity.this,PasswordActivity.class);
-                                intent.putExtra("folder",p);
+                                Log.v("123sda1223", String.valueOf(p));
+                                intent.putExtra("folder",String.valueOf(p));
                                 intent.putExtra("mode",modeEdit);
-                                startActivity(intent);
+                                startActivityForResult(intent,1234);
 
 
 //                                Intent intent=new Intent(MainActivity.this,UserActivity.class);
@@ -296,61 +484,106 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         popupMenu.show();
     }
 
-@Override
+    @Override
+    protected void onStop() {
+        if(flyVItem!=null) {
+            Intent intent = new Intent(MainActivity.this, Fly.class);
+            intent.putExtra("pass", flyVItem.getPass());
+            intent.putExtra("login", flyVItem.getLogin());
+            startService(intent);
+            flyVItem=null;
+        }
+        super.onStop();
+
+
+    }
+
+    @Override
+    protected void onStart() {
+        closeSearch();
+        super.onStart();
+
+    }
+    public void refreshClose(){
+        recyclerViewAdapter.setSizeSelect(0);
+        recyclerViewAdapter.notifyDataSetChanged();
+        switchToolbar(0);
+        progressl.setVisibility(View.GONE);
+    }
+
+    public void refreshStart(){
+
+        progressl.setVisibility(View.VISIBLE);
+    }
+
+    @Override
 protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-
-    if(requestCode==1){
+        Log.v("12312asd1232",requestCode+" "+resultCode);
+    if(resultCode==-1){
         refreshLayout.setRefreshing(true);
         presenter.refreshUsers();
     }
 }
-    public void switchToolbar(){
-        if(modeSelect) {
+    public void switchToolbar(int stat){
+        if(stat==1) {
 
             ll.setVisibility(View.GONE);
             rlSelect.setVisibility(View.VISIBLE);
-
-        }else{
+            pasteL.setVisibility(View.GONE);
+        }else if(stat==0){
             recyclerViewAdapter.closeSelect();
             recyclerViewAdapter.notifyDataSetChanged();
             ll.setVisibility(View.VISIBLE);
             rlSelect.setVisibility(View.GONE);
-
+            pasteL.setVisibility(View.GONE);
+        }else{
+            pasteState.setText("select "+cutItems.size()+" items");
+            ll.setVisibility(View.GONE);
+            rlSelect.setVisibility(View.GONE);
+            pasteL.setVisibility(View.VISIBLE);
         }
         }
 
-    private boolean OpenFlyWindow(){
 
+
+    private boolean OpenFlyWindow(FlyVItem flyVItem){
         if(Build.VERSION.SDK_INT >= 23 && !Settings.canDrawOverlays(MainActivity.this) ){
 
             Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
                     Uri.parse("package:" + getPackageName()));
+            intent.putExtra("pass",flyVItem.getPass());
+            intent.putExtra("login",flyVItem.getLogin());
             startActivityForResult(intent, 1234);
 
 
             return false;
         }
-        else
-        {
-            startService(new Intent(MainActivity.this,Fly.class));
-            Log.v("123444","1");
-        }
-//        finish();
+
         return true;
     }
 
     private void closeSearch(){
+        fLayout.setVisibility(View.VISIBLE);
         headersearchView.onActionViewCollapsed();
         placeV.setVisibility(View.VISIBLE);
         cloak.setVisibility(View.GONE);
-        fButton1.setVisibility(View.VISIBLE);
+
     }
     private void openSearch(){
+        fLayout.setVisibility(View.GONE);
         placeV.setVisibility(View.GONE);
         cloak.setVisibility(View.VISIBLE);
-        fButton1.setVisibility(View.GONE);
+//        searchList.setAdapter();
+//        LoadPasswordList();
     }
+
+    private List<SearchItem> LoadPasswordList(String s) {
+        DBWorker dbWorker=new DBWorker();
+
+        return  dbWorker.getSomePass(s);
+    }
+
     private void changeWay(String s){
      placeV.setText(placeV.getText()+"/"+s);
     }
@@ -364,8 +597,9 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
 
 
-    private void ClickFabB(int i) {
-        if(i==View.VISIBLE){
+    private void ClickFabB() {
+
+        if(fButton2.getVisibility()==View.VISIBLE){
         Animation anim = AnimationUtils.loadAnimation(this, R.anim.fbuttone);
         anim.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -403,7 +637,19 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
 
+        switch (id){
+            case R.id.korz:
+                Intent intent=new Intent(MainActivity.this,PreloaderActivity.class);
+                startActivity(intent);
+                finish();
+                LoadText.setNull();
+                break;
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
         return false;
     }
 
@@ -442,8 +688,11 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
             items = new ArrayList<>();
             items.addAll(users);
+            List list=new ArrayList<>();
+
 
             recyclerViewAdapter = new RecyclerViewAdapter(items);
+
             recyclerView.setAdapter(recyclerViewAdapter);
         }else{
             items = new ArrayList<>();
@@ -455,7 +704,9 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(recyclerViewAdapter.getSizeSelect()==0){
             modeSelect=false;
         }
-            switchToolbar();
+            if(modeSelect){
+            switchToolbar(0);
+    }
     }
 
     public void deleteError() {

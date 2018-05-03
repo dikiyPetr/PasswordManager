@@ -38,6 +38,44 @@
                         android:layout_height="match_parent">
 
                         <RelativeLayout
+                            android:id="@+id/pl"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone"
+                            tools:layout_editor_absoluteX="16dp">
+
+                            <TextView
+                                android:id="@+id/pasteStat"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:text="TextView"
+                                android:textSize="18sp" />
+
+                            <ImageView
+                                android:id="@+id/closeP"
+                                android:layout_width="46dp"
+                                android:layout_height="46dp"
+                                android:layout_alignParentRight="true"
+                                android:layout_marginRight="10dp"
+                                android:gravity="right"
+                                android:visibility="visible"
+                                app:srcCompat="@android:drawable/ic_menu_close_clear_cancel">
+
+                            </ImageView>
+
+                            <ImageView
+                                android:id="@+id/paste"
+                                android:layout_width="46dp"
+                                android:layout_height="46dp"
+                                android:layout_alignParentTop="true"
+                                android:layout_toLeftOf="@+id/closeP"
+                                android:layout_toStartOf="@+id/closeP"
+                                app:srcCompat="?attr/actionModePasteDrawable" />
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
                             android:id="@+id/ll"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -53,14 +91,14 @@
                                 android:textSize="18sp" />
 
                             <SearchView
-                                android:id="@+id/mainserch"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
-                                android:layout_marginRight="10dp"
-                                android:gravity="right">
+                            android:id="@+id/mainserch"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="10dp"
+                            android:gravity="right">
 
-                            </SearchView>
+                        </SearchView>
 
                         </RelativeLayout>
 
@@ -93,7 +131,7 @@
                                 android:text="TextView" />
 
                             <ImageView
-                                android:id="@+id/deleteItems"
+                                android:id="@+id/menus"
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
                                 android:layout_alignParentEnd="true"
@@ -102,19 +140,9 @@
                                 android:layout_centerVertical="true"
                                 android:layout_marginRight="10dp"
                                 android:padding="6dp"
-                                app:srcCompat="@drawable/delete" />
+                                android:visibility="visible"
+                                app:srcCompat="@drawable/threedots" />
 
-                            <ImageView
-                                android:id="@+id/moveItems"
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
-                                android:layout_alignParentTop="true"
-                                android:layout_centerVertical="true"
-                                android:layout_marginRight="10dp"
-                                android:layout_toLeftOf="@+id/deleteItems"
-                                android:layout_toStartOf="@+id/deleteItems"
-                                android:padding="7dp"
-                                app:srcCompat="@drawable/move" />
                         </RelativeLayout>
 
                     </RelativeLayout>
@@ -165,6 +193,7 @@
                         </RelativeLayout>
 
                         <RelativeLayout
+                            android:id="@+id/fLayout"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent">
 
@@ -230,16 +259,21 @@
                                 app:srcCompat="@drawable/add" />
                         </RelativeLayout>
 
+                        <RelativeLayout
+                            android:id="@+id/cloak"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@color/pngBlack"
+                            android:visibility="gone">
+
+                            <android.support.v7.widget.RecyclerView
+                                android:id="@+id/searchRV"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+                        </RelativeLayout>
+
                     </FrameLayout>
 
-
-                    <ImageView
-                        android:id="@+id/cloak"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@color/pngBlack"
-                        android:clickable="true"
-                        android:visibility="gone" />
 
                 </FrameLayout>
 
@@ -248,6 +282,20 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/progressl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/progressBar2"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|center_horizontal" />
+    </FrameLayout>
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"

@@ -27,7 +27,7 @@
 //import android.widget.TextView;
 //
 //import com.example.dikiy.passwordmain.Fly;
-//import com.example.dikiy.passwordmain.MainRecycler.MainItem;
+//
 //import com.example.dikiy.passwordmain.MainRecycler.RecyclerItemClickListener;
 //import com.example.dikiy.passwordmain.MainRecycler.RecyclerViewAdapter;
 //import com.example.dikiy.passwordmain.R;

@@ -1,6 +1,5 @@
 package com.example.dikiy.passwordmain.Model;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -8,15 +7,16 @@ import com.example.dikiy.passwordmain.Adapters.Get.GetFolder;
 import com.example.dikiy.passwordmain.Adapters.Get.GetFolder_Item;
 import com.example.dikiy.passwordmain.Adapters.Get.GetPass;
 import com.example.dikiy.passwordmain.Adapters.Get.GetPass_Item;
+import com.example.dikiy.passwordmain.Adapters.Get.GetTag;
+import com.example.dikiy.passwordmain.Adapters.Model.CutItem;
 import com.example.dikiy.passwordmain.Adapters.Post.PostAdapter;
 import com.example.dikiy.passwordmain.DBase.DBWorker;
 import com.example.dikiy.passwordmain.DBase.LoadText;
 import com.example.dikiy.passwordmain.ItemModel.MainItem;
 import com.example.dikiy.passwordmain.Retrofit.ApiUtils;
-import com.example.dikiy.passwordmain.Retrofit.ApiWorker;
 import com.example.dikiy.passwordmain.Retrofit.PostLogin;
+import com.google.gson.JsonObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +31,84 @@ import retrofit2.Response;
  */
 
 public class MainModel {
+    public void moveItem(MoveItemCallback callback, List<CutItem> cutItems,int folderId) {
+        MoveItemTask moveItemTask = new MoveItemTask(callback,cutItems,folderId);
+        moveItemTask.execute();
+
+    }
+    public interface MoveItemCallback {
+        void onLoad();
+    }
+    class MoveItemTask extends AsyncTask<Void, Void, Integer>{
+        MoveItemCallback callback;
+        List<CutItem> cutItems;
+        int b=0;
+        int folderId;
+        public MoveItemTask(MoveItemCallback callback, List<CutItem> cutItems, int folderId) {
+        this.callback=callback;
+        this.cutItems=cutItems;
+        this.folderId=folderId;
+        }
+
+        @Override
+        protected Integer doInBackground(Void... voids) {
+
+            final Map<String, String> map = new HashMap<>();
+            map.put("Authorization", "Bearer "+LoadText.getText("access_token"));
+
+            PostLogin postLogin = ApiUtils.getAPIService();
+
+            for(int i=0;i<cutItems.size();i++) {
+                if (!cutItems.get(i).getType()) {
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("folder", folderId);
+
+                    postLogin.MovePass(cutItems.get(i).getId(), map, jsonObject).enqueue(new Callback<GetPass_Item>() {
+                        @Override
+                        public void onResponse(Call<GetPass_Item> call, Response<GetPass_Item> response) {
+                            b++;
+                            onPostExecute(b);
+                        }
+
+                        @Override
+                        public void onFailure(Call<GetPass_Item> call, Throwable t) {
+                            b++;
+                            onPostExecute(b);
+                        }
+                    });
+                }else{
+                    JsonObject jsonObject = new JsonObject();
+                    jsonObject.addProperty("parent", folderId);
+
+                    postLogin.MoveFolder(cutItems.get(i).getId(), map, jsonObject).enqueue(new Callback<GetFolder_Item>() {
+                        @Override
+                        public void onResponse(Call<GetFolder_Item> call, Response<GetFolder_Item> response) {
+                            b++;
+                            onPostExecute(b);
+                        }
+
+                        @Override
+                        public void onFailure(Call<GetFolder_Item> call, Throwable t) {
+                            b++;
+                            onPostExecute(b);
+                        }
+                    });
+
+                }
+            }
+            return 0;
+        }
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            if(b==cutItems.size()){
+                callback.onLoad();
+            }
+
+        }
+    }
+
+
     public void loadUsers(LoadUserCallback callback,int folderid) {
         LoadUsersTask loadUsersTask = new LoadUsersTask(callback);
         loadUsersTask.setId(folderid);
@@ -52,6 +130,7 @@ public class MainModel {
         deleteItemCallback.execute();
 
     }
+
 
     public interface LoadUserCallback {
         void onLoad(List<MainItem> users);
@@ -227,6 +306,35 @@ public class MainModel {
                 public void onFailure(Call<GetPass> call, Throwable t) {
                     task=task-5;
                     onPostExecute(true);
+                }
+            });
+
+            postLogin.GetGroup(map).enqueue(new Callback<GetTag>() {
+                @Override
+                public void onResponse(Call<GetTag> call, Response<GetTag> response) {
+
+                    if(response.code()==200){
+                dbWorker.initGroup(response.body().getItems());
+
+                    }}
+
+                @Override
+                public void onFailure(Call<GetTag> call, Throwable t) {
+
+                }
+            });
+            postLogin.GetTag(map).enqueue(new Callback<GetTag>() {
+                @Override
+                public void onResponse(Call<GetTag> call, Response<GetTag> response) {
+                    if(response.code()==200){
+                        dbWorker.initTag(response.body().getItems());
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<GetTag> call, Throwable t) {
+
                 }
             });
         return false;

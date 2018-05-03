@@ -67,7 +67,7 @@
                     android:text="TextView" />
 
                 <ImageView
-                    android:id="@+id/deleteItems"
+                    android:id="@+id/menus"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_alignParentEnd="true"
@@ -85,8 +85,8 @@
                     android:layout_alignParentTop="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
-                    android:layout_toLeftOf="@+id/deleteItems"
-                    android:layout_toStartOf="@+id/deleteItems"
+                    android:layout_toLeftOf="@+id/menus"
+                    android:layout_toStartOf="@+id/menus"
                     android:padding="7dp"
                     app:srcCompat="@drawable/move" />
             </RelativeLayout>
@@ -94,9 +94,6 @@
         </RelativeLayout>
 
     </android.support.v7.widget.Toolbar>
-
-
-
 
 
 </android.support.constraint.ConstraintLayout>

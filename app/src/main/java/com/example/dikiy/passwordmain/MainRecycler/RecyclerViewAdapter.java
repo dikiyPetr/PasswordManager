@@ -10,10 +10,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import com.example.dikiy.passwordmain.DBase.DBWorker;
 import com.example.dikiy.passwordmain.ItemModel.MainItem;
 import com.example.dikiy.passwordmain.R;
 import com.example.dikiy.passwordmain.ScrollingTextView;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -31,7 +34,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         ScrollingTextView tag;
         TextView data;
         ImageView photo,st;
-
+        ScrollingTextView scrollingTextView;
 
         PersonViewHolder(View itemView) {
 
@@ -43,7 +46,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             data = itemView.findViewById(R.id.cvdata);
             photo=itemView.findViewById(R.id.photo);
             st=itemView.findViewById(R.id.cvst);
-
+            scrollingTextView=itemView.findViewById(R.id.cvtg);
 
 
         }
@@ -56,7 +59,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public interface OnItemTouchListener {
         void onItemClick(int i);
     }
-    List<MainItem> mainItems;
+    List<MainItem> mainItems=new ArrayList<>();
     int selectItems;
 
     public RecyclerViewAdapter(List<MainItem> mainItems) {
@@ -91,6 +94,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(final PersonViewHolder personViewHolder, final int i) {
 
+        DBWorker dbWorker=new DBWorker();
+       List<String> list= dbWorker.getTagName(Arrays.asList(mainItems.get(i).getTag().split(",")));
+
+       personViewHolder.scrollingTextView.setText(list.toString().substring(1,list.toString().length()-1));
         personViewHolder.namepass.setText(mainItems.get(i).getName()+" id="+mainItems.get(i).getId());
         if(mainItems.get(i).getType()) {
             personViewHolder.photo.setImageResource(R.drawable.folder);
@@ -99,6 +106,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
         if(mainItems.get(i).getStat()){
             personViewHolder.itemView.setBackgroundResource(R.color.pngBlue);
+
         }else{
             personViewHolder.itemView.setBackgroundResource(R.color.pngPng);
         }
@@ -114,6 +122,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public int getSizeSelect(){
         return selectItems;
     }
+    public void setSizeSelect(int size){
+        selectItems=size;
+    }
     public int selectItem(int id){
 
   if(mainItems.get(id).switchStat()){
@@ -126,9 +137,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
    return selectItems;
     }
     public void closeSelect() {
+        if(mainItems!=null){
         for(int i=0;i<mainItems.size();i++){
             mainItems.get(i).setStat(false);
-        }
+        }}
     }
     public List<MainItem> getItems(){
         return mainItems;

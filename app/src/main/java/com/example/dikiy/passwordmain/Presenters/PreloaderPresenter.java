@@ -9,31 +9,31 @@ import com.example.dikiy.passwordmain.PreloaderActivity;
  * Created by dikiy on 14.03.2018.
  */
 
-public class PreloaderPresenter {
-    private PreloaderActivity view;
-    private final PreloaderModel model;
+    public class PreloaderPresenter {
+        private PreloaderActivity view;
+        private final PreloaderModel model;
 
-    public PreloaderPresenter(PreloaderModel model) {
-        this.model = model;
-    }
+        public PreloaderPresenter(PreloaderModel model) {
+            this.model = model;
+        }
 
-    public void attachView(PreloaderActivity usersActivity) {
-        view = usersActivity;
-    }
+        public void attachView(PreloaderActivity usersActivity) {
+            view = usersActivity;
+        }
 
-    public void detachView() {
-        view = null;
-    }
-    public void viewIsReady() {
-        loadUsers();
-    }
+        public void detachView() {
+            view = null;
+        }
+        public void viewIsReady() {
+            loadUsers();
+        }
 
-    private void loadUsers() {
-        model.CheckToken(new PreloaderModel.CheckLoadCallback() {
-            @Override
-            public void onLoad(boolean stat) {
-               view.anim(stat);
-            }
-        });
+        private void loadUsers() {
+            model.CheckToken(new PreloaderModel.CheckLoadCallback() {
+                @Override
+                public void onLoad(boolean stat) {
+                   view.anim(stat);
+                }
+            });
+        }
     }
-}

@@ -34,12 +34,30 @@ public class FolderPresenter {
     public void viewIsReady() {
 
     }
-    public void createFolder(String name,String way){
+    public void createFolder(String name,int way){
         model.CreateFolder(new FolderModel.CreateFolderCallback() {
             @Override
             public void onLoad(int stat) {
                 view.execute(stat);
             }
         },name,way);
+    }
+
+    public void addTagOrGroup(Boolean tag, String s, int thisId) {
+        model.AddTag(new FolderModel.AddTagCallback() {
+            @Override
+            public void onLoad(String s) {
+
+            }
+        },tag,s,thisId);
+    }
+
+    public void removeTagOrGroup(String s, int thisId, Boolean tag) {
+        model.RemoveTag(new FolderModel.RemoveTagCallback() {
+            @Override
+            public void onLoad() {
+
+            }
+        },s,thisId,tag);
     }
 }

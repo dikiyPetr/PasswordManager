@@ -30,13 +30,12 @@ public class PreloaderModel {
         protected Boolean doInBackground(Void... params) {
 
             //проверка аторизации
-            Log.v("123123123123","1");
+
             if (LoadText.getText("access_token").length()>5){
                 //обновление токена
-                Log.v("123123123123","2");
 
                 if( ApiWorker.refreshToken()==200){
-                    Log.v("123123123123","3");
+
                     return true;
                 }else{
                     return false;

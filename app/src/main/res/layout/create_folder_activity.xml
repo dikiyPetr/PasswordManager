@@ -8,10 +8,8 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
+
     <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white"
@@ -25,13 +23,14 @@
             android:minHeight="?attr/actionBarSize"
             android:theme="?attr/actionBarTheme"
 
-          >
+            >
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/editandclose"
@@ -152,7 +151,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
-                        <EditText
+                        <AutoCompleteTextView
                             android:id="@+id/addtag"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -228,7 +227,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
-                        <EditText
+                        <AutoCompleteTextView
                             android:id="@+id/addgrup"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -290,4 +289,5 @@
         </ScrollView>
 
     </RelativeLayout>
+
 </android.support.v4.widget.DrawerLayout>

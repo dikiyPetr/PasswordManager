@@ -14,7 +14,7 @@ import java.io.OutputStream;
 public class Database extends SQLiteOpenHelper {
     private static String DB_NAME = "PasswordDB.db";
     private static String DB_PATH = "";
-    private static final int DB_VERSION = 3;
+    private static final int DB_VERSION = 10;
 
     private SQLiteDatabase mDataBase;
     private final Context mContext;

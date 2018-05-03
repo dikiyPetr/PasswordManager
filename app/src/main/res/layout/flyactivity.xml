@@ -121,7 +121,7 @@
             android:orientation="horizontal">
 
             <FrameLayout
-                android:id="@+id/close"
+                android:id="@+id/closeP"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="right|center"

@@ -50,7 +50,12 @@ public class UserActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         rvRole.setLayoutManager(layoutManager);
-        adapterRole = new RecyclerAdapter(listRole);
+        adapterRole = new RecyclerAdapter(listRole, new RecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(String s) {
+
+            }
+        });
         adapterRole.switchMode();
         rvRole.setAdapter(adapterRole);
 

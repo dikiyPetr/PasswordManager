@@ -28,8 +28,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             imageView = v.findViewById(R.id.imageView);
         }
     }
+    public interface OnItemClickListener {
+        void onItemClick(String s);
+    }
 
-    public RecyclerAdapter(List<RecyclerItem> moviesList) {
+
+    private final OnItemClickListener listener;
+    public RecyclerAdapter(List<RecyclerItem> moviesList, OnItemClickListener listener) {
+
+        this.listener=listener;
         this.mDataset = moviesList;
     }
 
@@ -43,11 +50,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        RecyclerItem movie = mDataset.get(position);
+        final RecyclerItem movie = mDataset.get(position);
         holder.mTextView.setText(movie.getName());
         holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                listener.onItemClick(movie.getName());
                 mDataset.remove(position);
                notifyDataSetChanged();
 //               holder.imageView.setVisibility(View.GONE);

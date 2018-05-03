@@ -6,27 +6,22 @@ import android.content.ClipboardManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.IBinder;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.widget.SimpleCursorAdapter;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by dikiy on 08.02.2018.
@@ -36,19 +31,41 @@ public class Fly extends Service {
 
     WindowManager wm;
     LinearLayout ll;
-
+    private String pass="";
+    private String login="";
     @Override
     public IBinder onBind(Intent intent) {
-        Log.v("123123123213221","1");
-        // TODO Auto-generated method stub
+
+
         return null;
+
+
+
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+
+       pass=intent.getExtras().getString("pass");
+        login=intent.getExtras().getString("login");
+        Log.v("asdaqweq123",pass);
+        Log.v("asdaqweq123",login);
+        return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
     public void onCreate() {
+
         // TODO Auto-generated method stub
         super.onCreate();
-        Log.v("123123123213221","1");
+
+        try {
+            TimeUnit.SECONDS.sleep(2);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Intent intent;
+
         wm = (WindowManager) getSystemService(WINDOW_SERVICE);
         wm.getDefaultDisplay();
         ll = new LinearLayout(this);
@@ -97,24 +114,30 @@ public class Fly extends Service {
         FrameLayout main =itemView.findViewById(R.id.main);
 
         final FrameLayout back = itemView.findViewById(R.id.back);
-        final FrameLayout close = itemView.findViewById(R.id.close);
+        final FrameLayout close = itemView.findViewById(R.id.closeP);
         copylogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(GetContext.getContext(),"copy login",Toast.LENGTH_SHORT).show();
+
+
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("123", "Login");
+                ClipData clip = ClipData.newPlainText("123", pass);
                 clipboard.setPrimaryClip(clip);
-                clipboard.getPrimaryClip();
+                Toast.makeText(GetContext.getContext(),"copy password",Toast.LENGTH_SHORT).show();
+
+
+
+
             }
         });
         copypassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("123", "Password");
+                ClipData clip = ClipData.newPlainText("123", login);
                 clipboard.setPrimaryClip(clip);
-                Toast.makeText(GetContext.getContext(),"copy password",Toast.LENGTH_SHORT).show();
+                clipboard.getPrimaryClip();
             }
         });
         main.setOnClickListener(new View.OnClickListener() {
@@ -175,7 +198,7 @@ public class Fly extends Service {
             public void onClick(View v) {
                 wm.removeView(ll);
                 stopSelf();
-                System.exit(0);
+
             }
         });
         back.setOnClickListener(new View.OnClickListener() {

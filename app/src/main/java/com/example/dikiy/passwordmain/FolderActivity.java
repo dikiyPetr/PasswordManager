@@ -6,18 +6,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.example.dikiy.passwordmain.Adapters.Get.GetFolder_Item;
+import com.example.dikiy.passwordmain.DBase.DBWorker;
 import com.example.dikiy.passwordmain.Model.FolderModel;
-import com.example.dikiy.passwordmain.Model.MainModel;
 import com.example.dikiy.passwordmain.Presenters.FolderPresenter;
-import com.example.dikiy.passwordmain.Presenters.MainPresenter;
 import com.example.dikiy.passwordmain.RecyclerView.RecyclerAdapter;
 import com.example.dikiy.passwordmain.RecyclerView.RecyclerItem;
-import com.example.dikiy.passwordmain.Retrofit.ApiWorker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,22 +30,23 @@ import java.util.List;
 
 public class FolderActivity extends AppCompatActivity {
     ImageView iEdit,iAccept,iAddgrup,iAddtag;
-    EditText etName,etLog,etAddgrup,etAddtag;
+    EditText etName,etLog;
+    AutoCompleteTextView etAddgroup,etAddtag;
     private Button bAccept;
 
-    boolean mode=false;
 
-    private RecyclerView rvTag, rvGrup;
-    private RecyclerAdapter adapterTag, adapterGrup;
+    private RecyclerView rvTag, rvGroup;
+    private RecyclerAdapter adapterTag, adapterGroup;
     private List<RecyclerItem> listTag = new ArrayList<>();
-    private List<RecyclerItem> listGrup = new ArrayList<>();
+    private List<RecyclerItem> listGroup = new ArrayList<>();
     private List<RecyclerItem> listTagD = new ArrayList<>();
-    private List<RecyclerItem> listGrupD = new ArrayList<>();
-    private RecyclerItem movieGrup, movieTag;
+    private List<RecyclerItem> listGroupD = new ArrayList<>();
+    private RecyclerItem movieGroup, movieTag;
     FolderPresenter presenter;
-    private String id;
-
-
+    private int thisId=0;
+    private int mode=0;
+    final Boolean tag=false,group=true;
+    ArrayAdapter tagAdapter,groupAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -53,24 +56,52 @@ public class FolderActivity extends AppCompatActivity {
         bAccept= findViewById(R.id.accept);
         Intent intent=getIntent();
 
-        id=intent.getStringExtra("folder");
-        Log.v("1231231231",id);
+        thisId= Integer.parseInt(intent.getStringExtra("folder"));
+        mode =Integer.parseInt(intent.getStringExtra("mode"));
         init();
     }
     private void setMode(){
-        if(mode){
-
-
-
+        if(mode==0){
 
         }else{
-            iEdit.setVisibility(View.GONE);
-            iAccept.setVisibility(View.GONE);
 
+            bAccept.setVisibility(View.GONE);
+//            setEnable(false);
+            DBWorker dbWorker=new DBWorker();
+            GetFolder_Item item=dbWorker.getFolder(thisId);
+               etName.setText(item.getName());
+            Log.v("123asdasdaszx",item.getGroups().toString());
+            if(!item.getGroups().get(0).equals("")) {
+                List<String> nameG=new ArrayList<>();
+                nameG.addAll(dbWorker.getGroupName(item.getGroups()));
+                for(int i=0;i<nameG.size();i++){
+                    Log.v("123123axzcass",nameG.get(i));
+                    listTag.add(new RecyclerItem(nameG.get(i)));
 
+                    listTagD.add(new RecyclerItem(nameG.get(i)));
+                }
+            }
+            if(!item.getTags().get(0).equals("")) {
+                List<String> nameT=new ArrayList<>();
+                nameT.addAll(dbWorker.getTagName(item.getTags()));
+                for(int i=0;i<nameT.size();i++){
+                    Log.v("123123axzcass",nameT.get(i));
+                    listGroup.add(new RecyclerItem(nameT.get(i)));
 
+                    listGroupD.add(new RecyclerItem(nameT.get(i)));
+                }
+            }
 
         }
+    }
+    private void setEnable(boolean b){
+        etName.setEnabled(b);
+        etAddtag.setEnabled(b);
+        etAddgroup.setEnabled(b);
+        etLog.setEnabled(b);
+        iAddtag.setEnabled(b);
+        iAddgrup.setEnabled(b);
+
     }
     private void init() {
 
@@ -80,9 +111,8 @@ public class FolderActivity extends AppCompatActivity {
         iAddtag= findViewById(R.id.addtagb);
         etName= findViewById(R.id.etname);
         etLog = findViewById(R.id.etlog);
-        etAddgrup= findViewById(R.id.addgrup);
+        etAddgroup = findViewById(R.id.addgrup);
         etAddtag=findViewById(R.id.addtag);
-
 
 
 
@@ -93,33 +123,29 @@ public class FolderActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-               presenter.createFolder(etName.getText().toString(),id);
+               presenter.createFolder(etName.getText().toString(),thisId);
                bAccept.setEnabled(false);
             }
         });
-        //init rvGrup
-        rvGrup= findViewById(R.id.rv2);
+
+        rvGroup= findViewById(R.id.rv2);
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        rvGrup.setLayoutManager(layoutManager);
-        adapterGrup = new RecyclerAdapter(listGrup);
-        adapterGrup.switchMode();
-        rvGrup.setAdapter(adapterGrup);
+        rvGroup.setLayoutManager(layoutManager);
+        adapterGroup = new RecyclerAdapter(listGroup, new RecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(String s) {
+                if(mode==1) {
+                    presenter.removeTagOrGroup(s, thisId, group);
+                }
+                groupAdapter.add(s);
+            }
+        });
+        adapterGroup.switchMode();
+        rvGroup.setAdapter(adapterGroup);
 
-        //add item in rvGrup
-        iAddgrup.setOnClickListener(new View.OnClickListener() {
-                                       @Override
-                                       public void onClick(View v) {
-                                           if(etAddgrup.getText().length()!=0) {
-                                               movieGrup = new RecyclerItem(String.valueOf(etAddgrup.getText()));
-                                               listGrup.add(movieGrup);
-                                               adapterGrup.notifyDataSetChanged();
-                                               rvGrup.scrollBy(1000000000, 1000000000);
-                                               etAddgrup.setText("");
-                                           }
-                                       }
-                                   }
-        );
+
+
 
 
 
@@ -127,9 +153,17 @@ public class FolderActivity extends AppCompatActivity {
         rvTag= findViewById(R.id.rv);
         LinearLayoutManager layoutManager2
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        rvGrup.setLayoutManager(layoutManager2);
+        rvGroup.setLayoutManager(layoutManager2);
         rvTag.setLayoutManager(layoutManager);
-        adapterTag = new RecyclerAdapter(listTag);
+        adapterTag = new RecyclerAdapter(listTag, new RecyclerAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(String s) {
+                if(mode==1) {
+                    presenter.removeTagOrGroup(s, thisId, tag);
+                }
+                tagAdapter.add(s);
+            }
+        });
         adapterTag.switchMode();
         rvTag.setAdapter(adapterTag);
 
@@ -138,57 +172,85 @@ public class FolderActivity extends AppCompatActivity {
                                         @Override
                                         public void onClick(View v) {
                                             if(etAddtag.getText().length()!=0) {
-                                                movieTag = new RecyclerItem(String.valueOf(etAddtag.getText()));
-                                                listTag.add(movieTag);
-                                                adapterTag.notifyDataSetChanged();
-                                                rvTag.scrollBy(1000000000, 1000000000);
-                                                etAddtag.setText("");
-                                            }
+                                                if( addItemInRV(etAddtag.getText().toString(),listTag)) {
+                                                    if(mode==1) {
+                                                        presenter.addTagOrGroup(tag, etAddtag.getText().toString(), thisId);
+                                                    }
+                                                    tagAdapter.remove(etAddtag.getText().toString());
+                                                    movieTag = new RecyclerItem(String.valueOf(etAddtag.getText()));
+                                                    listTag.add(movieTag);
+                                                    adapterTag.notifyDataSetChanged();
+                                                    rvTag.scrollBy(1000000000, 1000000000);
+                                                    etAddtag.setText("");
+                                                }}
                                         }
                                     }
         );
-
+        iAddgrup.setOnClickListener(new View.OnClickListener() {
+                                       @Override
+                                       public void onClick(View v) {
+                                           if(etAddgroup.getText().length()!=0) {
+                                               if( addItemInRV(etAddgroup.getText().toString(), listGroup)) {
+                                                   if(mode==1) {
+                                                       presenter.addTagOrGroup(group, etAddgroup.getText().toString(), thisId);
+                                                   }
+                                                   groupAdapter.remove(etAddgroup.getText().toString());
+                                                   movieGroup = new RecyclerItem(String.valueOf(etAddgroup.getText()));
+                                                   listGroup.add(movieGroup);
+                                                   adapterGroup.notifyDataSetChanged();
+                                                   rvGroup.scrollBy(1000000000, 1000000000);
+                                                   etAddgroup.setText("");
+                                               }}
+                                       }
+                                   }
+        );
         FolderModel usersModel = new FolderModel();
         presenter = new FolderPresenter(usersModel);
         presenter.attachView(this);
         presenter.viewIsReady();
 
 
+        DBWorker dbWorker = new DBWorker();
+        tagAdapter = new ArrayAdapter(this,
+                android.R.layout.simple_dropdown_item_1line, dbWorker.getTag());
+        groupAdapter= new ArrayAdapter(this,
+                android.R.layout.simple_dropdown_item_1line, dbWorker.getGroup());
 
 
+        etAddtag.setAdapter(tagAdapter);
+        etAddgroup.setAdapter(groupAdapter);
+        etAddtag.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(etAddtag.getText().length()==0){
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                    etAddtag.showDropDown();}
+                return false;
+            }
+        });
+        etAddgroup.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(etAddgroup.getText().length()==0){
+                    etAddgroup.showDropDown();}
+                return false;
+            }
+        });
+        setMode();
 
 
 
     }
+    private boolean addItemInRV(String text, List<RecyclerItem> list) {
+        for(int i=0;i<list.size();i++){
+            if(list.get(i).getName().equals(text)){
+                return false;
+            }
 
+        }
+        return true;
+    }
     public void execute(int stat) {
         Intent intent = new Intent();
         setResult(RESULT_OK, intent);

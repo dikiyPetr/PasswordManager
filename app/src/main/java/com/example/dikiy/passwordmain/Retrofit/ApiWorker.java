@@ -1,41 +1,30 @@
 package com.example.dikiy.passwordmain.Retrofit;
 
-import android.content.Context;
-import android.os.AsyncTask;
-import android.util.Log;
-
 import com.example.dikiy.passwordmain.Adapters.Get.GetFolder;
-import com.example.dikiy.passwordmain.Adapters.Get.GetFolder_Item;
+import com.example.dikiy.passwordmain.Adapters.Get.GetTag_Item;
 import com.example.dikiy.passwordmain.Adapters.Post.PostAdapter;
-import com.example.dikiy.passwordmain.DBase.DBWorker;
 import com.example.dikiy.passwordmain.DBase.LoadText;
-import com.example.dikiy.passwordmain.ItemModel.MainItem;
-import com.example.dikiy.passwordmain.Retrofit.ApiUtils;
-import com.example.dikiy.passwordmain.Retrofit.PostLogin;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
  * Created by dikiy on 14.03.2018.
  */
 
-public class ApiWorker {
-    public static int createFolder(String name,String parent){
+public class    ApiWorker {
+    public static int createFolder(String name,int parent){
         final Map<String, String> map = new HashMap<>();
         map.put("Authorization", "Bearer "+LoadText.getText("access_token"));
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("name", name);
-        if(!parent.equals("0")) {
+        if(parent!=0) {
             jsonObject.addProperty("parent", String.valueOf(parent));
         }
         PostLogin postLogin = ApiUtils.getAPIService();
@@ -227,8 +216,109 @@ public class ApiWorker {
         }
         return null;
     }
+    public static int addTagInPass(int idpass, int idtag){
+        final Map<String, String> map = new HashMap<>();
+        map.put("Authorization", "Bearer "+LoadText.getText("access_token"));
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("tag", String.valueOf(idtag));
 
-    public static int createPass(String name,String parent, String url, String pass,String login,String description) {
+        PostLogin postLogin = ApiUtils.getAPIService();
+        Response response = null;
+        try {
+            response = postLogin.AddTagInPass(idpass,map,jsonObject).execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if(response!=null && response.code()==200) {
+            return response.code();
+        }
+        if(response!=null) {
+            return response.code();
+        }else
+        {
+            return 0;
+        }
+
+    }
+    public static int addTagInFolder(int idpass, int idtag){
+        final Map<String, String> map = new HashMap<>();
+        map.put("Authorization", "Bearer "+LoadText.getText("access_token"));
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("tag", String.valueOf(idtag));
+
+        PostLogin postLogin = ApiUtils.getAPIService();
+        Response response = null;
+        try {
+            response = postLogin.AddTagInFolder(idpass,map,jsonObject).execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if(response!=null && response.code()==200) {
+            return response.code();
+        }
+        if(response!=null) {
+            return response.code();
+        }else
+        {
+            return 0;
+        }
+
+    }
+    public static int updatePass( int i,String name,String url,String login, String password) {
+        final Map<String, String> map = new HashMap<>();
+        map.put("Authorization", "Bearer "+LoadText.getText("access_token"));
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("name", name);
+        jsonObject.addProperty("url", url);
+        jsonObject.addProperty("pass", password);
+        jsonObject.addProperty("login", login);
+
+
+        PostLogin postLogin = ApiUtils.getAPIService();
+        Response response = null;
+        try {
+            response = postLogin.UpdatePass(i,map,jsonObject).execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if(response!=null && response.code()==200) {
+            return response.code();
+        }
+        if(response!=null) {
+            return response.code();
+        }else
+        {
+            return 0;
+        }
+    }
+    public static int updateFolder( int i,String name) {
+        final Map<String, String> map = new HashMap<>();
+        map.put("Authorization", "Bearer "+LoadText.getText("access_token"));
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("name", name);
+
+
+
+        PostLogin postLogin = ApiUtils.getAPIService();
+        Response response = null;
+        try {
+            response = postLogin.UpdateFolder(i,map,jsonObject).execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if(response!=null && response.code()==200) {
+            return response.code();
+        }
+        if(response!=null) {
+            return response.code();
+        }else
+        {
+            return 0;
+        }
+    }
+    public static int createPass(String name,String parent, String url, String pass,String login,String description,List<String> tags,List<String> groups) {
         final Map<String, String> map = new HashMap<>();
         map.put("Authorization", "Bearer "+LoadText.getText("access_token"));
         JsonObject jsonObject = new JsonObject();
@@ -239,8 +329,19 @@ public class ApiWorker {
         jsonObject.addProperty("url", url);
         jsonObject.addProperty("pass", pass);
         jsonObject.addProperty("login", login);
+        JsonArray jsonArray= new JsonArray();
+        for(int i=0;i<tags.size();i++){
+            jsonArray.add(tags.get(i).toString());
+        }
+        jsonObject.add("tags", jsonArray);
+        JsonArray jsonArray1 = new JsonArray();
+        for(int i=0;i<groups.size();i++){
+            jsonArray1.add(groups.get(i).toString());
+        }
+        jsonObject.add("groups", jsonArray1);
+
         jsonObject.addProperty("description", description);
-        jsonObject.addProperty("secretKey", "123");
+        jsonObject.addProperty("secretKey", LoadText.getText("pass"));
         PostLogin postLogin = ApiUtils.getAPIService();
         Response response = null;
         try {
@@ -253,6 +354,98 @@ public class ApiWorker {
         }
         if(response!=null) {
             return response.code();
+        }else
+        {
+            return 0;
+        }
+    }
+
+    public static Integer addGroupInPass(int idpass, int idgroup) {
+        final Map<String, String> map = new HashMap<>();
+        map.put("Authorization", "Bearer "+LoadText.getText("access_token"));
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("group", idgroup);
+        PostLogin postLogin = ApiUtils.getAPIService();
+        Response response = null;
+        try {
+            response = postLogin.AddGroupInPass(idpass,map,jsonObject).execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if(response!=null && response.code()==200) {
+            return response.code();
+        }
+        if(response!=null) {
+            return response.code();
+        }else
+        {
+            return 0;
+        }
+    }
+    public static Integer addGroupInFolder(int idpass, int idgroup) {
+        final Map<String, String> map = new HashMap<>();
+        map.put("Authorization", "Bearer "+LoadText.getText("access_token"));
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("group", idgroup);
+        PostLogin postLogin = ApiUtils.getAPIService();
+        Response response = null;
+        try {
+            response = postLogin.AddGroupInFolder(idpass,map,jsonObject).execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if(response!=null && response.code()==200) {
+            return response.code();
+        }
+        if(response!=null) {
+            return response.code();
+        }else
+        {
+            return 0;
+        }
+    }
+
+    public static Integer addTag( String s) {
+        final Map<String, String> map = new HashMap<>();
+        map.put("Authorization", "Bearer "+LoadText.getText("access_token"));
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("name", s);
+        PostLogin postLogin = ApiUtils.getAPIService();
+        Response response = null;
+        try {
+            response = postLogin.AddTag(map,jsonObject).execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if(response!=null && response.code()==200) {
+            GetTag_Item item = (GetTag_Item) response.body();
+            return    item.getId();
+        }
+        if(response!=null) {
+            return 0;
+        }else
+        {
+            return 0;
+        }
+    }
+    public static Integer addGroup( String s) {
+        final Map<String, String> map = new HashMap<>();
+        map.put("Authorization", "Bearer "+LoadText.getText("access_token"));
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("name", s);
+        PostLogin postLogin = ApiUtils.getAPIService();
+        Response response = null;
+        try {
+            response = postLogin.AddGroup(map,jsonObject).execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if(response!=null && response.code()==200) {
+            GetTag_Item item = (GetTag_Item) response.body();
+            return    item.getId();
+        }
+        if(response!=null) {
+            return 0;
         }else
         {
             return 0;

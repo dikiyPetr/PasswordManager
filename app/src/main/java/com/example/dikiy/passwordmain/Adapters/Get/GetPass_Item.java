@@ -3,7 +3,9 @@ package com.example.dikiy.passwordmain.Adapters.Get;
 import android.content.Intent;
 import android.view.KeyEvent;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -12,7 +14,7 @@ public class GetPass_Item {
 
     @SerializedName("pass")
     @Expose
-    private Boolean pass=false;
+    private String pass;
     @SerializedName("id")
     @Expose
     private Integer id=0;
@@ -31,18 +33,44 @@ public class GetPass_Item {
     @SerializedName("url")
     @Expose
     private String url="";
+    @SerializedName("description")
+    @Expose
+    private String description="";
     @SerializedName("tag")
     @Expose
-    private List<Object> tag = new ArrayList<>();
+    private List<GetTag_Item> tag = new ArrayList<>();
     @SerializedName("group")
     @Expose
-    private List<Object> group = new ArrayList<>();
+    private List<GetTag_Item> group = new ArrayList<>();
 
-    public Boolean getPass() {
+    private List<String> tags=new ArrayList<>();
+    private List<String> groups = new ArrayList<>();
+    public GetPass_Item(String pass,String name,String login,String url,String description,String tag,String group){
+    this.pass=pass;
+    this.name=name;
+        this.url=url;
+    this.login=login;
+        tags.addAll(Arrays.asList(tag.split(",")));
+        groups.addAll(Arrays.asList(group.split(",")));
+        this.description=description;
+
+
+
+    }
+
+    public List<String> getGroups() {
+        return groups;
+    }
+
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public String getPass() {
         return pass;
     }
 
-    public void setPass(Boolean pass) {
+    public void setPass(String pass) {
         this.pass = pass;
     }
 
@@ -94,21 +122,43 @@ public class GetPass_Item {
     public void setUrl(String url) {
         this.url = url;
     }
+    public void setTag(List<GetTag_Item> tag) {
 
-    public List<Object> getTag() {
-        return tag;
-    }
-
-    public void setTag(List<Object> tag) {
         this.tag = tag;
     }
-
-    public List<Object> getGroup() {
-        return group;
+    public String getTag() {
+        String s="";
+        for(int i=0;i<tag.size();i++){
+            s=s+tag.get(i).getId().toString()+",";
+        }
+        if(s.length()!=0) {
+            s = s.substring(0, s.length() - 1);
+        }
+        return s;
     }
 
-    public void setGroup(List<Object> group) {
+
+
+    public String getGroup() {
+        String s="";
+        for(int i=0;i<group.size();i++){
+            s=s+group.get(i).getId().toString()+",";
+        }
+        if(s.length()!=0) {
+            s = s.substring(0, s.length() - 1);
+        }
+        return s;
+    }
+
+    public void setGroup(List<GetTag_Item> group) {
         this.group = group;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }
