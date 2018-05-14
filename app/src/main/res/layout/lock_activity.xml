@@ -14,11 +14,11 @@
 
         <ImageView
             android:id="@+id/mainicon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-                app:srcCompat="@drawable/key" />
+            app:srcCompat="@drawable/key" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -54,7 +54,8 @@
                 android:ems="10"
                 android:inputType="textPersonName"
                 android:textAlignment="center"
-                android:textSize="35sp" />
+                android:textSize="35sp"
+                android:password="true"/>
         </LinearLayout>
 
         <RelativeLayout

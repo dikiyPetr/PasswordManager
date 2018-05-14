@@ -78,7 +78,7 @@ public class FolderModel {
         protected Integer doInBackground(Void... voids) {
             DBWorker dbWorker=new DBWorker();
             int itemId=0;
-            if(b){
+            if(!b){
                 itemId=dbWorker.getTagId(s);
                 final Map<String, String> map = new HashMap<>();
                 map.put("Authorization", "Bearer "+ LoadText.getText("access_token"));
@@ -158,7 +158,7 @@ public class FolderModel {
             DBWorker dbWorker=new DBWorker();
             int itemId=0;
             Log.v("123123123asdqq","1");
-            if(type){
+            if(!type){
                 Log.v("123123123asdqq","2");
                 itemId=dbWorker.getTagId(s);
                 if(itemId!=0){

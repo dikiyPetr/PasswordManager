@@ -1,5 +1,6 @@
 package com.example.dikiy.passwordmain.Model;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -16,9 +17,9 @@ public class PreloaderModel {
         loadUsersTask.execute();
     }
     public interface CheckLoadCallback {
-        void onLoad(boolean stat);
+        void onLoad(int stat);
     }
-    class CheckTokenTask extends AsyncTask<Void, Void, Boolean> {
+    class CheckTokenTask extends AsyncTask<Void, Void, Integer> {
 
         private final  PreloaderModel.CheckLoadCallback callback;
 
@@ -27,27 +28,34 @@ public class PreloaderModel {
         }
 
         @Override
-        protected Boolean doInBackground(Void... params) {
+        protected Integer doInBackground(Void... params) {
 
             //проверка аторизации
 
             if (LoadText.getText("access_token").length()>5){
                 //обновление токена
+                int code= ApiWorker.refreshToken();
+               switch (code){
+                   case 200:
+                       return 1;
 
-                if( ApiWorker.refreshToken()==200){
 
-                    return true;
-                }else{
-                    return false;
-                }
+                   case 401:
+                       return 0;
 
-            }else {
-                return false;
+
+                   case 0:
+                       return 2;
+
+               }
+
             }
+                return 0;
+
         }
 
         @Override
-        protected void onPostExecute(Boolean stat) {
+        protected void onPostExecute(Integer stat) {
             if (callback != null) {
                 callback.onLoad(stat);
             }

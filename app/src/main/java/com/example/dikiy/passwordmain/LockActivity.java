@@ -77,7 +77,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
         int screenWidth = displaymetrics.widthPixels;
         int screenHeight = displaymetrics.heightPixels;
-        mainIcon.setY(-screenHeight/2+mainIcon.getDrawable().getIntrinsicHeight());
+        mainIcon.setY(-screenHeight/2+mainIcon.getDrawable().getIntrinsicHeight()/4*3);
 //
 //            DisplayMetrics displaymetrics = new DisplayMetrics();
 //            getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);

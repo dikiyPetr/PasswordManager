@@ -130,11 +130,6 @@ public class DBWorker {
         List<MainItem> list =new ArrayList<>();
         Cursor cursor = mDb.rawQuery("select * from folders where folder="+id, null);
         Log.v("LoadLog", String.valueOf(cursor.getCount()));
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()){
-            list.add(new MainItem(cursor.getString(1), Integer.parseInt(cursor.getString(0)),true,""));
-            cursor.moveToNext();
-        }
         cursor.close();
         cursor = mDb.rawQuery("select * from passwords where folder="+id, null);
         Log.v("LoadLog", String.valueOf(cursor.getCount()));

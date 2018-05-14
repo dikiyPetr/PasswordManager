@@ -46,6 +46,7 @@ public class FolderActivity extends AppCompatActivity {
     private int thisId=0;
     private int mode=0;
     final Boolean tag=false,group=true;
+    Intent intent = new Intent();
     ArrayAdapter tagAdapter,groupAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +55,7 @@ public class FolderActivity extends AppCompatActivity {
         overridePendingTransition(0,R.anim.flye);
         setContentView(R.layout.create_folder_activity);
         bAccept= findViewById(R.id.accept);
-        Intent intent=getIntent();
+        intent=getIntent();
 
         thisId= Integer.parseInt(intent.getStringExtra("folder"));
         mode =Integer.parseInt(intent.getStringExtra("mode"));
@@ -76,9 +77,9 @@ public class FolderActivity extends AppCompatActivity {
                 nameG.addAll(dbWorker.getGroupName(item.getGroups()));
                 for(int i=0;i<nameG.size();i++){
                     Log.v("123123axzcass",nameG.get(i));
-                    listTag.add(new RecyclerItem(nameG.get(i)));
+                    listGroup.add(new RecyclerItem(nameG.get(i)));
 
-                    listTagD.add(new RecyclerItem(nameG.get(i)));
+                    listGroupD.add(new RecyclerItem(nameG.get(i)));
                 }
             }
             if(!item.getTags().get(0).equals("")) {
@@ -86,9 +87,9 @@ public class FolderActivity extends AppCompatActivity {
                 nameT.addAll(dbWorker.getTagName(item.getTags()));
                 for(int i=0;i<nameT.size();i++){
                     Log.v("123123axzcass",nameT.get(i));
-                    listGroup.add(new RecyclerItem(nameT.get(i)));
+                    listTag.add(new RecyclerItem(nameT.get(i)));
 
-                    listGroupD.add(new RecyclerItem(nameT.get(i)));
+                    listTagD.add(new RecyclerItem(nameT.get(i)));
                 }
             }
 
@@ -255,5 +256,8 @@ public class FolderActivity extends AppCompatActivity {
         Intent intent = new Intent();
         setResult(RESULT_OK, intent);
         finish();
+    }
+    public void setRefreshStatus() {
+        setResult(RESULT_OK, intent);
     }
 }

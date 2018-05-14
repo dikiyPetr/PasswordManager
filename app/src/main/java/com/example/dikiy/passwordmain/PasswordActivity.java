@@ -63,8 +63,8 @@ AutoCompleteTextView addTag, addGroup;
     String mode="";
     int folder=0;
     Button addpass;
-    private List<RecyclerItem> movieListD = new ArrayList<>();
-    private List<RecyclerItem> movieList2D = new ArrayList<>();
+//    private List<RecyclerItem> movieListD = new ArrayList<>();
+//    private List<RecyclerItem> movieList2D = new ArrayList<>();
     String log = "";
     PasswordModel model;
     PasswordPresenter presenter;
@@ -132,7 +132,6 @@ AutoCompleteTextView addTag, addGroup;
         acept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.v("123123123aasc","123");
                 if(password.equals(etPassword.getText().toString())||
                         url.equals(etUrl.getText().toString())||
                         name.equals(etname.getText().toString())||
@@ -322,7 +321,7 @@ AutoCompleteTextView addTag, addGroup;
                     Log.v("123123axzcass",nameG.get(i));
                     movieList2.add(new RecyclerItem(nameG.get(i)));
 
-                    movieList2D.add(new RecyclerItem(nameG.get(i)));
+//                    movieList2D.add(new RecyclerItem(nameG.get(i)));
                 }
             }
             if(!item.getTags().get(0).equals("")) {
@@ -332,7 +331,7 @@ AutoCompleteTextView addTag, addGroup;
                     Log.v("123123axzcass",nameT.get(i));
                     movieList.add(new RecyclerItem(nameT.get(i)));
 
-                    movieListD.add(new RecyclerItem(nameT.get(i)));
+//                    movieListD.add(new RecyclerItem(nameT.get(i)));
                 }
             }}else{
             mAdapter2.switchMode();
@@ -343,18 +342,18 @@ AutoCompleteTextView addTag, addGroup;
         etLogin.setText(login);
         etPassword.setText(password);
         etlog.setText(log);
-        movieList2.clear();
-        movieList2.addAll(movieList2D);
-        movieList.clear();
-        movieList.addAll(movieListD);
-        mAdapter2.notifyDataSetChanged();
-        mAdapter.notifyDataSetChanged();
+//        movieList2.clear();
+//        movieList2.addAll(movieList2D);
+//        movieList.clear();
+//        movieList.addAll(movieListD);
+//        mAdapter2.notifyDataSetChanged();
+//        mAdapter.notifyDataSetChanged();
     }
     public void saveDefault(){
-        movieList2D.clear();
-        movieList2D.addAll(movieList2);
-        movieListD.clear();
-        movieListD.addAll(movieList);
+//        movieList2D.clear();
+//        movieList2D.addAll(movieList2);
+//        movieListD.clear();
+//        movieListD.addAll(movieList);
 
     }
     private void SwitchEdit(boolean i){

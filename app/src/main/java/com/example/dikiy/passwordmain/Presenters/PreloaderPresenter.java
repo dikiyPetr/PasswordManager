@@ -1,8 +1,6 @@
 package com.example.dikiy.passwordmain.Presenters;
 
-import com.example.dikiy.passwordmain.Model.PasswordModel;
 import com.example.dikiy.passwordmain.Model.PreloaderModel;
-import com.example.dikiy.passwordmain.PasswordActivity;
 import com.example.dikiy.passwordmain.PreloaderActivity;
 
 /**
@@ -25,13 +23,13 @@ import com.example.dikiy.passwordmain.PreloaderActivity;
             view = null;
         }
         public void viewIsReady() {
-            loadUsers();
+            conect();
         }
 
-        private void loadUsers() {
+    public void conect() {
             model.CheckToken(new PreloaderModel.CheckLoadCallback() {
                 @Override
-                public void onLoad(boolean stat) {
+                public void onLoad(int stat) {
                    view.anim(stat);
                 }
             });

@@ -47,7 +47,7 @@ public class FolderPresenter {
         model.AddTag(new FolderModel.AddTagCallback() {
             @Override
             public void onLoad(String s) {
-
+                view.setRefreshStatus();
             }
         },tag,s,thisId);
     }
@@ -56,8 +56,9 @@ public class FolderPresenter {
         model.RemoveTag(new FolderModel.RemoveTagCallback() {
             @Override
             public void onLoad() {
-
+                view.setRefreshStatus();
             }
         },s,thisId,tag);
     }
+
 }
