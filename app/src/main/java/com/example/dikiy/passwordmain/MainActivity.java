@@ -640,11 +640,16 @@ protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         int id = item.getItemId();
 
         switch (id){
-            case R.id.korz:
+            case R.id.exit:
                 Intent intent=new Intent(MainActivity.this,PreloaderActivity.class);
                 startActivity(intent);
                 finish();
                 LoadText.setNull();
+                break;
+            case R.id.service:
+
+                startActivity(new Intent(MainActivity.this,ServiceActivity.class));
+
                 break;
         }
 

@@ -129,10 +129,19 @@ public class DBWorker {
     public  List<MainItem> loadData(int id){
         List<MainItem> list =new ArrayList<>();
         Cursor cursor = mDb.rawQuery("select * from folders where folder="+id, null);
-        Log.v("LoadLog", String.valueOf(cursor.getCount()));
+        Log.v("LoadLogPass", String.valueOf(cursor.getCount()));
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()){
+            String tag=cursor.getString(3 );
+            if(tag.length()>2){
+                tag.substring(1,tag.length()-1);
+            }
+            list.add(new MainItem(cursor.getString(1), Integer.parseInt(cursor.getString(0)),true,tag));
+            cursor.moveToNext();
+        }
         cursor.close();
         cursor = mDb.rawQuery("select * from passwords where folder="+id, null);
-        Log.v("LoadLog", String.valueOf(cursor.getCount()));
+        Log.v("LoadLogFolder", String.valueOf(cursor.getCount()));
         cursor.moveToFirst();
         while (!cursor.isAfterLast()){
             String tag=cursor.getString(7);

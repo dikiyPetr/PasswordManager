@@ -112,6 +112,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
 
             startActivity(intent);
             finish();
+            LoadText.setNull();
         }
     });
     }

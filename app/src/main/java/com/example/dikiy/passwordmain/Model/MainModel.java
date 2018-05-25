@@ -30,7 +30,7 @@ import retrofit2.Response;
  * Created by dikiy on 16.02.2018.
  */
 
-public class MainModel {
+public class    MainModel {
     public void moveItem(MoveItemCallback callback, List<CutItem> cutItems,int folderId) {
         MoveItemTask moveItemTask = new MoveItemTask(callback,cutItems,folderId);
         moveItemTask.execute();

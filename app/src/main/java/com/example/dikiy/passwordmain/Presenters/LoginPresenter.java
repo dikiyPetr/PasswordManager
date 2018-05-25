@@ -31,11 +31,44 @@ public class LoginPresenter {
 
     private void loginStat(String name,String pass) {
                 model.Login(new LoginModel.LoginCallback() {
-            @Override
-            public void onLoad(int stat) {
-                view.loginStat(stat);
-            }
-        },name,pass);
 
+                    @Override
+                    public void onLoad() {
+                            view.loginStat();
+                    }
+
+                    @Override
+                    public void onFail() {
+                                view.fail();
+                    }
+
+                    @Override
+                    public void onError(int code) {
+                                view.error(code);
+                    }
+                },name,pass);
+
+    }
+
+    public void register(String name, String login, String pass) {
+        model.Register(new LoginModel.RegisterCallback() {
+            @Override
+            public void onLoad() {
+
+                    view.rigisterOk();
+            }
+
+            @Override
+            public void onFail() {
+                    view.fail();
+            }
+
+            @Override
+            public void onError(int code) {
+
+                    view.error(code);
+
+            }
+        },name,login,pass);
     }
 }

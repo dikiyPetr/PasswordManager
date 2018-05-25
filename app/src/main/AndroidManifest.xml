@@ -2,9 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.dikiy.passwordmain">
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-    <uses-permission android:name="android.permission.INTERNAL_SYSTEM_WINDOW"
+
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission
+        android:name="android.permission.INTERNAL_SYSTEM_WINDOW"
         tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.  INTERNET" />
+
     <application
         android:name=".GetContext"
         android:allowBackup="true"
@@ -16,41 +20,42 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme">
-        </activity>
-        <activity android:name=".PasswordActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".PasswordActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme">
-
-        </activity>
-        <activity android:name=".PreloaderActivity"
-            android:theme="@style/SplashTheme"
-            >
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".PreloaderActivity"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity"
-            android:theme="@style/AppTheme">
-        </activity>
-        <activity android:name=".LockActivity"
-            android:theme="@style/AppTheme">
-        </activity>
-        <activity android:name=".FolderActivity"
-            android:theme="@style/AppTheme">
+        <activity
+            android:name=".LoginActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".LockActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".FolderActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".UserActivity"
+            android:theme="@style/AppTheme" />
 
-        </activity>
-        <activity android:name=".UserActivity"
-            android:theme="@style/AppTheme">
+        <service android:name=".Fly" />
 
-        </activity>
-        <service android:name=".Fly" ></service>
-
-        <!--<meta-data-->
-            <!--android:name="io.fabric.ApiKey"-->
-            <!--android:value="7e8f5d72fd7afb677913b2ba0cb09eae28a0113d" />-->
+        <!-- <meta-data -->
+        <!-- android:name="io.fabric.ApiKey" -->
+        <!-- android:value="7e8f5d72fd7afb677913b2ba0cb09eae28a0113d" /> -->
+        <activity android:name=".ServiceActivity" />
+        <activity android:name=".AddServiceActivity" />
+        <activity android:name=".ServiceCommandActivity" />
+        <activity android:name=".AddServiceCommandActivity"></activity>
     </application>
 
-    <uses-permission android:name="android.permission.  INTERNET" />
 </manifest>

@@ -13,7 +13,11 @@
 
             android:title="Настройки" />
         <item
-            android:id="@+id/korz"
+            android:id="@+id/service"
+
+            android:title="сервисы" />
+        <item
+            android:id="@+id/exit"
 
             android:title="Выйти" />
 

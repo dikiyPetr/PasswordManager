@@ -1,8 +1,11 @@
 package com.example.dikiy.passwordmain.Retrofit;
 
+import android.util.Log;
+
 import com.example.dikiy.passwordmain.Adapters.Get.GetFolder;
 import com.example.dikiy.passwordmain.Adapters.Get.GetTag_Item;
 import com.example.dikiy.passwordmain.Adapters.Post.PostAdapter;
+import com.example.dikiy.passwordmain.Adapters.Post.PostRegister;
 import com.example.dikiy.passwordmain.DBase.LoadText;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -19,6 +22,27 @@ import retrofit2.Response;
  */
 
 public class    ApiWorker {
+    public static int register(String name,String login,String pass){
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("username", name);
+        jsonObject.addProperty("email", login);
+        jsonObject.addProperty("password", pass);
+
+        PostLogin postLogin = ApiUtils.getAPIService();
+        Response<PostRegister> response = null;
+        try {
+            response = postLogin.Register(jsonObject).execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if(response!=null) {
+
+            return response.code();
+        }else
+        {
+            return 0;
+        }
+    }
     public static int createFolder(String name,int parent){
         final Map<String, String> map = new HashMap<>();
         map.put("Authorization", "Bearer "+LoadText.getText("access_token"));
@@ -43,6 +67,59 @@ public class    ApiWorker {
         {
             return 0;
         }
+    }
+    public static int addService(String name, String url,String login,String pass, String token,String token_name){
+        final Map<String, String> map = new HashMap<>();
+        map.put("Authorization", "Bearer "+LoadText.getText("access_token"));
+        JsonObject jsonObject= new JsonObject();
+        jsonObject.addProperty("name",name);
+        jsonObject.addProperty("url",url);
+        jsonObject.addProperty("login",login);
+        jsonObject.addProperty("pass",pass);
+        jsonObject.addProperty("token",token);
+        jsonObject.addProperty("token_name",token_name);
+
+        PostLogin postLogin = ApiUtils.getAPIService();
+        Response response = null;
+        try {
+            response = postLogin.AddService(map,jsonObject).execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if(response!=null && response.code()==200) {
+            return response.code();
+        }
+        if(response==null){
+            return 0;
+        }
+        return response.code();
+    }
+    public static int addServiceCommand( String name, String service, String command,String method,String params, String template){
+        final Map<String, String> map = new HashMap<>();
+        map.put("Authorization", "Bearer "+LoadText.getText("access_token"));
+        JsonObject jsonObject= new JsonObject();
+        jsonObject.addProperty("name",name);
+        jsonObject.addProperty("service",service);
+        jsonObject.addProperty("command",command);
+        jsonObject.addProperty("method",method);
+        jsonObject.addProperty("params",params);
+        jsonObject.addProperty("template",template);
+        PostLogin postLogin = ApiUtils.getAPIService();
+        Response response = null;
+        try {
+            response = postLogin.AddServiceCommand(map,jsonObject).execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        if(response!=null && response.code()==200) {
+            return response.code();
+        }
+        if(response==null){
+            return 0;
+        }
+        return response.code();
     }
     public static int getRandomId() {
         JsonObject jsonObject= new JsonObject();

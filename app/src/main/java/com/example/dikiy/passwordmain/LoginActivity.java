@@ -19,6 +19,7 @@ import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.dikiy.passwordmain.DBase.LoadText;
 import com.example.dikiy.passwordmain.Model.LoginModel;
@@ -135,96 +136,93 @@ public class LoginActivity extends AppCompatActivity {
                 return false;
             }
         });
+        bregister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+attemptRegister();
+            }
+        });
     }
 
     private void attemptRegister() {
 
-        if(!(isEmailValidR(etemail.getText().toString())||isPasswordValidR(etpass.getText().toString())||isNameValidR(etnameR.getText().toString()))) {
+        if((isEmailValidR(etemailR.getText().toString())&&isPasswordValidR(etpassR.getText().toString())&&isNameValidR(etnameR.getText().toString()))) {
+            presenter.register(etnameR.getText().toString(),etemailR.getText().toString(),etpassR.getText().toString());
             setLoginProgress(true);
         }
     }
 
     private boolean isNameValidR(String s) {
+        nameTilR.setError(null);
         if(!(s.length() >= 4)){
             nameTilR.setError(getString(R.string.error_invalid_name));
         }
-        else{
-            nameTilR.setError(null);
-        }
-        return !(s.length() >=4);
+        Log.v("12312312sdsz", String.valueOf( !(s.length() >=4)));
+        return (s.length() >=4);
 
     }
 
     private boolean isPasswordValidR(String s) {
+        passwordTilR.setError(null);
         if(!(s.length() >= 4)){
             passwordTilR.setError(getString(R.string.error_invalid_password));
         }
-        else{
-            passwordTilR.setError(null);
-        }
-        return !(s.length() >=4);
+        Log.v("12312312sdsz", String.valueOf(!(s.length() >=4)));
+        return (s.length() >=4);
     }
 
     private boolean isEmailValidR(String s) {
-        if(!(s.length()>=4)){
+        emailTilR.setError(null);
+        if(!(s.contains("@"))){
             emailTilR.setError(getString(R.string.error_invalid_email));
-        }else{
-            emailTilR.setError(null);
         }
-        return !(s.length()>=4);
+        Log.v("12312312sdsz", String.valueOf(s.contains("@")));
+        return s.contains("@");
     }
 
     private void attemptLogin() {
 
         if(!(isEmailValid(etemail.getText().toString())||isPasswordValid(etpass.getText().toString()))) {
+            presenter.login(etemail.getText().toString(),etpass.getText().toString());
             setLoginProgress(true);
         }
     }
 
     private boolean isEmailValid(String email) {
+        emailTil.setError(null);
         if(!(email.length()>=4)){
             emailTil.setError(getString(R.string.error_invalid_email));
-        }else{
-            emailTil.setError(null);
         }
         return !(email.length()>=4);
     }
     private boolean isPasswordValid(String password) {
+        passwordTil.setError(null);
         if(!(password.length() >= 4)){
             passwordTil.setError(getString(R.string.error_invalid_password));
         }
-        else{
-            passwordTil.setError(null);
-        }
+
         return !(password.length() >=4);
     }
-    public void loginStat(int stat){
-        Log.v("123123123123123", String.valueOf(stat));
-
-        if(stat==2){
-            LoadText.setText("pass","");
+    public void loginStat(){
             Intent intent = new Intent(this, LockActivity.class);
             startActivity(intent);
             finish();
-        }else{
-
-           setLoginProgress(false);
-        }
     }
     private void setLoginProgress(Boolean stat){
+
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
         if(stat){
-            InputMethodManager imm = (InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE);
 
-            if (imm.isAcceptingText()) {
-                InputMethodManager inputMethodManager = (InputMethodManager) LoginActivity.this.getSystemService(Activity.INPUT_METHOD_SERVICE);
-                inputMethodManager.hideSoftInputFromWindow(LoginActivity.this.getCurrentFocus().getWindowToken(), 0);
-            } else {
 
-            }
+
 
             loginP.setVisibility(View.VISIBLE);
             loginF.setVisibility(View.GONE);
-            presenter.login(etemail.getText().toString(),etpass.getText().toString());
+
 
         }else{
 
@@ -232,5 +230,27 @@ public class LoginActivity extends AppCompatActivity {
             loginF.setVisibility(View.VISIBLE);
         }
     }
+    public void fail(){
+        setLoginProgress(false);
+        Toast.makeText(this,"server no connection",Toast.LENGTH_SHORT).show();
+    }
+    public void error(int code){
+        setLoginProgress(false);
+        if(code==409){
+            Toast.makeText(this, "Имя/почта уже используются", Toast.LENGTH_SHORT).show();
+        }else if(code==400){
+            emailTilR.setError("invalid email");
+        }else {
+            Toast.makeText(this, "server error", Toast.LENGTH_SHORT).show();
+        }
+        }
+    public void rigisterOk(){
+        setLoginProgress(false);
+        etemail.setText(etemailR.getText().toString());
+        etnameR.setText("");
+        etemailR.setText("");
+        etpassR.setText("");
+        tabHost.setCurrentTab(0);
 
+    }
 }

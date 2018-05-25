@@ -2,14 +2,19 @@ package com.example.dikiy.passwordmain.Retrofit;
 
 
 
+import com.example.dikiy.passwordmain.Adapters.Get.GetCommand;
 import com.example.dikiy.passwordmain.Adapters.Get.GetFolder;
 import com.example.dikiy.passwordmain.Adapters.Get.GetFolder_Item;
 import com.example.dikiy.passwordmain.Adapters.Get.GetPass;
 import com.example.dikiy.passwordmain.Adapters.Get.GetPass_Item;
+import com.example.dikiy.passwordmain.Adapters.Get.GetService;
+import com.example.dikiy.passwordmain.Adapters.Get.GetService_Items;
+import com.example.dikiy.passwordmain.Adapters.Get.GetService_Items_Commands;
 import com.example.dikiy.passwordmain.Adapters.Get.GetStorage;
 import com.example.dikiy.passwordmain.Adapters.Get.GetTag;
 import com.example.dikiy.passwordmain.Adapters.Get.GetTag_Item;
 import com.example.dikiy.passwordmain.Adapters.Post.PostAdapter;
+import com.example.dikiy.passwordmain.Adapters.Post.PostRegister;
 import com.google.gson.JsonObject;
 
 import java.util.Map;
@@ -116,6 +121,20 @@ public interface    PostLogin {
     Call<GetFolder_Item> DeleteTagInFolder(@Path("id") int id, @Body JsonObject jsonObject,@HeaderMap Map<String, String> headers);
 
     @PUT("/api/v1/folders/{id}")
-    Call<GetFolder_Item > MoveFolder(@Path("id") int id, @HeaderMap Map<String, String> headers, @Body JsonObject post);
+    Call<GetFolder_Item> MoveFolder(@Path("id") int id, @HeaderMap Map<String, String> headers, @Body JsonObject post);
 
+    @POST("/api/v1/services")
+    Call<GetService_Items> AddService(@HeaderMap Map<String, String> map, @Body JsonObject jsonObject);
+
+    @GET("/api/v1/services")
+    Call<GetService> GetService(@HeaderMap Map<String, String> map);
+
+    @GET("/api/v1/service/commands")
+    Call<GetCommand> GetCommand(@HeaderMap Map<String, String> headers);
+
+    @POST("/api/v1/service/commands")
+    Call<GetService_Items_Commands> AddServiceCommand(@HeaderMap Map<String, String> map, @Body JsonObject jsonObject);
+
+    @POST("/api/v1/users")
+    Call<PostRegister>  Register(@Body JsonObject jsonObject);
 }
