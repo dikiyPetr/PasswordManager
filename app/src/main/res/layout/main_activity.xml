@@ -29,7 +29,6 @@
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/black"
                     android:minHeight="?attr/actionBarSize"
                     android:theme="?attr/actionBarTheme">
 
@@ -91,14 +90,14 @@
                                 android:textSize="18sp" />
 
                             <SearchView
-                            android:id="@+id/mainserch"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginRight="10dp"
-                            android:gravity="right">
+                                android:id="@+id/mainserch"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_marginRight="10dp"
+                                android:gravity="right">
 
-                        </SearchView>
+                            </SearchView>
 
                         </RelativeLayout>
 
@@ -197,73 +196,66 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent">
 
-                            <android.support.design.widget.FloatingActionButton
-                                android:id="@+id/fbaddpassword"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-
-                                android:layout_above="@+id/floatingActionButton3"
-                                android:layout_alignLeft="@+id/floatingActionButton3"
-                                android:layout_alignStart="@+id/floatingActionButton3"
-                                android:layout_gravity="bottom|right"
-                                android:layout_marginBottom="5dp"
-                                android:clickable="true"
-                                android:visibility="gone"
-                                app:backgroundTint="@android:color/holo_blue_light"
-                                app:elevation="0dp"
-                                app:rippleColor="@color/cardview_dark_background"
-                                app:srcCompat="@drawable/key" />
-
-                            <android.support.design.widget.FloatingActionButton
-                                android:id="@+id/floatingActionButton3"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_above="@+id/floatingActionButton2"
-                                android:layout_alignLeft="@+id/floatingActionButton2"
-                                android:layout_alignStart="@+id/floatingActionButton2"
-                                android:layout_gravity="bottom|right"
-                                android:layout_marginBottom="5dp"
-                                android:clickable="true"
-                                android:visibility="gone"
-                                app:backgroundTint="@android:color/holo_blue_light"
-                                app:srcCompat="@drawable/user" />
-
-                            <android.support.design.widget.FloatingActionButton
-                                android:id="@+id/floatingActionButton2"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-
-                                android:layout_above="@+id/floatingActionButton"
-                                android:layout_alignLeft="@+id/floatingActionButton"
-                                android:layout_alignStart="@+id/floatingActionButton"
-                                android:layout_gravity="bottom|right"
-                                android:layout_marginBottom="5dp"
-                                android:clickable="true"
-                                android:visibility="gone"
-                                app:backgroundTint="@android:color/holo_blue_light"
-                                app:srcCompat="@drawable/folder" />
-
-                            <android.support.design.widget.FloatingActionButton
-                                android:id="@+id/floatingActionButton"
+                            <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentBottom="true"
                                 android:layout_alignParentEnd="true"
                                 android:layout_alignParentRight="true"
-                                android:layout_gravity="bottom|right"
                                 android:layout_marginBottom="31dp"
+                                android:layout_marginEnd="20dp"
                                 android:layout_marginRight="20dp"
-                                android:clickable="true"
-                                android:visibility="visible"
-                                app:backgroundTint="@android:color/holo_blue_dark"
-                                app:srcCompat="@drawable/add" />
+                                android:gravity="center_horizontal"
+                                android:orientation="vertical">
+
+                                <android.support.design.widget.FloatingActionButton
+                                    android:id="@+id/fbaddpassword"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="10dp"
+                                    android:clickable="true"
+                                    android:focusable="true"
+                                    android:scaleType="center"
+                                    android:visibility="gone"
+                                    app:backgroundTint="@android:color/holo_blue_light"
+                                    app:elevation="1dp"
+                                    app:fabSize="mini"
+                                    app:srcCompat="@drawable/ic_key" />
+
+                                <android.support.design.widget.FloatingActionButton
+                                    android:id="@+id/floatingActionButton3"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginBottom="10dp"
+                                    android:clickable="true"
+                                    android:focusable="true"
+                                    android:scaleType="center"
+                                    android:visibility="gone"
+                                    app:backgroundTint="@android:color/holo_blue_light"
+                                    app:elevation="1dp"
+                                    app:fabSize="mini"
+                                    app:srcCompat="@drawable/ic_folder" />
+
+                                <android.support.design.widget.FloatingActionButton
+                                    android:id="@+id/floatingActionButton"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:clickable="true"
+                                    android:focusable="true"
+                                    android:scaleType="fitCenter"
+                                    android:visibility="visible"
+                                    app:backgroundTint="@color/colorPrimary"
+                                    app:elevation="0dp"
+                                    app:fabSize="normal"
+                                    app:srcCompat="@drawable/add" />
+                            </LinearLayout>
                         </RelativeLayout>
 
                         <RelativeLayout
                             android:id="@+id/cloak"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:background="@color/pngBlack"
+                            android:background="@color/black"
                             android:visibility="gone">
 
                             <android.support.v7.widget.RecyclerView
@@ -297,13 +289,4 @@
             android:layout_gravity="center_vertical|center_horizontal" />
     </FrameLayout>
 
-    <android.support.design.widget.NavigationView
-        android:id="@+id/nav_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        android:visibility="visible"
-        app:headerLayout="@layout/nav_header_main"
-        app:menu="@menu/activity_main_drawer" />
 </android.support.v4.widget.DrawerLayout>

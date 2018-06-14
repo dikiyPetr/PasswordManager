@@ -1,11 +1,8 @@
 package com.example.dikiy.passwordmain.Presenters;
 
 import com.example.dikiy.passwordmain.FolderActivity;
-import com.example.dikiy.passwordmain.MainActivity;
 import com.example.dikiy.passwordmain.Model.FolderModel;
-import com.example.dikiy.passwordmain.Model.MainModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,22 +31,22 @@ public class FolderPresenter {
     public void viewIsReady() {
 
     }
-    public void createFolder(String name,int way){
+    public void createFolder(String name, int way, List<String> tags, List<String> groups){
         model.CreateFolder(new FolderModel.CreateFolderCallback() {
             @Override
-            public void onLoad(int stat) {
-                view.execute(stat);
+            public void onLoad() {
+                view.execute();
             }
-        },name,way);
+        },view.getApplicationContext(),name,way,tags,groups);
     }
 
     public void addTagOrGroup(Boolean tag, String s, int thisId) {
-        model.AddTag(new FolderModel.AddTagCallback() {
+        model.AddTagOrGroup(new FolderModel.AddTagCallback() {
             @Override
-            public void onLoad(String s) {
+            public void onLoad() {
                 view.setRefreshStatus();
             }
-        },tag,s,thisId);
+        },view.getApplicationContext(),tag,s,thisId);
     }
 
     public void removeTagOrGroup(String s, int thisId, Boolean tag) {
@@ -58,7 +55,7 @@ public class FolderPresenter {
             public void onLoad() {
                 view.setRefreshStatus();
             }
-        },s,thisId,tag);
+        },view.getApplicationContext(),s,thisId,tag);
     }
 
 }

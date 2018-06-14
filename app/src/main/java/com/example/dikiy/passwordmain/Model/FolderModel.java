@@ -1,16 +1,20 @@
 package com.example.dikiy.passwordmain.Model;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.dikiy.passwordmain.Adapters.Get.GetFolder_Item;
 import com.example.dikiy.passwordmain.Adapters.Get.GetPass_Item;
+import com.example.dikiy.passwordmain.Adapters.Get.GetTag_Item;
+import com.example.dikiy.passwordmain.Adapters.Post.PostAdapter;
 import com.example.dikiy.passwordmain.DBase.DBWorker;
 import com.example.dikiy.passwordmain.DBase.LoadText;
 import com.example.dikiy.passwordmain.ItemModel.MainItem;
-import com.example.dikiy.passwordmain.Retrofit.ApiUtils;
 import com.example.dikiy.passwordmain.Retrofit.ApiWorker;
 import com.example.dikiy.passwordmain.Retrofit.PostLogin;
+import com.example.dikiy.passwordmain.Retrofit.RetrofitClient;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.util.HashMap;
@@ -26,212 +30,221 @@ import retrofit2.Response;
  */
 
 public class FolderModel {
-    public void CreateFolder(CreateFolderCallback callback,String name,int way) {
-        CreateFolderTask loadUsersTask = new CreateFolderTask(callback,name,way);
-        loadUsersTask.execute();
+    public void CreateFolder(final CreateFolderCallback callback, Context context, final String name, final int way, List<String> tags, List<String> groups) {
+        final Map<String, String> map = new HashMap<>();
+        map.put("Authorization", "Bearer "+LoadText.getText(context,"access_token"));
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("name", name);
+        if(way!=0) {
+            jsonObject.addProperty("parent", String.valueOf(way));
+        }
+        JsonArray jsonArray = new JsonArray();
+        for (int i = 0; i < tags.size(); i++) {
+            jsonArray.add(tags.get(i).toString());
+        }
+        jsonObject.add("tags", jsonArray);
+        JsonArray jsonArray1 = new JsonArray();
+        for (int i = 0; i < groups.size(); i++) {
+            jsonArray1.add(groups.get(i).toString());
+        }
+        jsonObject.add("groups", jsonArray1);
+        PostLogin postLogin =  RetrofitClient.getClient(context).create(PostLogin.class);
+        postLogin.CreateFolder(map,jsonObject).enqueue(new Callback<PostAdapter>() {
+            @Override
+            public void onResponse(Call<PostAdapter> call, Response<PostAdapter> response) {
+                callback.onLoad();
+            }
+
+            @Override
+            public void onFailure(Call<PostAdapter> call, Throwable t) {
+
+            }
+        });
 
     }
+
     public interface CreateFolderCallback {
-        void onLoad(int stat);
-    }
-    class CreateFolderTask extends AsyncTask<Void, Void, Integer> {
-        private final CreateFolderCallback callback;
-        private String name;
-        private int id;
-        CreateFolderTask(CreateFolderCallback callback,String name,int way) {
-            this.callback = callback;
-           this.name = name;
-           this.id=way;
-        }
-        @Override
-        protected Integer doInBackground(Void... voids) {
-
-            callback.onLoad( ApiWorker.createFolder(name,id));
-            return null;
-
-
-        }
-    }
-
-
-
-    public void RemoveTag(RemoveTagCallback callback, String s, int itemId, boolean b) {
-      RemoveTagTask removeTagTask = new RemoveTagTask(callback,s,itemId,b);
-        removeTagTask.execute();
-    }
-    public  interface RemoveTagCallback {
         void onLoad();
     }
-    class RemoveTagTask extends AsyncTask<Void, Void, Integer> {
-        RemoveTagCallback callback;
-        String s;
-        int id;
-        boolean b;
-        public RemoveTagTask(RemoveTagCallback callback, String s, int id, boolean b) {
-            this.callback=callback;
-            this.s=s;
-            this.id=id;
-            this.b=b;
+
+    public void RemoveTag(RemoveTagCallback callback, Context context, String s, int id, boolean b) {
+        DBWorker dbWorker = new DBWorker(context);
+        int itemId = 0;
+        if (!b) {
+            itemId = dbWorker.getTagId(s);
+            final Map<String, String> map = new HashMap<>();
+            map.put("Authorization", "Bearer " + LoadText.getText(context, "access_token"));
+
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("tag", String.valueOf(itemId));
+
+            PostLogin postLogin = RetrofitClient.getClient(context).create(PostLogin.class);
+            Log.v("asdasdasdxcaz", id + " " + itemId);
+            postLogin.DeleteTagInFolder(id, jsonObject, map).enqueue(new Callback<GetFolder_Item>() {
+                @Override
+                public void onResponse(Call<GetFolder_Item> call, Response<GetFolder_Item> response) {
+
+                }
+
+                @Override
+                public void onFailure(Call<GetFolder_Item> call, Throwable t) {
+
+                }
+            });
+        } else {
+            itemId = dbWorker.getGroupId(s);
+            final Map<String, String> map = new HashMap<>();
+            map.put("Authorization", "Bearer " + LoadText.getText(context, "access_token"));
+
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("group", String.valueOf(itemId));
+
+            PostLogin postLogin = RetrofitClient.getClient(context).create(PostLogin.class);
+            Log.v("asdasdasdxcaz", id + " " + itemId);
+            postLogin.DeleteGroupInFolder(id, jsonObject, map).enqueue(new Callback<GetFolder_Item>() {
+                @Override
+                public void onResponse(Call<GetFolder_Item> call, Response<GetFolder_Item> response) {
+
+                }
+
+                @Override
+                public void onFailure(Call<GetFolder_Item> call, Throwable t) {
+
+                }
+            });
+
         }
+    }
 
-        @Override
-        protected Integer doInBackground(Void... voids) {
-            DBWorker dbWorker=new DBWorker();
-            int itemId=0;
-            if(!b){
-                itemId=dbWorker.getTagId(s);
-                final Map<String, String> map = new HashMap<>();
-                map.put("Authorization", "Bearer "+ LoadText.getText("access_token"));
+    public interface RemoveTagCallback {
+        void onLoad();
+    }
 
-                JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty("tag", String.valueOf(itemId));
+    public void AddTagOrGroup(final AddTagCallback callback, final Context context, boolean type, String s, final int passid) {
+        DBWorker dbWorker = new DBWorker(context);
+        int itemId = 0;
+        final Map<String, String> map = new HashMap<>();
+        map.put("Authorization", "Bearer " + LoadText.getText(context, "access_token"));
+        final JsonObject jsonObject = new JsonObject();
 
-                PostLogin postLogin = ApiUtils.getAPIService();
-                Log.v("asdasdasdxcaz",id+" "+itemId);
-                postLogin.DeleteTagInFolder(id,jsonObject,map).enqueue(new Callback<GetFolder_Item>() {
+        final PostLogin postLogin = RetrofitClient.getClient(context).create(PostLogin.class);
+        if (!type) {
+            itemId = dbWorker.getTagId(s);
+            jsonObject.addProperty("tag", String.valueOf(itemId));
+            if (itemId != 0) {
+
+                addTagInPass(context, passid, itemId);
+            } else {
+                jsonObject.addProperty("name", s);
+                postLogin.AddTag(map, jsonObject).enqueue(new Callback<GetTag_Item>() {
                     @Override
-                    public void onResponse(Call<GetFolder_Item> call, Response<GetFolder_Item> response) {
-                        onPostExecute(1);
+                    public void onResponse(Call<GetTag_Item> call, Response<GetTag_Item> response) {
+                        if(response.isSuccessful()){
+                            addTagInPass(context, passid, response.body().getId());
+                            callback.onLoad();
+                        }
                     }
 
                     @Override
-                    public void onFailure(Call<GetFolder_Item> call, Throwable t) {
+                    public void onFailure(Call<GetTag_Item> call, Throwable t) {
 
                     }
                 });
-            }else{
-                itemId=dbWorker.getGroupId(s);
-                final Map<String, String> map = new HashMap<>();
-                map.put("Authorization", "Bearer "+ LoadText.getText("access_token"));
+            }
 
-                JsonObject jsonObject = new JsonObject();
+        } else {
+            itemId = dbWorker.getGroupId(s);
+            if (itemId != 0) {
                 jsonObject.addProperty("group", String.valueOf(itemId));
+                addGroupInPass(context, passid, itemId);
 
-                PostLogin postLogin = ApiUtils.getAPIService();
-                Log.v("asdasdasdxcaz",id+" "+itemId);
-                postLogin.DeleteGroupInFolder(id,jsonObject,map).enqueue(new Callback<GetFolder_Item>() {
+            } else {
+                jsonObject.addProperty("name", s);
+                postLogin.AddGroup(map, jsonObject).enqueue(new Callback<GetTag_Item>() {
                     @Override
-                    public void onResponse(Call<GetFolder_Item> call, Response<GetFolder_Item> response) {
-                        onPostExecute(1);
+                    public void onResponse(Call<GetTag_Item> call, Response<GetTag_Item> response) {
+                        if(response.isSuccessful()) {
+                            addGroupInPass(context, passid, response.body().getId());
+                            callback.onLoad();
+                        }
                     }
 
                     @Override
-                    public void onFailure(Call<GetFolder_Item> call, Throwable t) {
+                    public void onFailure(Call<GetTag_Item> call, Throwable t) {
 
                     }
                 });
 
             }
 
-
-            return 0;
-        }
-
-        @Override
-        protected void onPostExecute(Integer integer) {
-            if(integer==1){callback.onLoad();}
         }
     }
-
-
-    public void AddTag(AddTagCallback callback, boolean b, String s, int passid) {
-       AddTagTask addTagTask = new AddTagTask(callback,b,s,passid);
-        addTagTask.execute();
-    }
-    public  interface AddTagCallback {
-        void onLoad(String s);
-    }
-    class AddTagTask extends AsyncTask<Void, Void, Integer> {
-     AddTagCallback callback;
-        boolean type;
-        String s;
-        int passid;
-        public AddTagTask(AddTagCallback callback, boolean b, String s, int passid) {
-            this.callback=callback;
-            this.s=s;
-            type=b;
-            this.passid=passid;
-        }
-
-        @Override
-        protected Integer doInBackground(Void... voids) {
-            DBWorker dbWorker=new DBWorker();
-            int itemId=0;
-            Log.v("123123123asdqq","1");
-            if(!type){
-                Log.v("123123123asdqq","2");
-                itemId=dbWorker.getTagId(s);
-                if(itemId!=0){
-
-                    onPostExecute(ApiWorker.addTagInFolder(passid,itemId));
-                }else {
-                    itemId =ApiWorker.addTag(s);
-                    if(itemId!=0){
-                        onPostExecute(ApiWorker.addTagInFolder(passid,itemId));}
-                }
-
-            }else{
-                itemId=dbWorker.getGroupId(s);
-                if(itemId!=0){
-
-                    onPostExecute(ApiWorker.addGroupInFolder(passid,itemId));
-                }else {
-                    itemId =ApiWorker.addGroup(s);
-                    if(itemId!=0){
-                        onPostExecute(ApiWorker.addGroupInFolder(passid,itemId));}
-                }
+    private void addGroupInPass(final Context context, final int idpass, int idGroup) {
+        final Map<String, String> map = new HashMap<>();
+        map.put("Authorization", "Bearer " + LoadText.getText(context, "access_token"));
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("group", idGroup);
+        PostLogin postLogin = RetrofitClient.getClient(context).create(PostLogin.class);
+        postLogin.AddGroupInFolder(idpass, map, jsonObject).enqueue(new Callback<GetFolder_Item>() {
+            @Override
+            public void onResponse(Call<GetFolder_Item> call, Response<GetFolder_Item> response) {
 
             }
-            return -1;
-        }
 
-        @Override
-        protected void onPostExecute(Integer integer) {
-            if(integer==200){
-                callback.onLoad(s);
-            }else if(integer==0){
+            @Override
+            public void onFailure(Call<GetFolder_Item> call, Throwable t) {
 
             }
-        }
+        });
     }
 
+    private void addTagInPass(Context context, int idpass, int idTag) {
+        final Map<String, String> map = new HashMap<>();
+        map.put("Authorization", "Bearer " + LoadText.getText(context, "access_token"));
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("tag", String.valueOf(idTag));
+        PostLogin postLogin = RetrofitClient.getClient(context).create(PostLogin.class);
+        postLogin.AddTagInFolder(idpass, map, jsonObject).enqueue(new Callback<GetFolder_Item>() {
+            @Override
+            public void onResponse(Call<GetFolder_Item> call, Response<GetFolder_Item> response) {
 
+            }
 
+            @Override
+            public void onFailure(Call<GetFolder_Item> call, Throwable t) {
 
-
-
-    public void UpdateFolder(UpdateFolderCallback callback, int i, String name) {
-        UpdateFolderTask updatePassTask = new UpdateFolderTask(callback,i,name);
-        updatePassTask.execute();
-    }
-    public  interface UpdateFolderCallback {
-        void onLoad(int code);
-    }
-    class UpdateFolderTask extends AsyncTask<Void, Void, Integer> {
-        int id =0;
-        String name = "";
-        private final UpdateFolderCallback callback;
-
-        public UpdateFolderTask(UpdateFolderCallback callback, int i, String name) {
-            this.callback=callback;
-            this.id=i;
-            this.name = name ;
-        }
-
-        @Override
-        protected Integer doInBackground(Void... voids) {
-            Log.v("123123123aasc","123");
-            ApiWorker.updateFolder(id,name);
-            DBWorker dbWorker= new DBWorker();
-            dbWorker.updateFolder(id,name);
-            callback.onLoad(200);
-            return 0;
-        }
-
-        @Override
-        protected void onPostExecute(Integer s) {
-
-        }
+            }
+        });
     }
 
+    public interface AddTagCallback {
+        void onLoad();
+    }
+
+    public void UpdateFolder(final UpdateFolderCallback callback, Context context, int id, String name) {
+        final Map<String, String> map = new HashMap<>();
+        map.put("Authorization", "Bearer "+LoadText.getText(context,"access_token"));
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("name", name);
+
+
+
+        PostLogin postLogin = RetrofitClient.getClient(context).create(PostLogin.class);
+        postLogin.UpdateFolder(id,map,jsonObject).enqueue(new Callback<GetFolder_Item>() {
+            @Override
+            public void onResponse(Call<GetFolder_Item> call, Response<GetFolder_Item> response) {
+                callback.onLoad();
+            }
+
+            @Override
+            public void onFailure(Call<GetFolder_Item> call, Throwable t) {
+
+            }
+        });
+    }
+
+    public interface UpdateFolderCallback {
+        void onLoad();
+    }
 }

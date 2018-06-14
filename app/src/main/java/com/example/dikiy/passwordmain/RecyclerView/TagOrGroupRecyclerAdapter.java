@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.dikiy.passwordmain.Adapters.Model.TagOrGroupRecyclerItem;
 import com.example.dikiy.passwordmain.R;
 
 import java.util.List;
@@ -15,8 +16,8 @@ import java.util.List;
  * Created by dikiy on 12.02.2018.
  */
 
-public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
-    List<RecyclerItem> mDataset;
+public class TagOrGroupRecyclerAdapter extends RecyclerView.Adapter<TagOrGroupRecyclerAdapter.ViewHolder> {
+    List<String> mDataset;
     boolean modeEdit=false;
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -25,7 +26,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         public ViewHolder(View v) {
             super(v);
             mTextView = v.findViewById(R.id.textView2);
-            imageView = v.findViewById(R.id.imageView);
         }
     }
     public interface OnItemClickListener {
@@ -34,7 +34,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
 
     private final OnItemClickListener listener;
-    public RecyclerAdapter(List<RecyclerItem> moviesList, OnItemClickListener listener) {
+    public TagOrGroupRecyclerAdapter(List<String> moviesList, OnItemClickListener listener) {
 
         this.listener=listener;
         this.mDataset = moviesList;
@@ -50,32 +50,25 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        final RecyclerItem movie = mDataset.get(position);
-        holder.mTextView.setText(movie.getName());
-        holder.imageView.setOnClickListener(new View.OnClickListener() {
+        final String movie = mDataset.get(position);
+        holder.mTextView.setText(movie);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                listener.onItemClick(movie.getName());
+                if(modeEdit){
+                listener.onItemClick(movie);
                 mDataset.remove(position);
                notifyDataSetChanged();
 //               holder.imageView.setVisibility(View.GONE);
             }
+            }
         });
-        if(!modeEdit){
-            holder.imageView.setVisibility(View.GONE);
-        }else{
-            holder.imageView.setVisibility(View.VISIBLE);
-        }
+
     }
 
-    public boolean switchMode(){
-
-        if(modeEdit){
-            modeEdit =false;
-            return false;
-        }else {
-            modeEdit =true;
-            return true;}
+    public boolean modeEdit(boolean stat){
+        modeEdit =stat;
+        return modeEdit;
     }
     @Override
     public int getItemCount() {

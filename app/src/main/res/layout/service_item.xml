@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="70dp">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
@@ -11,7 +11,8 @@
         <RelativeLayout
             android:id="@+id/asdf"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_weight="1">
 
             <TextView
                 android:id="@+id/serviceName"
@@ -21,6 +22,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="12dp"
+                android:singleLine="true"
                 android:text="TextView"
                 android:textSize="17sp" />
 
@@ -31,12 +33,14 @@
                 android:layout_alignStart="@+id/serviceName"
                 android:layout_below="@+id/serviceName"
                 android:layout_marginTop="4dp"
+                android:singleLine="true"
                 android:text="TextView"
-                android:textColor="@color/pngBlack" />
+                android:textColor="@color/black" />
 
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/rl1"
             android:layout_width="70dp"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
@@ -49,6 +53,6 @@
                 android:layout_centerInParent="true"
                 android:text="1" />
         </RelativeLayout>
-    </RelativeLayout>
+    </LinearLayout>
 
 </android.support.v7.widget.CardView>

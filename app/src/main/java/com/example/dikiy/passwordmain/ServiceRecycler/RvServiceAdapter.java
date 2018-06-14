@@ -1,16 +1,12 @@
 package com.example.dikiy.passwordmain.ServiceRecycler;
 
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.dikiy.passwordmain.Adapters.Get.GetService_Items;
-import com.example.dikiy.passwordmain.Adapters.Model.RVServiceItem;
-import com.example.dikiy.passwordmain.Adapters.Model.SearchItem;
-import com.example.dikiy.passwordmain.MainRecycler.RecyclerViewAdapter;
 import com.example.dikiy.passwordmain.R;
 
 import java.util.List;

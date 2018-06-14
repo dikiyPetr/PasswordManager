@@ -39,9 +39,9 @@ public class ServicePresenter {
 
             @Override
             public void onError() {
-
+            view.error();
             }
-        });
+        },view.getApplicationContext());
     }
 
     public void viewIsReady() {

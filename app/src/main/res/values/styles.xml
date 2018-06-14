@@ -1,8 +1,12 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/white</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
 
@@ -18,7 +22,9 @@
     <style name="SplashTheme" parent="Theme.AppCompat">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-
         <item name="android:windowBackground">@drawable/background_splash</item>
     </style>
+    <style name="LoginButton" parent="ThemeOverlay.AppCompat">
+    <item name="colorAccent">@color/colorPrimary</item>
+</style>
 </resources>

@@ -3,9 +3,10 @@ package com.example.dikiy.passwordmain.ItemModel;
 public class MainItem {
     String name;
     boolean type;
+
     int id;
     boolean stat=false;
-    String tag;
+    String tag="";
 
 
 

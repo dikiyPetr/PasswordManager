@@ -1,11 +1,11 @@
 package com.example.dikiy.passwordmain.DBase;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.example.dikiy.passwordmain.Adapters.Post.PostAdapter;
-import com.example.dikiy.passwordmain.GetContext;
 
 /**
  * Created by dikiy on 25.01.2018.
@@ -14,8 +14,8 @@ import com.example.dikiy.passwordmain.GetContext;
 public class LoadText extends Activity{
 
 
-   public static void setText( String name, String value) {
-       SharedPreferences preferences = GetContext.getContext().getSharedPreferences("Data",MODE_PRIVATE);
+   public static void setText( Context context,String name, String value) {
+       SharedPreferences preferences = context.getSharedPreferences("Data",MODE_PRIVATE);
 
        if (preferences != null) {
            SharedPreferences.Editor editor = preferences.edit();
@@ -27,9 +27,9 @@ public class LoadText extends Activity{
 
     }
 
-    public static String getText( String key) {
+    public static String getText(Context context, String key) {
         String value = null;
-        SharedPreferences preferences =  GetContext.getContext().getSharedPreferences("Data",MODE_PRIVATE);
+        SharedPreferences preferences =  context.getSharedPreferences("Data",MODE_PRIVATE);
         if (preferences != null) {
             value = preferences.getString(key, null);
             Log.v("123457",key);
@@ -41,19 +41,20 @@ public class LoadText extends Activity{
 
     }
 
-    public static void setNull() {
-        SharedPreferences preferences = GetContext.getContext().getSharedPreferences("Data",MODE_PRIVATE);
+    public static void setNull(Context context) {
+        SharedPreferences preferences = context.getSharedPreferences("Data",MODE_PRIVATE);
 
         if (preferences != null) {
             SharedPreferences.Editor editor = preferences.edit();
             editor.putString("access_token", null);
             editor.putString("refresh_token", null);
             editor.putString("pass",null);
+            editor.putString("pin",null);
             editor.commit();
         }
     }
-    public static void refreshToken(PostAdapter adapter) {
-        SharedPreferences preferences = GetContext.getContext().getSharedPreferences("Data",MODE_PRIVATE);
+    public static void refreshToken(Context context,PostAdapter adapter) {
+        SharedPreferences preferences = context.getSharedPreferences("Data",MODE_PRIVATE);
 
         if (preferences != null) {
             SharedPreferences.Editor editor = preferences.edit();
@@ -62,13 +63,33 @@ public class LoadText extends Activity{
             editor.commit();
         }
     }
-    public static void newId(PostAdapter adapter) {
-        SharedPreferences preferences = GetContext.getContext().getSharedPreferences("Data",MODE_PRIVATE);
+    public static void newRandomId(Context context,PostAdapter adapter) {
+        SharedPreferences preferences = context.getSharedPreferences("Data",MODE_PRIVATE);
 
         if (preferences != null) {
             SharedPreferences.Editor editor = preferences.edit();
             editor.putString("client_secret", adapter.getSecret());
             editor.putString("client_id", adapter.getId()+"_"+adapter.getRandom_id());
+            editor.commit();
+        }
+    }
+    public static String getMasterPass(Context context) {
+        String value = null;
+        SharedPreferences preferences =  context.getSharedPreferences("Data",MODE_PRIVATE);
+        if (preferences != null) {
+            value = preferences.getString("master_pass", null);
+        }
+        if(value==null){
+            value="";
+        }
+        return value;
+    }
+    public static void setMasterPass(Context context,String pass) {
+        SharedPreferences preferences = context.getSharedPreferences("Data",MODE_PRIVATE);
+
+        if (preferences != null) {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString("master_pass", pass);
             editor.commit();
         }
     }

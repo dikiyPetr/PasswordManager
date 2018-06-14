@@ -2,6 +2,7 @@ package com.example.dikiy.passwordmain.Presenters;
 
 import com.example.dikiy.passwordmain.LoginActivity;
 import com.example.dikiy.passwordmain.Model.LoginModel;
+import com.example.dikiy.passwordmain.Model.ModelCallback;
 import com.example.dikiy.passwordmain.Model.PreloaderModel;
 import com.example.dikiy.passwordmain.PreloaderActivity;
 
@@ -25,50 +26,52 @@ public class LoginPresenter {
     public void detachView() {
         view = null;
     }
-    public void login(String name,String pass) {
-        loginStat(name,pass);
+
+    public void login(String name, String pass) {
+      checkDeviceId(name,pass);
     }
 
-    private void loginStat(String name,String pass) {
-                model.Login(new LoginModel.LoginCallback() {
-
-                    @Override
-                    public void onLoad() {
-                            view.loginStat();
-                    }
-
-                    @Override
-                    public void onFail() {
-                                view.fail();
-                    }
-
-                    @Override
-                    public void onError(int code) {
-                                view.error(code);
-                    }
-                },name,pass);
-
-    }
-
-    public void register(String name, String login, String pass) {
-        model.Register(new LoginModel.RegisterCallback() {
+    private void loginStat(String name, String pass) {
+        model.Login(new ModelCallback.CallbackCheckField() {
             @Override
             public void onLoad() {
-
-                    view.rigisterOk();
+                view.login();
             }
 
             @Override
             public void onFail() {
-                    view.fail();
+                view.modelFail();
             }
 
             @Override
-            public void onError(int code) {
-
-                    view.error(code);
-
+            public void onError() {
+                view.modelError();
             }
-        },name,login,pass);
+
+            @Override
+            public void onFieldError() {
+                view.invalidLogin();
+            }
+        },view.getApplicationContext(), name, pass);
+
     }
+    public void checkDeviceId(final String name, final String pass) {
+        model.GetDeviceId(new ModelCallback.Callback() {
+            @Override
+            public void onLoad() {
+                loginStat(name,pass);
+            }
+
+            @Override
+            public void onFail() {
+                view.modelFail();
+            }
+
+            @Override
+            public void onError(String s) {
+                view.modelError();
+            }
+        }, view.getApplicationContext());
+    }
+
 }

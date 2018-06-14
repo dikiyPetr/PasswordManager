@@ -23,7 +23,7 @@ public class AddServicePresenter {
 
 
     public void createService( String name, String url, String login,String pass,String token,String token_name) {
-        model.CreateService(new AddServiceModel.CreateServiceCallback() {
+        model.createService(new AddServiceModel.CreateServiceCallback() {
             @Override
             public void onLoad() {
                 view.execute();
@@ -38,6 +38,6 @@ public class AddServicePresenter {
             public void onError() {
                 view.error();
             }
-        },name,url,login,pass,token,token_name);
+        },view.getApplicationContext(),name,url,login,pass,token,token_name);
     }
 }

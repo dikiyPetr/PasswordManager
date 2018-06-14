@@ -1,4 +1,4 @@
-package com.example.dikiy.passwordmain.RecyclerView;
+package com.example.dikiy.passwordmain.Adapters.Model;
 
 import android.util.Log;
 
@@ -6,14 +6,14 @@ import android.util.Log;
  * Created by dikiy on 12.02.2018.
  */
 
-public class RecyclerItem {
+public class TagOrGroupRecyclerItem {
     String name;
 
-    public RecyclerItem(String name){
+    public TagOrGroupRecyclerItem(String name){
         this.name=name;
 
     }
-    public RecyclerItem(){
+    public TagOrGroupRecyclerItem(){
     }
 
     public String getName() {

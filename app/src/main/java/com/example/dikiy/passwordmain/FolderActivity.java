@@ -18,8 +18,8 @@ import com.example.dikiy.passwordmain.Adapters.Get.GetFolder_Item;
 import com.example.dikiy.passwordmain.DBase.DBWorker;
 import com.example.dikiy.passwordmain.Model.FolderModel;
 import com.example.dikiy.passwordmain.Presenters.FolderPresenter;
-import com.example.dikiy.passwordmain.RecyclerView.RecyclerAdapter;
-import com.example.dikiy.passwordmain.RecyclerView.RecyclerItem;
+import com.example.dikiy.passwordmain.RecyclerView.TagOrGroupRecyclerAdapter;
+import com.example.dikiy.passwordmain.Adapters.Model.TagOrGroupRecyclerItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,12 +36,12 @@ public class FolderActivity extends AppCompatActivity {
 
 
     private RecyclerView rvTag, rvGroup;
-    private RecyclerAdapter adapterTag, adapterGroup;
-    private List<RecyclerItem> listTag = new ArrayList<>();
-    private List<RecyclerItem> listGroup = new ArrayList<>();
-    private List<RecyclerItem> listTagD = new ArrayList<>();
-    private List<RecyclerItem> listGroupD = new ArrayList<>();
-    private RecyclerItem movieGroup, movieTag;
+    private TagOrGroupRecyclerAdapter adapterTag, adapterGroup;
+    private List<String> listTag = new ArrayList<>();
+    private List<String> listGroup = new ArrayList<>();
+    private List<String> listTagD = new ArrayList<>();
+    private List<String> listGroupD = new ArrayList<>();
+    private TagOrGroupRecyclerItem movieGroup, movieTag;
     FolderPresenter presenter;
     private int thisId=0;
     private int mode=0;
@@ -68,7 +68,7 @@ public class FolderActivity extends AppCompatActivity {
 
             bAccept.setVisibility(View.GONE);
 //            setEnable(false);
-            DBWorker dbWorker=new DBWorker();
+            DBWorker dbWorker=new DBWorker(this);
             GetFolder_Item item=dbWorker.getFolder(thisId);
                etName.setText(item.getName());
             Log.v("123asdasdaszx",item.getGroups().toString());
@@ -77,9 +77,9 @@ public class FolderActivity extends AppCompatActivity {
                 nameG.addAll(dbWorker.getGroupName(item.getGroups()));
                 for(int i=0;i<nameG.size();i++){
                     Log.v("123123axzcass",nameG.get(i));
-                    listGroup.add(new RecyclerItem(nameG.get(i)));
+                    listGroup.add(nameG.get(i));
 
-                    listGroupD.add(new RecyclerItem(nameG.get(i)));
+                    listGroupD.add(nameG.get(i));
                 }
             }
             if(!item.getTags().get(0).equals("")) {
@@ -87,9 +87,9 @@ public class FolderActivity extends AppCompatActivity {
                 nameT.addAll(dbWorker.getTagName(item.getTags()));
                 for(int i=0;i<nameT.size();i++){
                     Log.v("123123axzcass",nameT.get(i));
-                    listTag.add(new RecyclerItem(nameT.get(i)));
+                    listTag.add(nameT.get(i));
 
-                    listTagD.add(new RecyclerItem(nameT.get(i)));
+                    listTagD.add(nameT.get(i));
                 }
             }
 
@@ -123,8 +123,15 @@ public class FolderActivity extends AppCompatActivity {
         bAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-               presenter.createFolder(etName.getText().toString(),thisId);
+                List<String> tagList = new ArrayList<>();
+                List<String> groupList = new ArrayList<>();
+                for (int i = 0; i < listTag.size(); i++) {
+                    tagList.add(listTag.get(i));
+                }
+                for (int i = 0; i < listGroup.size(); i++) {
+                    groupList.add(listGroup.get(i));
+                }
+               presenter.createFolder(etName.getText().toString(),thisId,tagList,groupList);
                bAccept.setEnabled(false);
             }
         });
@@ -133,7 +140,7 @@ public class FolderActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         rvGroup.setLayoutManager(layoutManager);
-        adapterGroup = new RecyclerAdapter(listGroup, new RecyclerAdapter.OnItemClickListener() {
+        adapterGroup = new TagOrGroupRecyclerAdapter(listGroup, new TagOrGroupRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(String s) {
                 if(mode==1) {
@@ -142,7 +149,7 @@ public class FolderActivity extends AppCompatActivity {
                 groupAdapter.add(s);
             }
         });
-        adapterGroup.switchMode();
+        adapterGroup.modeEdit(true);
         rvGroup.setAdapter(adapterGroup);
 
 
@@ -156,7 +163,7 @@ public class FolderActivity extends AppCompatActivity {
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         rvGroup.setLayoutManager(layoutManager2);
         rvTag.setLayoutManager(layoutManager);
-        adapterTag = new RecyclerAdapter(listTag, new RecyclerAdapter.OnItemClickListener() {
+        adapterTag = new TagOrGroupRecyclerAdapter(listTag, new TagOrGroupRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(String s) {
                 if(mode==1) {
@@ -165,7 +172,7 @@ public class FolderActivity extends AppCompatActivity {
                 tagAdapter.add(s);
             }
         });
-        adapterTag.switchMode();
+        adapterTag.modeEdit(true);
         rvTag.setAdapter(adapterTag);
 
         //add item in rvTag
@@ -178,8 +185,7 @@ public class FolderActivity extends AppCompatActivity {
                                                         presenter.addTagOrGroup(tag, etAddtag.getText().toString(), thisId);
                                                     }
                                                     tagAdapter.remove(etAddtag.getText().toString());
-                                                    movieTag = new RecyclerItem(String.valueOf(etAddtag.getText()));
-                                                    listTag.add(movieTag);
+                                                    listTag.add(etAddtag.getText().toString());
                                                     adapterTag.notifyDataSetChanged();
                                                     rvTag.scrollBy(1000000000, 1000000000);
                                                     etAddtag.setText("");
@@ -196,8 +202,7 @@ public class FolderActivity extends AppCompatActivity {
                                                        presenter.addTagOrGroup(group, etAddgroup.getText().toString(), thisId);
                                                    }
                                                    groupAdapter.remove(etAddgroup.getText().toString());
-                                                   movieGroup = new RecyclerItem(String.valueOf(etAddgroup.getText()));
-                                                   listGroup.add(movieGroup);
+                                                   listGroup.add(etAddgroup.getText().toString());
                                                    adapterGroup.notifyDataSetChanged();
                                                    rvGroup.scrollBy(1000000000, 1000000000);
                                                    etAddgroup.setText("");
@@ -211,7 +216,7 @@ public class FolderActivity extends AppCompatActivity {
         presenter.viewIsReady();
 
 
-        DBWorker dbWorker = new DBWorker();
+        DBWorker dbWorker = new DBWorker(this);
         tagAdapter = new ArrayAdapter(this,
                 android.R.layout.simple_dropdown_item_1line, dbWorker.getTag());
         groupAdapter= new ArrayAdapter(this,
@@ -243,17 +248,16 @@ public class FolderActivity extends AppCompatActivity {
 
 
     }
-    private boolean addItemInRV(String text, List<RecyclerItem> list) {
+    private boolean addItemInRV(String text, List<String> list) {
         for(int i=0;i<list.size();i++){
-            if(list.get(i).getName().equals(text)){
+            if(list.get(i).equals(text)){
                 return false;
             }
 
         }
         return true;
     }
-    public void execute(int stat) {
-        Intent intent = new Intent();
+    public void execute() {
         setResult(RESULT_OK, intent);
         finish();
     }

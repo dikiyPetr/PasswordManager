@@ -1,5 +1,6 @@
 package com.example.dikiy.passwordmain;
 
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -31,8 +32,9 @@ public class Fly extends Service {
 
     WindowManager wm;
     LinearLayout ll;
-    private String pass="";
-    private String login="";
+    private String pass = "";
+    private String login = "";
+
     @Override
     public IBinder onBind(Intent intent) {
 
@@ -40,32 +42,24 @@ public class Fly extends Service {
         return null;
 
 
-
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-       pass=intent.getExtras().getString("pass");
-        login=intent.getExtras().getString("login");
-        Log.v("asdaqweq123",pass);
-        Log.v("asdaqweq123",login);
+        pass = intent.getExtras().getString("pass");
+        login = intent.getExtras().getString("login");
+        Log.v("asdaqweq123", pass);
+        Log.v("asdaqweq123", login);
         return super.onStartCommand(intent, flags, startId);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onCreate() {
 
         // TODO Auto-generated method stub
         super.onCreate();
-
-        try {
-            TimeUnit.SECONDS.sleep(2);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        Intent intent;
-
         wm = (WindowManager) getSystemService(WINDOW_SERVICE);
         wm.getDefaultDisplay();
         ll = new LinearLayout(this);
@@ -90,14 +84,14 @@ public class Fly extends Service {
 //                WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
 //                       | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
 //                       | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-                  WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE|
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
                         WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
 //                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
                 ,
 
                 PixelFormat.TRANSLUCENT
         );
-        parameters.gravity = Gravity.RIGHT  ;
+        parameters.gravity = Gravity.RIGHT;
         parameters.x = 0;
         parameters.y = -300;
 
@@ -106,27 +100,25 @@ public class Fly extends Service {
 //        ViewGroup.LayoutParams btnParameters = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT);
 //        stop.setLayoutParams(btnParameters);
 
-        View itemView = LayoutInflater.from(GetContext.getContext())
+        View itemView = LayoutInflater.from(this)
                 .inflate(R.layout.flyactivity
-                        ,ll,false);
+                        , ll, false);
         final FrameLayout copylogin = itemView.findViewById(R.id.copylogin);
         final FrameLayout copypassword = itemView.findViewById(R.id.copypassword);
-        FrameLayout main =itemView.findViewById(R.id.main);
+        FrameLayout main = itemView.findViewById(R.id.main);
 
         final FrameLayout back = itemView.findViewById(R.id.back);
         final FrameLayout close = itemView.findViewById(R.id.closeP);
         copylogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(GetContext.getContext(),"copy login",Toast.LENGTH_SHORT).show();
+                Toast.makeText(Fly.this, "copy login", Toast.LENGTH_SHORT).show();
 
 
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText("123", pass);
                 clipboard.setPrimaryClip(clip);
-                Toast.makeText(GetContext.getContext(),"copy password",Toast.LENGTH_SHORT).show();
-
-
+                Toast.makeText(Fly.this, "copy password", Toast.LENGTH_SHORT).show();
 
 
             }
@@ -143,8 +135,8 @@ public class Fly extends Service {
         main.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(copylogin.getVisibility()==View.VISIBLE){
-                    Animation anim = AnimationUtils.loadAnimation(GetContext.getContext(), R.anim.flye);
+                if (copylogin.getVisibility() == View.VISIBLE) {
+                    Animation anim = AnimationUtils.loadAnimation(Fly.this, R.anim.flye);
                     anim.setAnimationListener(new Animation.AnimationListener() {
                         @Override
                         public void onAnimationStart(Animation animation) {
@@ -165,12 +157,12 @@ public class Fly extends Service {
 
                         }
                     });
-                copylogin.startAnimation(anim);
-                copypassword.startAnimation(anim);
-                close.startAnimation(anim);
-                back.startAnimation(anim);
-                }else{
-                    Animation anim = AnimationUtils.loadAnimation(GetContext.getContext(), R.anim.flys);
+                    copylogin.startAnimation(anim);
+                    copypassword.startAnimation(anim);
+                    close.startAnimation(anim);
+                    back.startAnimation(anim);
+                } else {
+                    Animation anim = AnimationUtils.loadAnimation(Fly.this, R.anim.flys);
                     copylogin.startAnimation(anim);
                     copypassword.startAnimation(anim);
                     close.startAnimation(anim);
@@ -261,7 +253,7 @@ public class Fly extends Service {
 
     @Override
     public void onDestroy() {
-        Log.v("123123123213221","1");
+        Log.v("123123123213221", "1");
         super.onDestroy();
         stopSelf();
     }

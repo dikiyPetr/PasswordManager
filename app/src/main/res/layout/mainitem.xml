@@ -57,6 +57,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:singleLine="true"
                         android:id="@+id/cvpass"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -67,7 +68,8 @@
                         android:text="пароль"
                         android:textAlignment="viewStart"
                         android:textSize="25sp"
-                        android:paddingRight="5dp"/>
+                        android:paddingRight="5dp"
+                        android:gravity="start" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -83,8 +85,7 @@
                             android:ellipsize="marquee"
                             android:marqueeRepeatLimit="marquee_forever"
                             android:scrollHorizontally="true"
-                            android:singleLine="true"
-                            android:text="теги,теги,теги,теги,теги,теги,теги,теги,теги,теги." />
+                            android:singleLine="true" />
 
                         <TextView
                             android:id="@+id/cvdata"

@@ -8,8 +8,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import com.example.dikiy.passwordmain.RecyclerView.RecyclerAdapter;
-import com.example.dikiy.passwordmain.RecyclerView.RecyclerItem;
+import com.example.dikiy.passwordmain.RecyclerView.TagOrGroupRecyclerAdapter;
+import com.example.dikiy.passwordmain.Adapters.Model.TagOrGroupRecyclerItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,12 +22,12 @@ public class UserActivity extends AppCompatActivity {
     ImageView iAccept,iClose,iRole;
     EditText etRole,etLog,etName;
     private RecyclerView rvTag, rvRole;
-    private RecyclerAdapter adapterTag, adapterRole;
-    private List<RecyclerItem> listTag = new ArrayList<>();
-    private List<RecyclerItem> listRole = new ArrayList<>();
-    private List<RecyclerItem> listTagD = new ArrayList<>();
-    private List<RecyclerItem> listGrupD = new ArrayList<>();
-    private RecyclerItem movieGrup, movieTag;
+    private TagOrGroupRecyclerAdapter adapterTag, adapterRole;
+    private List<String> listTag = new ArrayList<>();
+    private List<String> listRole = new ArrayList<>();
+    private List<String> listTagD = new ArrayList<>();
+    private List<String> listGrupD = new ArrayList<>();
+    private TagOrGroupRecyclerItem movieGrup, movieTag;
 
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -50,21 +50,21 @@ public class UserActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         rvRole.setLayoutManager(layoutManager);
-        adapterRole = new RecyclerAdapter(listRole, new RecyclerAdapter.OnItemClickListener() {
+        adapterRole = new TagOrGroupRecyclerAdapter(listRole, new TagOrGroupRecyclerAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(String s) {
 
             }
         });
-        adapterRole.switchMode();
+        adapterRole.modeEdit(true);
         rvRole.setAdapter(adapterRole);
 
         iRole.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
                                             if(etRole.getText().length()!=0) {
-                                                movieGrup = new RecyclerItem(String.valueOf(etRole.getText()));
-                                                listRole.add(movieGrup);
+
+                                                listRole.add(etRole.getText().toString());
                                                 adapterRole.notifyDataSetChanged();
                                                 rvRole.scrollBy(1000000000, 1000000000);
                                                 etRole.setText("");

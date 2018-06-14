@@ -1,5 +1,7 @@
-package com.example.dikiy.passwordmain.MainRecycler;
+package com.example.dikiy.passwordmain.RecyclerView;
 
+import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -21,10 +23,7 @@ import java.util.List;
 
 
 @SuppressWarnings("Convert2streamapi")
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.PersonViewHolder>
-{
-
-
+public class MainActivityRecyclerViewAdapter extends RecyclerView.Adapter<MainActivityRecyclerViewAdapter.PersonViewHolder> {
 
 
     public static class PersonViewHolder extends RecyclerView.ViewHolder {
@@ -33,20 +32,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         TextView namepass;
         ScrollingTextView tag;
         TextView data;
-        ImageView photo,st;
+        ImageView photo, st;
         ScrollingTextView scrollingTextView;
 
         PersonViewHolder(View itemView) {
 
 
             super(itemView);
-            cv =  itemView.findViewById(R.id.cv);
-            namepass =  itemView.findViewById(R.id.cvpass);
-            tag =  itemView.findViewById(R.id.cvtg);
+            cv = itemView.findViewById(R.id.cv);
+            namepass = itemView.findViewById(R.id.cvpass);
+            tag = itemView.findViewById(R.id.cvtg);
             data = itemView.findViewById(R.id.cvdata);
-            photo=itemView.findViewById(R.id.photo);
-            st=itemView.findViewById(R.id.cvst);
-            scrollingTextView=itemView.findViewById(R.id.cvtg);
+            photo = itemView.findViewById(R.id.photo);
+            st = itemView.findViewById(R.id.cvst);
+            scrollingTextView = itemView.findViewById(R.id.cvtg);
 
 
         }
@@ -56,16 +55,18 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
 
     public static OnItemTouchListener listener;
+
     public interface OnItemTouchListener {
         void onItemClick(int i);
     }
-    List<MainItem> mainItems=new ArrayList<>();
+
+    List<MainItem> mainItems = new ArrayList<>();
     int selectItems;
+    Context context;
 
-    public RecyclerViewAdapter(List<MainItem> mainItems) {
-
-
-        this.mainItems = mainItems;
+    public MainActivityRecyclerViewAdapter(Context context, List<MainItem> items) {
+        this.context = context;
+        this.mainItems = items;
 
 
     }
@@ -94,23 +95,34 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(final PersonViewHolder personViewHolder, final int i) {
 
-        DBWorker dbWorker=new DBWorker();
-       List<String> list= dbWorker.getTagName(Arrays.asList(mainItems.get(i).getTag().split(",")));
 
-       personViewHolder.scrollingTextView.setText(list.toString().substring(1,list.toString().length()-1));
-        personViewHolder.namepass.setText(mainItems.get(i).getName()+" id="+mainItems.get(i).getId());
-        if(mainItems.get(i).getType()) {
+        DBWorker dbWorker = new DBWorker(context);
+
+
+        personViewHolder.namepass.setText(mainItems.get(i).getName());
+        if (mainItems.get(i).getType()) {
             personViewHolder.photo.setImageResource(R.drawable.folder);
-        }else {
+            if(!mainItems.get(i).getTag().equals("")) {
+                List<String> list = dbWorker.getTagName(Arrays.asList(mainItems.get(i).getTag().split(",")));
+                List<String> tags = Arrays.asList(list.toString().substring(1, list.toString().length() - 1).split(","));
+                String stringTag = "";
+                for (int i1 = 0; i1 < tags.size(); i1++) {
+                    if (!tags.get(i1).isEmpty())
+                        stringTag += "#" + tags.get(i1) + " ";
+                }
+                personViewHolder.tag.setText(stringTag);
+            }
+        } else {
+            personViewHolder.tag.setText(mainItems.get(i).getTag());
+            personViewHolder.tag.setTextColor(Color.parseColor("#eb919191"));
             personViewHolder.photo.setImageResource(R.drawable.keyb);
         }
-        if(mainItems.get(i).getStat()){
+        if (mainItems.get(i).getStat()) {
             personViewHolder.itemView.setBackgroundResource(R.color.pngBlue);
 
-        }else{
+        } else {
             personViewHolder.itemView.setBackgroundResource(R.color.pngPng);
         }
-
 
 
     }
@@ -119,30 +131,36 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public int getItemCount() {
         return mainItems.size();
     }
-    public int getSizeSelect(){
+
+    public int getSizeSelect() {
         return selectItems;
     }
-    public void setSizeSelect(int size){
-        selectItems=size;
-    }
-    public int selectItem(int id){
 
-  if(mainItems.get(id).switchStat()){
-      selectItems++;
-  }else{
-      selectItems--;
-  }
-    notifyDataSetChanged();
-    Log.v("1233333333333333", String.valueOf(selectItems));
-   return selectItems;
+    public void setSizeSelect(int size) {
+        selectItems = size;
     }
+
+    public int selectItem(int id) {
+
+        if (mainItems.get(id).switchStat()) {
+            selectItems++;
+        } else {
+            selectItems--;
+        }
+        notifyDataSetChanged();
+        Log.v("1233333333333333", String.valueOf(selectItems));
+        return selectItems;
+    }
+
     public void closeSelect() {
-        if(mainItems!=null){
-        for(int i=0;i<mainItems.size();i++){
-            mainItems.get(i).setStat(false);
-        }}
+        if (mainItems != null) {
+            for (int i = 0; i < mainItems.size(); i++) {
+                mainItems.get(i).setStat(false);
+            }
+        }
     }
-    public List<MainItem> getItems(){
+
+    public List<MainItem> getItems() {
         return mainItems;
     }
 

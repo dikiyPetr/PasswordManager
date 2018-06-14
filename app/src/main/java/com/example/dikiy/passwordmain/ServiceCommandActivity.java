@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import com.example.dikiy.passwordmain.Adapters.Get.GetService_Items_Commands;
 import com.example.dikiy.passwordmain.Model.ServiceCommandModel;
 import com.example.dikiy.passwordmain.Presenters.ServiceCommandPresenter;
+import com.example.dikiy.passwordmain.RecyclerView.RecyclerItemClickListener;
 import com.example.dikiy.passwordmain.ServiceCommandRecycler.RvServiceCommandAdapter;
 import com.example.dikiy.passwordmain.ServiceRecycler.RvServiceAdapter;
 
@@ -41,7 +42,7 @@ public class ServiceCommandActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             Intent intent=new Intent(ServiceCommandActivity.this,AddServiceCommandActivity.class);
-            intent.putExtra("id",getIntent().getStringExtra("id"));
+            intent.putExtra("command_id",getIntent().getStringExtra("id"));
             startActivityForResult(intent,1234);
 
         }
@@ -49,7 +50,7 @@ public class ServiceCommandActivity extends AppCompatActivity {
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                presenter.loadCommand();
+                presenter.loadCommand(getIntent().getStringExtra("id"));
             }
         });
         RecyclerView.LayoutManager ll = new LinearLayoutManager(this);
@@ -58,11 +59,26 @@ public class ServiceCommandActivity extends AppCompatActivity {
 
         adapter = new RvServiceCommandAdapter(list);
         commandRv.setAdapter(adapter);
+        commandRv.addOnItemTouchListener(
+                new RecyclerItemClickListener(this,commandRv, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        Intent intent=new Intent(ServiceCommandActivity.this,AddServiceCommandActivity.class);
+                        intent.putExtra("command_id",getIntent().getStringExtra("id"));
+                        intent.putExtra("id",String.valueOf(list.get(position).getId()));
+                        startActivityForResult(intent,1234);
 
+                    }
+
+                    @Override
+                    public void onLongClick(View view, int position) {
+
+                    }
+                }));
         ServiceCommandModel model = new ServiceCommandModel();
         presenter = new ServiceCommandPresenter(model);
         presenter.attachView(this);
-        presenter.viewIsReady();
+        presenter.loadCommand(getIntent().getStringExtra("id"));
     }
 
     public void load(List<GetService_Items_Commands> list) {
@@ -71,11 +87,11 @@ public class ServiceCommandActivity extends AppCompatActivity {
     this.list.addAll(list);
     adapter.notifyDataSetChanged();
     }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode==-1){
-            //refresh
+         refreshLayout.setRefreshing(true);
+         presenter.loadCommand(getIntent().getStringExtra("id"));
         }
     }
 

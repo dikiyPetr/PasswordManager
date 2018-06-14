@@ -20,6 +20,9 @@ public class GetStorage {
     @Expose
     private Double time;
 
+
+
+
     public List<GetStorage_Item> getItems() {
         return items;
     }

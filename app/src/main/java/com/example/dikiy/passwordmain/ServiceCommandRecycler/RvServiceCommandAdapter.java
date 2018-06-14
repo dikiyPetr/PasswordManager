@@ -71,7 +71,7 @@ public static class PersonViewHolder extends RecyclerView.ViewHolder {
     public void onBindViewHolder(final PersonViewHolder personViewHolder, final int i) {
 
         personViewHolder.name.setText(mainItems.get(i).getName());
-        personViewHolder.url.setText(mainItems.get(i).getCommand());
+        personViewHolder.url.setText(mainItems.get(i).getMethod());
         personViewHolder.size.setText("");
 
 

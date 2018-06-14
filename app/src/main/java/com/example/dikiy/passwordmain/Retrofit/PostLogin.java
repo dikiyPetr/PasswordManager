@@ -1,7 +1,6 @@
 package com.example.dikiy.passwordmain.Retrofit;
 
 
-
 import com.example.dikiy.passwordmain.Adapters.Get.GetCommand;
 import com.example.dikiy.passwordmain.Adapters.Get.GetFolder;
 import com.example.dikiy.passwordmain.Adapters.Get.GetFolder_Item;
@@ -13,9 +12,12 @@ import com.example.dikiy.passwordmain.Adapters.Get.GetService_Items_Commands;
 import com.example.dikiy.passwordmain.Adapters.Get.GetStorage;
 import com.example.dikiy.passwordmain.Adapters.Get.GetTag;
 import com.example.dikiy.passwordmain.Adapters.Get.GetTag_Item;
+import com.example.dikiy.passwordmain.Adapters.Get.Users;
 import com.example.dikiy.passwordmain.Adapters.Post.PostAdapter;
 import com.example.dikiy.passwordmain.Adapters.Post.PostRegister;
 import com.google.gson.JsonObject;
+
+import org.json.JSONObject;
 
 import java.util.Map;
 
@@ -35,28 +37,28 @@ import retrofit2.http.Query;
  * Created by dikiy on 23.01.2018.
  */
 
-public interface    PostLogin {
+public interface PostLogin {
 
-    @Headers( {"Content-Type: application/json",
+    @Headers({"Content-Type: application/json",
             "Accept: */*"
     })
     @POST("/oauth/v2/token")
     Call<PostAdapter> Login(@Body JsonObject post);
 
     @POST("/api/v1/folders")
-    Call<PostAdapter> CreateFolder(@HeaderMap Map<String, String> headers,@Body JsonObject post);
+    Call<PostAdapter> CreateFolder(@HeaderMap Map<String, String> headers, @Body JsonObject post);
 
     @POST("/api/v1/passes")
-    Call<PostAdapter> CreatePass(@HeaderMap Map<String, String> headers,@Body JsonObject post);
+    Call<PostAdapter> CreatePass(@HeaderMap Map<String, String> headers, @Body JsonObject post);
 
     @POST("/api/v1/clients")
     Call<PostAdapter> GetRandomId(@Body JsonObject post);
 
     @DELETE("/api/v1/folders/{id}")
-    Call<PostAdapter> DeleteFolder(@Path("id") int id,@HeaderMap Map<String, String> headers);
+    Call<PostAdapter> DeleteFolder(@Path("id") int id, @HeaderMap Map<String, String> headers);
 
     @DELETE("/api/v1/passes/{id}")
-    Call<PostAdapter> DeletePass(@Path("id") int id,@HeaderMap Map<String, String> headers);
+    Call<PostAdapter> DeletePass(@Path("id") int id, @HeaderMap Map<String, String> headers);
 
     @GET("/api/v1/tags?limit=999999999")
     Call<GetTag> GetTag(@HeaderMap Map<String, String> headers);
@@ -72,17 +74,17 @@ public interface    PostLogin {
     @GET("/api/v1/folders?limit=999999999")
     Call<GetFolder> GetFolder(@HeaderMap Map<String, String> headers);
 
-    @GET("/api/v1/passes?limit=999999999")
-    Call<GetPass> GetPass(@HeaderMap Map<String, String> headers);
+    @GET("/api/v1/storages?limit=999999999")
+    Call<GetStorage> GetPass(@HeaderMap Map<String, String> headers);
 
     @GET("/api/v1/storages")
-    Call<GetStorage> GetClue( @HeaderMap Map<String, String> headers);
+    Call<GetStorage> GetClue(@HeaderMap Map<String, String> headers);
 
     @GET("/api/v1/passes/{id}.json")
-    Call<GetPass_Item> GetPass(@Path("id") int id,@HeaderMap Map<String, String> headers);
+    Call<GetPass_Item> GetPass(@Path("id") String id, @HeaderMap Map<String, String> headers);
 
     @PUT("/api/v1/passes/{id}")
-    Call<GetPass_Item> UpdatePass(@Path("id") int id,@HeaderMap Map<String, String> headers,@Body JsonObject post);
+    Call<GetPass_Item> UpdatePass(@Path("id") int id, @HeaderMap Map<String, String> headers, @Body JsonObject post);
 
     @POST("/api/v1/passes/tag/{id}")
     Call<GetPass_Item> AddTagInPass(@Path("id") int id, @HeaderMap Map<String, String> map, @Body JsonObject jsonObject);
@@ -91,16 +93,16 @@ public interface    PostLogin {
     Call<GetPass_Item> AddGroupInPass(@Path("id") int id, @HeaderMap Map<String, String> map, @Body JsonObject jsonObject);
 
     @POST("/api/v1/tags")
-    Call<GetTag_Item> AddTag(@HeaderMap Map<String, String> map,@Body JsonObject jsonObject);
+    Call<GetTag_Item> AddTag(@HeaderMap Map<String, String> map, @Body JsonObject jsonObject);
 
     @POST("/api/v1/groups")
-    Call<GetTag_Item> AddGroup(@HeaderMap Map<String, String> map,@Body JsonObject jsonObject);
+    Call<GetTag_Item> AddGroup(@HeaderMap Map<String, String> map, @Body JsonObject jsonObject);
 
     @HTTP(method = "DELETE", path = "/api/v1/passes/group/{id}", hasBody = true)
-    Call<GetPass_Item> DeleteGroupInPass(@Path("id") int id, @Body JsonObject jsonObject,@HeaderMap Map<String, String> headers);
+    Call<GetPass_Item> DeleteGroupInPass(@Path("id") int id, @Body JsonObject jsonObject, @HeaderMap Map<String, String> headers);
 
     @HTTP(method = "DELETE", path = "/api/v1/passes/tag/{id}", hasBody = true)
-    Call<GetPass_Item> DeleteTagInPass(@Path("id") int id, @Body JsonObject jsonObject,@HeaderMap Map<String, String> headers);
+    Call<GetPass_Item> DeleteTagInPass(@Path("id") int id, @Body JsonObject jsonObject, @HeaderMap Map<String, String> headers);
 
     @PUT("/api/v1/passes/{id}")
     Call<GetPass_Item> MovePass(@Path("id") int id, @HeaderMap Map<String, String> headers, @Body JsonObject post);
@@ -115,10 +117,10 @@ public interface    PostLogin {
     Call<GetFolder_Item> AddGroupInFolder(@Path("id") int id, @HeaderMap Map<String, String> map, @Body JsonObject jsonObject);
 
     @HTTP(method = "DELETE", path = "/api/v1/folders/group/{id}", hasBody = true)
-    Call<GetFolder_Item> DeleteGroupInFolder(@Path("id") int id, @Body JsonObject jsonObject,@HeaderMap Map<String, String> headers);
+    Call<GetFolder_Item> DeleteGroupInFolder(@Path("id") int id, @Body JsonObject jsonObject, @HeaderMap Map<String, String> headers);
 
     @HTTP(method = "DELETE", path = "/api/v1/folders/tag/{id}", hasBody = true)
-    Call<GetFolder_Item> DeleteTagInFolder(@Path("id") int id, @Body JsonObject jsonObject,@HeaderMap Map<String, String> headers);
+    Call<GetFolder_Item> DeleteTagInFolder(@Path("id") int id, @Body JsonObject jsonObject, @HeaderMap Map<String, String> headers);
 
     @PUT("/api/v1/folders/{id}")
     Call<GetFolder_Item> MoveFolder(@Path("id") int id, @HeaderMap Map<String, String> headers, @Body JsonObject post);
@@ -127,14 +129,29 @@ public interface    PostLogin {
     Call<GetService_Items> AddService(@HeaderMap Map<String, String> map, @Body JsonObject jsonObject);
 
     @GET("/api/v1/services")
-    Call<GetService> GetService(@HeaderMap Map<String, String> map);
+    Call<GetService> GetServices(@HeaderMap Map<String, String> map);
 
     @GET("/api/v1/service/commands")
-    Call<GetCommand> GetCommand(@HeaderMap Map<String, String> headers);
+    Call<GetCommand> GetCommands(@HeaderMap Map<String, String> headers, @Query("service") int id);
 
     @POST("/api/v1/service/commands")
     Call<GetService_Items_Commands> AddServiceCommand(@HeaderMap Map<String, String> map, @Body JsonObject jsonObject);
 
     @POST("/api/v1/users")
-    Call<PostRegister>  Register(@Body JsonObject jsonObject);
+    Call<PostRegister> Register(@Body JsonObject jsonObject);
+
+    @POST("/api/v1/passes/send/{id}")
+    Call<PostRegister> SendPass(@HeaderMap Map<String, String> map, @Body JsonObject jsonObject, @Path("id") int id);
+
+    @GET("/api/v1/user/current")
+    Call<Users> GetThisUser(@HeaderMap Map<String, String> headers);
+
+    @POST("/api/v1/storages")
+    Call<Users> AddPasswordInStorage(@HeaderMap Map<String, String> headers, @Body JsonObject jsonObject);
+
+    @GET("/api/v1/service/commands/{id}")
+    Call<GetService_Items_Commands> GetCommand(@HeaderMap Map<String, String> headers, @Path("id") String id);
+
+    @PUT("/api/v1/service/commands/{id}")
+    Call<GetService_Items_Commands> EditCommand(@Path("id") int id, @HeaderMap Map<String, String> headers, @Body JsonObject post);
 }

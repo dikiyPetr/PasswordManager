@@ -23,15 +23,21 @@ import com.example.dikiy.passwordmain.PreloaderActivity;
             view = null;
         }
         public void viewIsReady() {
-            conect();
+            connect();
         }
 
-    public void conect() {
+    public void connect() {
             model.CheckToken(new PreloaderModel.CheckLoadCallback() {
                 @Override
-                public void onLoad(int stat) {
-                   view.anim(stat);
+                public void onLoad() {
+                    view.startApplication(true);
                 }
-            });
+
+                @Override
+                public void onFail() {
+                    view.startApplication(false);
+                }
+
+            },view.getApplicationContext());
         }
     }

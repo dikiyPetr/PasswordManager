@@ -1,5 +1,7 @@
 package com.example.dikiy.passwordmain.Retrofit;
 
+import android.content.Context;
+
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -14,8 +16,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitClient {
 
     private static Retrofit retrofit = null;
-
-    public static Retrofit getClient(String baseUrl) {
+    private static String baseUrl= "http://pass-manager.dev.webant.ru/";
+    public static Retrofit getClient(Context context) {
         if (retrofit==null) {
             HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
 // set your desired log level
@@ -31,7 +33,7 @@ public class RetrofitClient {
 //                    .readTimeout(30, TimeUnit.SECONDS);
 
 //            OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
-          httpClient1.addInterceptor(new TokenRefresherInterceptor()).build();
+          httpClient1.addInterceptor(new TokenRefresherInterceptor(context)).build();
 httpClient1.build();
 
 

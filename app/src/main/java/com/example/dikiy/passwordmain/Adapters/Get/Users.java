@@ -7,17 +7,10 @@ import com.google.gson.annotations.SerializedName;
 
 public class Users {
 
-    @SerializedName("id")
-    @Expose
     private Integer id=0;
-    @SerializedName("username")
-    @Expose
-    private String username=null;
-    @SerializedName("email")
-    @Expose
-    private String email=null;
-    @SerializedName("roles")
-    @Expose
+
+    private String username="";
+    private String email="";
     private List<String> roles = new ArrayList<>();
 
     public Integer getId() {

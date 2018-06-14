@@ -1,6 +1,6 @@
 package com.example.dikiy.passwordmain.ItemModel;
 
-import com.example.dikiy.passwordmain.RecyclerView.RecyclerItem;
+import com.example.dikiy.passwordmain.Adapters.Model.TagOrGroupRecyclerItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +14,10 @@ public class PasswordList {
     String url;
     String login;
     String password;
-    List<RecyclerItem> movieList= new ArrayList<>();
-    List<RecyclerItem> movieList2 = new ArrayList<>();
+    List<TagOrGroupRecyclerItem> movieList= new ArrayList<>();
+    List<TagOrGroupRecyclerItem> movieList2 = new ArrayList<>();
     String log;
-    public PasswordList(String name,String url,String login,String password,List<RecyclerItem> movieList,List<RecyclerItem> movieList2,String log) {
+    public PasswordList(String name, String url, String login, String password, List<TagOrGroupRecyclerItem> movieList, List<TagOrGroupRecyclerItem> movieList2, String log) {
         this.name = name;
         this.url =url;
         this.login =login;
@@ -31,11 +31,11 @@ public class PasswordList {
         return name;
     }
 
-    public List<RecyclerItem> getMovieList() {
+    public List<TagOrGroupRecyclerItem> getMovieList() {
         return movieList;
     }
 
-    public List<RecyclerItem> getMovieList2() {
+    public List<TagOrGroupRecyclerItem> getMovieList2() {
         return movieList2;
     }
 
@@ -63,11 +63,11 @@ public class PasswordList {
         this.login = login;
     }
 
-    public void setMovieList(List<RecyclerItem> movieList) {
+    public void setMovieList(List<TagOrGroupRecyclerItem> movieList) {
         this.movieList = movieList;
     }
 
-    public void setMovieList2(List<RecyclerItem> movieList2) {
+    public void setMovieList2(List<TagOrGroupRecyclerItem> movieList2) {
         this.movieList2 = movieList2;
     }
 

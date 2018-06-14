@@ -6,14 +6,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.dikiy.passwordmain.Adapters.Get.GetService_Items;
-import com.example.dikiy.passwordmain.Adapters.Model.RVServiceItem;
-import com.example.dikiy.passwordmain.MainRecycler.RecyclerItemClickListener;
+import com.example.dikiy.passwordmain.RecyclerView.RecyclerItemClickListener;
 import com.example.dikiy.passwordmain.Model.ServiceModel;
 import com.example.dikiy.passwordmain.Presenters.ServicePresenter;
 import com.example.dikiy.passwordmain.ServiceRecycler.RvServiceAdapter;
@@ -99,8 +97,12 @@ public class ServiceActivity extends AppCompatActivity {
 
     public void fail() {
     refreshLayout.setRefreshing(false);
-        Toast.makeText(this,"server error",Toast.LENGTH_SHORT).show();
+        Toast.makeText(this,"server fail",Toast.LENGTH_SHORT).show();
     }
 
 
+    public void error() {
+        refreshLayout.setRefreshing(false);
+        Toast.makeText(this,"server error",Toast.LENGTH_SHORT).show();
+    }
 }

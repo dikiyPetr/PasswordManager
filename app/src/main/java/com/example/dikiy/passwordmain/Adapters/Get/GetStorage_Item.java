@@ -12,16 +12,15 @@ import java.util.List;
 
 public class GetStorage_Item {
 
-
-    @SerializedName("clue")
-    @Expose
-    private String clue;
-    @SerializedName("id")
-    @Expose
-    private Integer id;
-    @SerializedName("pass")
-    @Expose
+    private Integer id=0;
     private GetPass_Item pass;
+    private String clue;
+    private GetFolder_Item folder = new GetFolder_Item();
+
+    public GetFolder_Item getFolder() {
+        return folder;
+    }
+
 
     public String getClue() {
         return clue;

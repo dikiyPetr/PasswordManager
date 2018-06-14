@@ -1,12 +1,12 @@
 package com.example.dikiy.passwordmain.Presenters;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.example.dikiy.passwordmain.Adapters.Model.CutItem;
 import com.example.dikiy.passwordmain.Model.MainModel;
 import com.example.dikiy.passwordmain.MainActivity;
-import com.example.dikiy.passwordmain.ItemModel.MainItem;
-
+import com.example.dikiy.passwordmain.Model.ModelCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,9 +36,24 @@ public class MainPresenter {
 
 
     public void viewIsReady() {
-
-        refreshUsers();
+        getUser();
+        refreshList();
     }
+
+    private void getUser() {
+    model.GetUser(new MainModel.RefreshBDCallback() {
+        @Override
+        public void onLoad() {
+            view.setUserInfo();
+        }
+
+        @Override
+        public void onFail() {
+
+        }
+    },view.getApplicationContext());
+    }
+
     public Boolean backWay(){
         if(way.size()!=1) {
             way.remove(way.size() - 1);
@@ -47,72 +62,82 @@ public class MainPresenter {
         }
         return false;
     }
-    public void nextWay(int id){
+    public void nextWay(int id,String name){
         way.add(id);
+        view.changeWay(name);
         loadUsers();
     }
     public int getWay(){
         return way.get(way.size()-1);
     }
-    public void refreshUsers() {
+    public void refreshList() {
 
         model.refreshBd(new MainModel.RefreshBDCallback() {
             @Override
-            public void onLoad(Boolean b) {
-                if(b){
-             loadUsers();
-                } else{
-
-                    view.failRefresh();
-                }
+            public void onLoad() {
+                loadUsers();
             }
-        });
+
+            @Override
+            public void onFail() {
+                view.failRefresh();
+            }
+        },view.getApplicationContext());
     }
     public void editItem(){
 
 
     }
     public void loadUsers() {
-
-                model.loadUsers(new MainModel.LoadUserCallback() {
-                    @Override
-                    public void onLoad(List<MainItem> users) {
-                        view.refreshClose();
-                        view.showUsers(users);
-                    }
-                },way.get(way.size()-1));
-
+        view.refreshClose();
+        view.showUsers();
 }
 
-    public void deleteItem(int i,boolean type) {
+    public void deleteItem(int id,boolean type) {
         view.refreshStart();
       model.deleteItem(new MainModel.DeleteItemCallback() {
           @Override
-          public void onLoad(int id, boolean mode) {
+          public void onLoad() {
               view.refreshClose();
-              Log.v("steps121312","1");
-              if(id==-1){
-                  view.deleteError();
-              }else if(id==-2){
-                  view.fail();
-              }else{
+
                   loadUsers();
-              }
 
 
           }
-      },i,type);
+      },view.getApplicationContext(),id,type);
 
     }
 
-        public void moveItem(List<CutItem> cutItems,int folderId) {
+        public void moveItem(final List<CutItem> cutItems, int folderId) {
         view.refreshStart();
+            final int[] i = {0};
         model.moveItem(new MainModel.MoveItemCallback() {
             @Override
             public void onLoad() {
-                refreshUsers();
+                i[0]++;
+                if(i[0]==cutItems.size())
+                refreshList();
 
             }
-        },cutItems,folderId);
+        },view.getApplicationContext(),cutItems,folderId);
+    }
+
+    public void addPasswordInStorage(String id,String clue) {
+        model.addPasswordInStorage(new ModelCallback.Callback() {
+            @Override
+            public void onLoad() {
+
+            }
+
+            @Override
+            public void onFail() {
+
+            }
+
+            @Override
+            public void onError(String s) {
+
+            }
+        }, view.getApplicationContext(),id,clue);
     }
 }

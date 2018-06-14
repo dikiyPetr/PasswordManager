@@ -1,66 +1,54 @@
 package com.example.dikiy.passwordmain.Model;
 
-import android.content.Intent;
-import android.os.AsyncTask;
-import android.util.Log;
+import android.content.Context;
 
+import com.example.dikiy.passwordmain.Adapters.Post.PostAdapter;
 import com.example.dikiy.passwordmain.DBase.LoadText;
-import com.example.dikiy.passwordmain.Retrofit.ApiWorker;
+import com.example.dikiy.passwordmain.Retrofit.PostLogin;
+import com.example.dikiy.passwordmain.Retrofit.RetrofitClient;
+import com.google.gson.JsonObject;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by dikiy on 14.03.2018.
  */
 
 public class PreloaderModel {
-    public void CheckToken(PreloaderModel.CheckLoadCallback callback) {
-        PreloaderModel.CheckTokenTask loadUsersTask = new PreloaderModel.CheckTokenTask(callback);
-        loadUsersTask.execute();
+    public void CheckToken(final PreloaderModel.CheckLoadCallback callback, final Context context) {
+        if (LoadText.getText(context, "access_token").length() > 5) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.addProperty("client_id", LoadText.getText(context, "client_id"));
+            jsonObject.addProperty("grant_type", "refresh_token");
+            jsonObject.addProperty("refresh_token", LoadText.getText(context, "refresh_token"));
+            jsonObject.addProperty("client_secret", LoadText.getText(context, "client_secret"));
+            PostLogin postLogin = RetrofitClient.getClient(context).create(PostLogin.class);
+            postLogin.Login(jsonObject).enqueue(new Callback<PostAdapter>() {
+                @Override
+                public void onResponse(Call<PostAdapter> call, Response<PostAdapter> response) {
+                    if (response.isSuccessful()) {
+                        LoadText.refreshToken(context, response.body());
+                        callback.onLoad();
+                    } else {
+                        callback.onFail();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<PostAdapter> call, Throwable t) {
+                    callback.onFail();
+                }
+            });
+        } else {
+            callback.onFail();
+        }
     }
+
     public interface CheckLoadCallback {
-        void onLoad(int stat);
-    }
-    class CheckTokenTask extends AsyncTask<Void, Void, Integer> {
+        void onLoad();
 
-        private final  PreloaderModel.CheckLoadCallback callback;
-
-        CheckTokenTask(PreloaderModel.CheckLoadCallback callback) {
-            this.callback = callback;
-        }
-
-        @Override
-        protected Integer doInBackground(Void... params) {
-
-            //проверка аторизации
-
-            if (LoadText.getText("access_token").length()>5){
-                //обновление токена
-                int code= ApiWorker.refreshToken();
-               switch (code){
-                   case 200:
-                       return 1;
-
-
-                   case 401:
-                       return 0;
-
-
-                   case 0:
-                       return 2;
-
-               }
-
-            }
-                return 0;
-
-        }
-
-        @Override
-        protected void onPostExecute(Integer stat) {
-            if (callback != null) {
-                callback.onLoad(stat);
-            }
-        }
-
-
+        void onFail();
     }
 }

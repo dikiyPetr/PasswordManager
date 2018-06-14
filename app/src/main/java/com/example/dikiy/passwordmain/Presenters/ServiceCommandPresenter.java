@@ -25,10 +25,8 @@ public class ServiceCommandPresenter {
     }
 
 
-    public void viewIsReady() {
-        loadCommand();
-    }
-    public void loadCommand(){
+
+    public void loadCommand(String id){
         model.LoadCommand(new ServiceCommandModel.LoadCommandCallback() {
 
 
@@ -46,6 +44,6 @@ public class ServiceCommandPresenter {
             public void onError() {
 
             }
-        });
+        },view.getApplicationContext(),id);
     }
 }

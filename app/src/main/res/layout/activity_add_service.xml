@@ -7,7 +7,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:openDrawer="start">
+    tools:openDrawer="start"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -149,6 +151,8 @@
                 </android.support.design.widget.TextInputLayout>
 
                 <Button
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:theme="@style/LoginButton"
                     android:id="@+id/createS"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -160,10 +164,12 @@
     </RelativeLayout>
 
     <FrameLayout
+        android:clickable="true"
         android:id="@+id/progresS"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="invisible">
+        android:visibility="invisible"
+        android:focusable="true">
 
         <ProgressBar
             android:id="@+id/progressBar2"
