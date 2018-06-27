@@ -18,6 +18,50 @@
     <string name="forgot_password">Forgot your password?</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
     <string name="empty">пустое поле</string>
+    <string name="edit_pin_ok">Пин-код изменен</string>
+    <string name="edit_main_pass_ok">MainPass изменен</string>
+    <string name="incorect_pin">Неверный пинкод</string>
+    <string name="short_main_pass">короткий MainPass</string>
+    <string name="short_pin">короткий пин-код</string>
+    <string name="main_page">Главная</string>
+    <string name="service_page">Сервисы</string>
+    <string name="setting_page">Настройки</string>
+    <string name="action_exit">Выход</string>
+    <string name="exit_question">Вы точно хотите выйти?</string>
+    <string name="action_cancel">отмена</string>
+    <string name="message_to_save_main_pass_on_mail">Сохранение MasterPass(a)</string>
+    <string name="incorect_mail">неправильная почта</string>
+    <string name="short_password">короткий пароль</string>
+    <string name="send_password">Отправить</string>
+    <string name="action_write">Записать</string>
+    <string name="action_edit_pin">Изменить пин-код</string>
+    <string name="write_main_pass">Введите MainPass</string>
+    <string name="main_pass_description">Им будут шифроваться пароли
+        если вы зайдете с другово устройства, вам нужно будет его ввести</string>
+    <string name="action_no_encrypt">Не шифровать</string>
+    <string name="action_encrypt">Шифровать</string>
+    <string name="action_no_send">Не отправлять</string>
+    <string name="send_main_pass_description">MainPass отправится вам на почту
+Что бы расшифровать MainPass вам необходимо будет ввести пин-код указанный ранее</string>
+    <string name="select_storage_method_main_pass">Выберите способ хранениия MainPass</string>
+    <string name="try_again">Попробуйте ещё раз</string>
+    <string name="action_write_pin">Введите пин-код</string>
+    <string name="create_pin">Создайте PIN</string>
+    <string name="confirm_pin">Потвердите PIN</string>
+    <string name="write_pin">Введите PIN</string>
+    <string name="sign_in_first">Сначала войдите</string>
+    <string name="incorect_token">incorrect token</string>
+    <string name="incorect_url">incorrect url</string>
+    <string name="incorect_name">incorrect name</string>
+    <string name="no_connect_to_internet_message">Проверте полключение к интернету и повторите попытку</string>
+    <string name="is_not_empty">внутри что то есть</string>
+    <string name="server_unknown_error">Сервер, ты в порядке?</string>
+    <string name="email_is_already_used">Эта почта уже используется</string>
+    <string name="invalid_email_response">Почта введена неверно</string>
+    <string name="name_is_already_used">имя уже используется</string>
+    <string name="there_is_no_such_user">такого пользователя нет</string>
+    <string name="folder_is_not_empty">в папке что то есть</string>
+    <string name="invalid_login">неверный логин/пароль</string>
 
 
 </resources>

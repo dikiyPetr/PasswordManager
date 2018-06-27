@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.dikiy.passwordmain">
+    package="com.webant.password.manager">
 
     <uses-permission android:name="android.permission.USE_FINGERPRINT" />
     <uses-permission android:name="android.permission.USE_FINGERPRINT" />
@@ -10,13 +10,13 @@
     <uses-permission android:name="android.permission.USE_FINGERPRINT" />
 
     <application
+        android:name=".AplicationListner"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -26,11 +26,11 @@
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".PreloaderActivity"
-            android:descendantFocusability="beforeDescendants"
-            android:focusableInTouchMode="true"
+            android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -39,7 +39,11 @@
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ShareGetActivity"
-            android:windowSoftInputMode="stateHidden" />
+            android:windowSoftInputMode="stateHidden" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity"/>
+        </activity>
         <activity android:name=".LockActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -59,9 +63,6 @@
         </activity>
         <activity
             android:name=".FolderActivity"
-            android:windowSoftInputMode="stateHidden" />
-        <activity
-            android:name=".UserActivity"
             android:windowSoftInputMode="stateHidden" />
 
         <service android:name=".Fly" />
@@ -84,6 +85,7 @@
         <activity
             android:name=".RegisterActivity"
             android:windowSoftInputMode="stateHidden" />
+        <activity android:name=".SettingActivity"></activity>
     </application>
 
 </manifest>

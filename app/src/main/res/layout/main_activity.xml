@@ -9,284 +9,318 @@
     tools:openDrawer="start">
 
     <LinearLayout
+        android:id="@+id/corl"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clickable="true"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/corl"
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clickable="true"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme">
 
-            <android.support.design.widget.AppBarLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:theme="@style/AppTheme.AppBarOverlay">
+                android:layout_height="match_parent"
+                android:layout_marginRight="30dp">
 
-                <android.support.v7.widget.Toolbar
-                    android:id="@+id/toolbar"
+                <RelativeLayout
+                    android:id="@+id/pasteLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/pasteStat"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@+id/closeP"
+                        android:layout_toRightOf="@+id/closeP"
+
+                        android:text="TextView" />
+
+                    <ImageView
+                        android:id="@+id/closeP"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+
+                        android:layout_centerVertical="true"
+                        android:gravity="right"
+
+                        android:padding="4dp"
+                        android:visibility="visible"
+                        app:srcCompat="@drawable/cancel_white">
+
+                    </ImageView>
+
+                    <ImageView
+                        android:id="@+id/paste"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentTop="true"
+
+                        android:layout_centerVertical="true"
+                        app:srcCompat="?attr/actionModePasteDrawable" />
+
+                </RelativeLayout>
+
+                <LinearLayout
+
+                    android:id="@+id/searchLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="?attr/actionBarSize"
-                    android:theme="?attr/actionBarTheme">
+                    android:orientation="horizontal"
+                    android:visibility="visible"
+                    tools:layout_editor_absoluteX="16dp">
 
-                    <RelativeLayout
+                    <TextView
+                        android:id="@+id/placev"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:layout_centerVertical="true"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:singleLine="true"
+                        android:text="TextView"
+                        android:textSize="18sp" />
 
-                        <RelativeLayout
-                            android:id="@+id/pl"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:visibility="gone"
-                            tools:layout_editor_absoluteX="16dp">
+                    <SearchView
 
-                            <TextView
-                                android:id="@+id/pasteStat"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:text="TextView"
-                                android:textSize="18sp" />
+                        android:id="@+id/mainserch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_weight="1"
+                        android:gravity="right">
 
-                            <ImageView
-                                android:id="@+id/closeP"
-                                android:layout_width="46dp"
-                                android:layout_height="46dp"
-                                android:layout_alignParentRight="true"
-                                android:layout_marginRight="10dp"
-                                android:gravity="right"
-                                android:visibility="visible"
-                                app:srcCompat="@android:drawable/ic_menu_close_clear_cancel">
+                    </SearchView>
 
-                            </ImageView>
+                </LinearLayout>
 
-                            <ImageView
-                                android:id="@+id/paste"
-                                android:layout_width="46dp"
-                                android:layout_height="46dp"
-                                android:layout_alignParentTop="true"
-                                android:layout_toLeftOf="@+id/closeP"
-                                android:layout_toStartOf="@+id/closeP"
-                                app:srcCompat="?attr/actionModePasteDrawable" />
+                <RelativeLayout
+                    android:id="@+id/selectedLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
 
-                        </RelativeLayout>
+                    <ImageView
+                        android:id="@+id/closeselect"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:padding="4dp"
+                        app:srcCompat="@drawable/cancel_white" />
 
-                        <RelativeLayout
-                            android:id="@+id/ll"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:visibility="visible"
-                            tools:layout_editor_absoluteX="16dp">
+                    <TextView
+                        android:id="@+id/sizeselect"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toEndOf="@+id/closeselect"
+                        android:layout_toRightOf="@+id/closeselect"
+                        android:text="TextView" />
 
-                            <TextView
-                                android:id="@+id/placev"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:text="TextView"
-                                android:textSize="18sp" />
+                    <ImageView
+                        android:id="@+id/menus"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerVertical="true"
+                        android:visibility="visible"
+                        app:srcCompat="@drawable/threedots" />
 
-                            <SearchView
-                                android:id="@+id/mainserch"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
-                                android:layout_marginRight="10dp"
-                                android:gravity="right">
+                </RelativeLayout>
 
-                            </SearchView>
+            </RelativeLayout>
 
-                        </RelativeLayout>
+        </android.support.v7.widget.Toolbar>
 
-                        <RelativeLayout
-                            android:id="@+id/rl"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
-                            android:orientation="horizontal"
-                            android:visibility="gone">
-
-                            <ImageView
-                                android:id="@+id/closeselect"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentLeft="true"
-                                android:layout_alignParentStart="true"
-                                android:layout_centerVertical="true"
-                                app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
-
-                            <TextView
-                                android:id="@+id/sizeselect"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:layout_toEndOf="@+id/closeselect"
-                                android:layout_toRightOf="@+id/closeselect"
-                                android:text="TextView" />
-
-                            <ImageView
-                                android:id="@+id/menus"
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
-                                android:layout_alignParentEnd="true"
-                                android:layout_alignParentRight="true"
-                                android:layout_alignParentTop="true"
-                                android:layout_centerVertical="true"
-                                android:layout_marginRight="10dp"
-                                android:padding="6dp"
-                                android:visibility="visible"
-                                app:srcCompat="@drawable/threedots" />
-
-                        </RelativeLayout>
-
-                    </RelativeLayout>
-
-                </android.support.v7.widget.Toolbar>
-
-            </android.support.design.widget.AppBarLayout>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+
+                <!--<ScrollView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent">-->
+                <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="vertical" >-->
+                <!--</LinearLayout>-->
+                <!--</ScrollView>-->
+
                 <FrameLayout
+                    android:id="@+id/progressl"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone">
+
+                    <ProgressBar
+                        android:id="@+id/progressBar2"
+                        style="?android:attr/progressBarStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical|center_horizontal" />
+                </FrameLayout>
+
+                <android.support.v4.widget.SwipeRefreshLayout
+                    android:id="@+id/refresh"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <FrameLayout
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
+                    </android.support.v7.widget.RecyclerView>
+                </android.support.v4.widget.SwipeRefreshLayout>
 
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginRight="20dp"
+                    android:orientation="vertical">
 
+                    <LinearLayout
+                        android:id="@+id/statFabBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
-                            <!--<ScrollView-->
-                            <!--android:layout_width="match_parent"-->
-                            <!--android:layout_height="match_parent">-->
-                            <!--<LinearLayout-->
-                            <!--android:layout_width="match_parent"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:orientation="vertical" >-->
-                            <!--</LinearLayout>-->
-                            <!--</ScrollView>-->
-                            <android.support.v4.widget.SwipeRefreshLayout
-                                android:id="@+id/refresh"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent">
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:gravity="center_vertical">
 
-                                <android.support.v7.widget.RecyclerView
-                                    android:id="@+id/rv"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent">
-
-                                </android.support.v7.widget.RecyclerView>
-                            </android.support.v4.widget.SwipeRefreshLayout>
-                        </RelativeLayout>
-
-                        <RelativeLayout
-                            android:id="@+id/fLayout"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
+                            <TextView
+                                android:layout_width="60dp"
                                 android:layout_height="wrap_content"
-                                android:layout_alignParentBottom="true"
-                                android:layout_alignParentEnd="true"
-                                android:layout_alignParentRight="true"
-                                android:layout_marginBottom="31dp"
-                                android:layout_marginEnd="20dp"
-                                android:layout_marginRight="20dp"
-                                android:gravity="center_horizontal"
-                                android:orientation="vertical">
 
-                                <android.support.design.widget.FloatingActionButton
-                                    android:id="@+id/fbaddpassword"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginBottom="10dp"
-                                    android:clickable="true"
-                                    android:focusable="true"
-                                    android:scaleType="center"
-                                    android:visibility="gone"
-                                    app:backgroundTint="@android:color/holo_blue_light"
-                                    app:elevation="1dp"
-                                    app:fabSize="mini"
-                                    app:srcCompat="@drawable/ic_key" />
+                                android:background="@drawable/corner"
+                                android:padding="4dp"
+                                android:text="пароль"
+                                android:textAlignment="center"
+                                android:visibility="visible" />
 
-                                <android.support.design.widget.FloatingActionButton
-                                    android:id="@+id/floatingActionButton3"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginBottom="10dp"
-                                    android:clickable="true"
-                                    android:focusable="true"
-                                    android:scaleType="center"
-                                    android:visibility="gone"
-                                    app:backgroundTint="@android:color/holo_blue_light"
-                                    app:elevation="1dp"
-                                    app:fabSize="mini"
-                                    app:srcCompat="@drawable/ic_folder" />
-
-                                <android.support.design.widget.FloatingActionButton
-                                    android:id="@+id/floatingActionButton"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:clickable="true"
-                                    android:focusable="true"
-                                    android:scaleType="fitCenter"
-                                    android:visibility="visible"
-                                    app:backgroundTint="@color/colorPrimary"
-                                    app:elevation="0dp"
-                                    app:fabSize="normal"
-                                    app:srcCompat="@drawable/add" />
-                            </LinearLayout>
-                        </RelativeLayout>
-
-                        <RelativeLayout
-                            android:id="@+id/cloak"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@color/black"
-                            android:visibility="gone">
-
-                            <android.support.v7.widget.RecyclerView
-                                android:id="@+id/searchRV"
+                            <android.support.design.widget.FloatingActionButton
+                                android:id="@+id/fbaddpassword"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content" />
-                        </RelativeLayout>
+                                android:layout_height="wrap_content"
 
-                    </FrameLayout>
+                                android:layout_marginLeft="10dp"
+                                android:layout_weight="1"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:scaleType="center"
+                                android:visibility="visible"
+                                app:backgroundTint="@android:color/holo_blue_light"
+                                app:elevation="1dp"
+                                app:fabSize="mini"
+                                app:srcCompat="@drawable/ic_key" />
 
+                        </LinearLayout>
 
-                </FrameLayout>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:layout_marginEnd="8dp"
+
+                            android:layout_marginRight="8dp"
+                            android:gravity="center_vertical">
+
+                            <TextView
+                                android:layout_width="60dp"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/corner"
+                                android:padding="4dp"
+                                android:text="папка"
+                                android:textAlignment="center"
+                                android:visibility="visible" />
+
+                            <android.support.design.widget.FloatingActionButton
+
+                                android:id="@+id/floatingActionButton3"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:layout_weight="1"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:scaleType="center"
+                                android:visibility="visible"
+                                app:backgroundTint="@android:color/holo_blue_light"
+                                app:elevation="1dp"
+                                app:fabSize="mini"
+                                app:srcCompat="@drawable/ic_fab_folder" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <android.support.design.widget.FloatingActionButton
+                        android:id="@+id/floatingActionButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:layout_weight="1"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:visibility="visible"
+                        app:backgroundTint="@color/colorPrimary"
+                        app:elevation="0dp"
+                        app:fabSize="normal"
+                        app:srcCompat="@drawable/add" />
+
+                </LinearLayout>
 
             </RelativeLayout>
 
-        </LinearLayout>
+            <RelativeLayout
+                android:id="@+id/cloak"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/black"
+                android:visibility="gone">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/searchRV"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </RelativeLayout>
+
+        </FrameLayout>
+
 
     </LinearLayout>
-
-    <FrameLayout
-        android:id="@+id/progressl"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone">
-
-        <ProgressBar
-            android:id="@+id/progressBar2"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical|center_horizontal" />
-    </FrameLayout>
 
 </android.support.v4.widget.DrawerLayout>

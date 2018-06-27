@@ -21,37 +21,32 @@
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
             android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme"
-
-            >
+            android:theme="?attr/actionBarTheme">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginRight="30dp"
                 android:layout_weight="1"
-                android:orientation="horizontal"
-                android:visibility="gone">
+                android:orientation="horizontal">
 
                 <ImageView
-                    android:id="@+id/editandclose"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:id="@+id/backImageView"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:padding="4dp"
+                    app:srcCompat="@drawable/back" />
+
+                <ImageView
+                    android:id="@+id/accept"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
-                    android:paddingRight="20dp"
-                    app:srcCompat="@android:drawable/ic_menu_edit" />
+                    android:padding="3dp"
+                    app:srcCompat="@drawable/accept" />
 
-                <ImageView
-                    android:id="@+id/acept"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_toLeftOf="@+id/editandclose"
-                    android:layout_toStartOf="@+id/editandclose"
-                    android:paddingRight="10dp"
-                    android:visibility="gone"
-                    app:srcCompat="@android:drawable/ic_menu_save" />
             </RelativeLayout>
         </android.support.v7.widget.Toolbar>
 
@@ -70,37 +65,22 @@
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp">
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:id="@+id/tvname"
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_centerVertical="true"
-                        android:text="Имя" />
-
-                    <EditText
-                        android:id="@+id/etname"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentTop="true"
-                        android:layout_toEndOf="@+id/tvname"
-                        android:layout_toLeftOf="@+id/imageView4"
-                        android:layout_toRightOf="@+id/tvname"
-                        android:layout_toStartOf="@+id/imageView4"
-                        android:ems="10"
-                        android:inputType="textPersonName" />
-
-                </RelativeLayout>
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:id="@+id/nameTIL"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <EditText
+                            android:id="@+id/name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Имя" />
+                    </android.support.design.widget.TextInputLayout>
 
                     <TextView
                         android:id="@+id/textView5"
@@ -164,130 +144,44 @@
 
                         <ImageView
                             android:id="@+id/addtagb"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
-                            app:srcCompat="@android:drawable/ic_menu_add" />
+                            android:padding="5dp"
+                            app:srcCompat="@drawable/plus" />
                     </RelativeLayout>
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/textView5"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentStart="true"
-                        android:layout_centerVertical="true"
-                        android:paddingRight="5dp"
-                        android:text="Группы" />
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp">
-
-                        <FrameLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:layout_alignParentBottom="true"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_alignParentTop="true"
-                            android:layout_toEndOf="@+id/textView5"
-                            android:layout_toRightOf="@+id/textView5">
-
-                            <android.support.v7.widget.RecyclerView
-                                android:id="@+id/rv2"
-                                android:layout_width="match_parent"
-                                android:layout_height="40dp"></android.support.v7.widget.RecyclerView>
-
-                            <ImageView
-                                android:id="@+id/imageView2"
-                                android:layout_width="15dp"
-                                android:layout_height="match_parent"
-                                android:rotation="180"
-                                app:srcCompat="@drawable/gradient" />
-
-                            <ImageView
-                                android:layout_width="20dp"
-                                android:layout_height="match_parent"
-                                android:layout_gravity="right"
-                                app:srcCompat="@drawable/gradient" />
-                        </FrameLayout>
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <AutoCompleteTextView
-                            android:id="@+id/addgrup"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
-                            android:layout_alignParentStart="true"
-                            android:layout_toLeftOf="@+id/addgrupb"
-                            android:layout_toStartOf="@+id/addgrupb"
-                            android:ems="10"
-                            android:inputType="textPersonName" />
-
-                        <ImageView
-                            android:id="@+id/addgrupb"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
-                            app:srcCompat="@android:drawable/ic_menu_add" />
-                    </RelativeLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:id="@+id/textView5"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Коментарии" />
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <EditText
-                            android:id="@+id/etlog"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:ems="10"
-                            android:inputType="textMultiLine" />
-                    </RelativeLayout>
-                </LinearLayout>
 
                 <Button
-                    android:id="@+id/accept"
+                    android:id="@+id/addFolder"
+                    style="@style/Widget.AppCompat.Button.Colored"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:text="Добавить" />
+                    android:text="Добавить"
+                    android:theme="@style/LoginButton" />
             </LinearLayout>
         </ScrollView>
 
     </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/progressl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:visibility="gone"
+        android:focusable="true">
+
+        <ProgressBar
+            android:id="@+id/progressBar2"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|center_horizontal" />
+    </FrameLayout>
 
 </android.support.v4.widget.DrawerLayout>

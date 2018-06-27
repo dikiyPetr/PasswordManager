@@ -5,10 +5,12 @@
         <item
             android:id="@+id/mD"
 
-            android:title="delete"/>
+            android:title="удалить"/>
         <item
             android:id="@+id/mM"
-            android:title="move"/>
-
+            android:title="переместить"/>
+        <item
+            android:id="@+id/mS"
+            android:title="передать"/>
     </group>
 </menu>

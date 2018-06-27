@@ -9,4 +9,5 @@
     <color name="white">#ffffff</color>
     <color name="pngWhite">#ebffffff</color>
     <color name="gray">#eb919191</color>
+    <color name="pngGray">#FAFAFA</color>
 </resources>

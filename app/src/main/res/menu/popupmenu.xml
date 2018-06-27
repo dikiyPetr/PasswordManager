@@ -5,10 +5,10 @@
         <item
             android:id="@+id/menu1"
 
-            android:title="open in browser"/>
+            android:title="открыть в браузере"/>
         <item
             android:id="@+id/menu2"
-            android:title="open file"/>
+            android:title="открыть файл"/>
 
     </group>
 
