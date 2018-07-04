@@ -3,6 +3,7 @@ package com.webant.password.manager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -36,8 +37,23 @@ public class LoginActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.close_activity_anim, R.anim.start_activity_anim);
         setContentView(R.layout.login_activity);
         init();
+        if(savedInstanceState!=null)
+        restoreActivityState(savedInstanceState);
     }
-
+ private void restoreActivityState(Bundle savedInstanceState){
+       presenter=savedInstanceState.getParcelable("presenter");
+     assert presenter != null;
+     presenter.attachView(this);
+     emailEditText.setText(savedInstanceState.getString("login"));
+     passwordEditText.setText(savedInstanceState.getString("password"));
+     if(savedInstanceState.getInt("stateActivity")==1){
+         loginFormScrollView.setVisibility(View.GONE);
+         progressBar.setVisibility(View.VISIBLE);
+     }else{
+         loginFormScrollView.setVisibility(View.VISIBLE);
+         progressBar.setVisibility(View.GONE);
+     }
+ }
     private void init() {
         emailTextInputLayout = findViewById(R.id.emailTextInputLayout);
         passwordTextInputLayout = findViewById(R.id.passwordTextInputLayout);
@@ -67,6 +83,19 @@ public class LoginActivity extends AppCompatActivity {
         });
 
     }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("presenter",presenter);
+        outState.putString("login",emailEditText.getText().toString());
+        outState.putString("password",passwordEditText.getText().toString());
+       if(progressBar.getVisibility()==View.VISIBLE)
+        outState.putInt("stateActivity",1);
+       else
+           outState.putInt("stateActivity",0);
+    }
+
     private void activitiMode(boolean status){
         //true progress
         //false form

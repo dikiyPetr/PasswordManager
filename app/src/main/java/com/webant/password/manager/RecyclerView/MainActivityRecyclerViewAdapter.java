@@ -1,5 +1,6 @@
 package com.webant.password.manager.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.webant.password.manager.DBase.DBWorker;
 import com.webant.password.manager.ItemModel.MainItem;
@@ -43,6 +45,7 @@ public class MainActivityRecyclerViewAdapter extends RecyclerView.Adapter<MainAc
     }
 
     List<MainItem> mainItems = new ArrayList<>();
+    DBWorker dbWorker;
     int sizeSelected;
     Context context;
     MainClick listner;
@@ -53,10 +56,11 @@ public class MainActivityRecyclerViewAdapter extends RecyclerView.Adapter<MainAc
         void click(View v, int id);
     }
 
-    public MainActivityRecyclerViewAdapter(Context context, List<MainItem> items, MainClick listner) {
+    public MainActivityRecyclerViewAdapter(Context context, List<MainItem> items, MainClick listner, DBWorker dbWorker) {
         this.listner = listner;
         this.context = context;
         this.mainItems = items;
+        this.dbWorker = dbWorker;
     }
 
     @Override
@@ -72,36 +76,26 @@ public class MainActivityRecyclerViewAdapter extends RecyclerView.Adapter<MainAc
     }
 
     @Override
-    public void onBindViewHolder(final PersonViewHolder personViewHolder, final int i) {
-        DBWorker dbWorker = new DBWorker(context);
-        personViewHolder.namepass.setText(mainItems.get(i).getName());
-        if (mainItems.get(i).getType()) {
+    public void onBindViewHolder(@NonNull final PersonViewHolder personViewHolder, @SuppressLint("RecyclerView") final int i) {
+        MainItem item =mainItems.get(i);
+        personViewHolder.namepass.setText(item.getName());
+        if (item.getType()) {
             personViewHolder.photo.setImageResource(R.drawable.folder);
-            if (mainItems.get(i).getAmountParent() != 0){
-                personViewHolder.folderContent.setText(String.valueOf(mainItems.get(i).getAmountParent()));
-                personViewHolder.folderContent.setVisibility(View.VISIBLE);}
-            if (!mainItems.get(i).getTag().equals("")) {
-                List<String> list = dbWorker.getTagName(Arrays.asList(mainItems.get(i).getTag().split(",")));
-                List<String> tags = Arrays.asList(list.toString().substring(1, list.toString().length() - 1).split(","));
-                String stringTag = "";
-                for (int i1 = 0; i1 < tags.size(); i1++) {
-                    if (!tags.get(i1).isEmpty())
-                        stringTag += "#" + tags.get(i1) + " ";
-                }
-                personViewHolder.tag.setText(stringTag);
+            if (item.getAmountParent() != 0) {
+                personViewHolder.folderContent.setText(String.valueOf(item.getAmountParent()));
+                personViewHolder.folderContent.setVisibility(View.VISIBLE);
             }
+                personViewHolder.tag.setText(item.getTag());
         } else {
             personViewHolder.folderContent.setVisibility(View.GONE);
-            personViewHolder.tag.setText(mainItems.get(i).getTag());
+            personViewHolder.tag.setText(item.getTag());
             personViewHolder.tag.setTextColor(Color.parseColor("#eb919191"));
             personViewHolder.photo.setImageResource(R.drawable.keyb);
         }
-        if (mainItems.get(i).getStat()) {
+        if (item.getStat())
             personViewHolder.itemView.setBackgroundResource(R.color.pngBlue);
-
-        } else {
+        else
             personViewHolder.itemView.setBackgroundResource(R.color.pngPng);
-        }
         personViewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -145,6 +139,7 @@ public class MainActivityRecyclerViewAdapter extends RecyclerView.Adapter<MainAc
             for (int i = 0; i < mainItems.size(); i++) {
                 mainItems.get(i).setStat(false);
             }
+            sizeSelected = 0;
         }
     }
 

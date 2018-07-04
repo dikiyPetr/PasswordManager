@@ -10,6 +10,7 @@ import com.webant.password.manager.Adapters.Get.GetService_Items;
 import com.webant.password.manager.R;
 import com.webant.password.manager.ServiceCommandRecycler.RvServiceCommandAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,13 +28,13 @@ public class RvServiceAdapter extends RecyclerView.Adapter<RvServiceAdapter.Pers
         }
     }
 
-    List<GetService_Items> mainItems;
+    ArrayList<GetService_Items> mainItems;
     ServiceClick listner;
     public interface ServiceClick {
         void longClick(View v,int id);
         void click(View v,int id);
     }
-    public RvServiceAdapter(List<GetService_Items> list,ServiceClick listner) {
+    public RvServiceAdapter(ArrayList<GetService_Items> list, ServiceClick listner) {
         this.listner=listner;
         this.mainItems = list;
     }

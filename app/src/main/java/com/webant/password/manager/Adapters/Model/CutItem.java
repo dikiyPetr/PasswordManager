@@ -1,10 +1,15 @@
 package com.webant.password.manager.Adapters.Model;
 
+import android.annotation.SuppressLint;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by dikiy on 28.04.2018.
  */
 
-public class CutItem {
+@SuppressLint("ParcelCreator")
+public class CutItem implements Parcelable {
     int id;
     boolean type;
     int storageid;
@@ -33,4 +38,13 @@ public class CutItem {
         return id;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+    }
 }

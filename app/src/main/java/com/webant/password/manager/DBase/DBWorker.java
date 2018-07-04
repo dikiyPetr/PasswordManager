@@ -125,14 +125,14 @@ public class DBWorker {
             folderCursor = mDb.rawQuery("select * from folders where folder=" + thisId, null);
             folderContent += folderCursor.getCount();
             folderCursor.close();
-            list.add(new MainItem(cursor.getString(1), Integer.parseInt(cursor.getString(0)), true, tag, 0, folderContent));
+            list.add(new MainItem(cursor.getString(1), Integer.parseInt(cursor.getString(0)), true, tag, 0, folderContent,this));
             cursor.moveToNext();
         }
         cursor.close();
         cursor = mDb.rawQuery("select * from passwords where folder=" + id, null);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            list.add(new MainItem(cursor.getString(2), Integer.parseInt(cursor.getString(0)), false, cursor.getString(5), Integer.parseInt(cursor.getString(10)), 0));
+            list.add(new MainItem(cursor.getString(2), Integer.parseInt(cursor.getString(0)), false, cursor.getString(5), Integer.parseInt(cursor.getString(10)), 0,this));
             cursor.moveToNext();
         }
         cursor.close();

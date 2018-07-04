@@ -1,5 +1,9 @@
 package com.webant.password.manager.Adapters.Get;
 
+import android.annotation.SuppressLint;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.webant.password.manager.Adapters.Get.GetService_Items_Commands;
@@ -7,7 +11,8 @@ import com.webant.password.manager.Adapters.Get.GetService_Items_Commands;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GetService_Items {
+@SuppressLint("ParcelCreator")
+public class GetService_Items implements Parcelable {
     @SerializedName("id")
     @Expose
     private int id=0;
@@ -102,5 +107,15 @@ public class GetService_Items {
 
     public void setToken_name(String token_name) {
         this.token_name = token_name;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
     }
 }

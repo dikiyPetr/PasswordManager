@@ -1,12 +1,17 @@
 package com.webant.password.manager.Presenters;
 
 
+import android.annotation.SuppressLint;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.webant.password.manager.ConverterErrorResponse;
 import com.webant.password.manager.LoginActivity;
 import com.webant.password.manager.Model.LoginModel;
 import com.webant.password.manager.Model.ModelCallback;
 
-public class LoginPresenter {
+@SuppressLint("ParcelCreator")
+public class LoginPresenter implements Parcelable {
 
     private LoginActivity view;
     private final LoginModel model;
@@ -71,4 +76,13 @@ public class LoginPresenter {
         }, view.getApplicationContext());
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+    }
 }

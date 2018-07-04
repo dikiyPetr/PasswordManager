@@ -3,6 +3,7 @@ package com.webant.password.manager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -34,7 +35,7 @@ public class ServiceActivity extends AppCompatActivity {
     RecyclerView serviceRv;
     ImageView addService;
     RvServiceAdapter adapter;
-    List<GetService_Items> list = new ArrayList<>();
+    ArrayList<GetService_Items> list = new ArrayList<>();
     ServicePresenter presenter;
     SwipeRefreshLayout refreshLayout;
     Toolbar toolbar;
@@ -50,6 +51,28 @@ public class ServiceActivity extends AppCompatActivity {
         setContentView(R.layout.service_activity);
         init();
         createLeftMenu();
+        if (savedInstanceState != null)
+            restoreActivityState(savedInstanceState);
+        else
+            presenter.getService();
+    }
+
+    private void restoreActivityState(Bundle savedInstanceState) {
+        list = savedInstanceState.getParcelableArrayList("list");
+        presenter=savedInstanceState.getParcelable("presenter");
+        assert presenter != null;
+        presenter.attachView(this);
+        adapter.notifyDataSetChanged();
+        if (savedInstanceState.getBoolean("drawerStat"))
+            result.openDrawer();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable("presenter",presenter);
+        outState.putParcelableArrayList("list", list);
+        outState.putBoolean("drawerStat", result.isDrawerOpen());
     }
 
     @Override
@@ -99,7 +122,6 @@ public class ServiceActivity extends AppCompatActivity {
         ServiceModel model = new ServiceModel();
         presenter = new ServicePresenter(model);
         presenter.attachView(this);
-        presenter.viewIsReady();
 
     }
 

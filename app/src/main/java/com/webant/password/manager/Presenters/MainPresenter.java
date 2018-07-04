@@ -1,6 +1,10 @@
 package com.webant.password.manager.Presenters;
 
 
+import android.annotation.SuppressLint;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.webant.password.manager.Adapters.Model.CutItem;
 import com.webant.password.manager.Adapters.Model.DeleteItems;
 import com.webant.password.manager.Adapters.Model.SelectedShareItems;
@@ -16,10 +20,11 @@ import java.util.List;
  * Created by dikiy on 14.02.2018.
  */
 
-public class MainPresenter {
+@SuppressLint("ParcelCreator")
+public class MainPresenter implements Parcelable {
     private MainActivity view;
     private final MainModel model;
-    private List<Integer> way = new ArrayList<>();
+    private ArrayList<Integer> way = new ArrayList<>();
 
     public MainPresenter(MainModel model) {
         way.add(0);
@@ -67,8 +72,17 @@ public class MainPresenter {
         view.showItems();
     }
 
-    public int getWay() {
+    public int getWayPosition() {
         return way.get(way.size() - 1);
+    }
+
+    public ArrayList<Integer> getWay() {
+        return way;
+    }
+
+    public void setWay(ArrayList<Integer> way) {
+
+        this.way = way;
     }
 
     public void refreshList() {
@@ -95,14 +109,10 @@ public class MainPresenter {
 
     public void moveItem(final List<CutItem> cutItems, int folderId) {
         view.refreshStart();
-        final int[] i = {0};
         model.moveItem(new MainModel.MoveItemCallback() {
             @Override
             public void onLoad() {
-                i[0]++;
-                if (i[0] == cutItems.size())
                     refreshList();
-
             }
         }, view.getApplicationContext(), cutItems, folderId);
     }
@@ -148,5 +158,15 @@ public class MainPresenter {
             }
 
         }, view.getApplicationContext(), deleteItems);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
     }
 }

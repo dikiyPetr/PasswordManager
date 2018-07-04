@@ -20,16 +20,46 @@ import com.webant.password.manager.Presenters.RegisterPresenter;
 public class RegisterActivity extends AppCompatActivity {
     ProgressBar progressBar;
     ScrollView registerFormScrollView;
-    TextInputLayout  emailTextInputLayout, passwordTextInputLayout;
-    EditText  emailEditText, passwordEditText;
+    TextInputLayout emailTextInputLayout, passwordTextInputLayout;
+    EditText emailEditText, passwordEditText;
     Button registerButton;
     TextView loginButton;
     RegisterPresenter presenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         init();
+        if (savedInstanceState != null)
+            restoreActivityState(savedInstanceState);
+    }
+
+    private void restoreActivityState(Bundle savedInstanceState) {
+        presenter=savedInstanceState.getParcelable("presenter");
+        presenter.attachView(this);
+        emailEditText.setText(savedInstanceState.getString("login"));
+        passwordEditText.setText(savedInstanceState.getString("password"));
+        if (savedInstanceState.getInt("stateActivity") == 1) {
+            registerFormScrollView.setVisibility(View.GONE);
+            progressBar.setVisibility(View.VISIBLE);
+        } else {
+            registerFormScrollView.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString("login", emailEditText.getText().toString());
+        outState.putString("password", passwordEditText.getText().toString());
+        outState.putParcelable("presenter",presenter);
+        if (progressBar.getVisibility() == View.VISIBLE)
+            outState.putInt("stateActivity", 1);
+        else
+            outState.putInt("stateActivity", 0);
+
     }
 
     private void init() {
@@ -39,13 +69,13 @@ public class RegisterActivity extends AppCompatActivity {
         passwordTextInputLayout = findViewById(R.id.passwordTextInputLayout);
         emailEditText = findViewById(R.id.emailEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
-        loginButton=findViewById(R.id.loginButton);
+        loginButton = findViewById(R.id.loginButton);
         registerButton = findViewById(R.id.registerButton);
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (isEmailValid(emailEditText.getText().toString()) && isPasswordValid(passwordEditText.getText().toString())) {
-                    presenter.register(emailEditText.getText().toString(),passwordEditText.getText().toString());
+                    presenter.register(emailEditText.getText().toString(), passwordEditText.getText().toString());
                     activityMode(true);
                 }
             }
@@ -54,7 +84,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_NULL) {
-                    presenter.register(emailEditText.getText().toString(),passwordEditText.getText().toString());
+                    presenter.register(emailEditText.getText().toString(), passwordEditText.getText().toString());
                     activityMode(true);
                     return true;
                 }
@@ -106,7 +136,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     public void setError(String error) {
-        if(!error.isEmpty() && error.length()!=0)
-       emailTextInputLayout.setError(error);
+        if (!error.isEmpty() && error.length() != 0)
+            emailTextInputLayout.setError(error);
     }
 }

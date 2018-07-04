@@ -1,6 +1,10 @@
 package com.webant.password.manager.Presenters;
 
 
+import android.annotation.SuppressLint;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.webant.password.manager.Adapters.Get.GetService_Items;
 import com.webant.password.manager.Adapters.Get.GetService_Items_Commands;
 import com.webant.password.manager.ConverterErrorResponse;
@@ -16,7 +20,8 @@ import java.util.List;
  * Created by dikiy on 16.02.2018.
  */
 
-public class PasswordPresenter {
+@SuppressLint("ParcelCreator")
+public class PasswordPresenter implements Parcelable {
     private PasswordActivity view;
     private final PasswordModel model;
 
@@ -36,6 +41,7 @@ public class PasswordPresenter {
         model.CreatePass(new PasswordModel.CreatePassCallback() {
             @Override
             public void onLoad(int id) {
+                view.setRefresh();
                 if (view.getCommandId() == 0)
                     view.execute();
                 else
@@ -60,19 +66,21 @@ public class PasswordPresenter {
         model.UpdatePass(new ModelCallback.Callback() {
             @Override
             public void onLoad() {
+
+                view.setRefresh();
                 view.setExecute();
             }
 
             @Override
             public void onFail() {
                 ConverterErrorResponse.connectionFailed(view.getApplicationContext());
-                view.modeEdit(1);
+                view.modeEdit(true,1);
             }
 
             @Override
             public void onError(int code, String s) {
                 new ConverterErrorResponse(code, s).sendMessage(view.getApplicationContext());
-                view.modeEdit(1);
+                view.modeEdit(true,1);
             }
         }, view.getApplicationContext(), i, s, s1, s2, s3, tagsListEdit, tagsListEditMode);
     }
@@ -82,6 +90,7 @@ public class PasswordPresenter {
         model.givePass(new ModelCallback.Callback() {
             @Override
             public void onLoad() {
+                view.setRefresh();
                 view.sendMesageToUser(email);
             }
 
@@ -101,6 +110,7 @@ public class PasswordPresenter {
         model.LoadService(new ServiceModel.LoadServiceCallback() {
             @Override
             public void onLoad(List<GetService_Items> list) {
+
                 view.loadService(list);
             }
 
@@ -139,7 +149,8 @@ public class PasswordPresenter {
 
         model.setParams(new ModelCallback.CallbackNoError() {
             @Override
-            public void onLoad() {
+            public void onLoad()
+            {
                 view.execute();
             }
 
@@ -147,5 +158,15 @@ public class PasswordPresenter {
             public void onFail() {
             }
         }, view.getApplicationContext(), commandId, id, view.getUrlItems(), view.getBodyItems());
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
     }
 }

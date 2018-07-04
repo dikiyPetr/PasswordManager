@@ -19,7 +19,7 @@ public class GetPass_Item {
     private List<GetTag_Item> group = new ArrayList<>();
     private String description = "";
 
-    private List<String> tags = new ArrayList<>();
+    private ArrayList<String> tags = new ArrayList<>();
     private List<String> groups = new ArrayList<>();
     private String clue;
     public GetPass_Item(String pass, String name, String login, String url, String description, String tag, String group,String clue) {
@@ -47,7 +47,7 @@ public class GetPass_Item {
         return groups;
     }
 
-    public List<String> getTags() {
+    public ArrayList<String> getTags() {
         return tags;
     }
 

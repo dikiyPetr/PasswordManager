@@ -1,5 +1,9 @@
 package com.webant.password.manager.Presenters;
 
+import android.annotation.SuppressLint;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.webant.password.manager.Adapters.Get.GetService_Items;
 import com.webant.password.manager.ConverterErrorResponse;
 import com.webant.password.manager.Model.ModelCallback;
@@ -8,7 +12,8 @@ import com.webant.password.manager.ServiceActivity;
 
 import java.util.List;
 
-public class ServicePresenter {
+@SuppressLint("ParcelCreator")
+public class ServicePresenter implements Parcelable{
     private ServiceActivity view;
     private final ServiceModel model;
 
@@ -49,9 +54,6 @@ public class ServicePresenter {
         }, view.getApplicationContext());
     }
 
-    public void viewIsReady() {
-        getService();
-    }
 
     public void delete(int p) {
         view.setRefresh(true);
@@ -73,5 +75,15 @@ public class ServicePresenter {
                 view.setRefresh(false);
             }
         }, view.getApplicationContext(), p);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
     }
 }

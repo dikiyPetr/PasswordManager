@@ -46,10 +46,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PasswordActivity extends AppCompatActivity implements View.OnClickListener {
-    private List<String> tagsList = new ArrayList<>();
+    private ArrayList<String> tagsList = new ArrayList<>();
     TextInputLayout nameTIL, urlTIL, loginTIL, passwordTIL, commentTIL;
-    private List<String> tagsListEdit = new ArrayList<>();
-    private List<Integer> tagsListEditMode = new ArrayList<>();
+    private ArrayList<String> tagsListEdit = new ArrayList<>();
+    private ArrayList<Integer> tagsListEditMode = new ArrayList<>();
     private RecyclerView recyclerView, rvUrl, rvBody;
     private TagOrGroupRecyclerAdapter adapter;
     List<GetService_Items> serviceList;
@@ -59,16 +59,18 @@ public class PasswordActivity extends AppCompatActivity implements View.OnClickL
     AutoCompleteTextView addTag;
     ImageView addTagB, editOrAccept, close, copyUrl, copyLogin, copyPassword, backImageView, shareImageView;
     boolean stat = false;
+
+    final Boolean tag = false, group = true;
     String name = "";
     String url = "";
     String login = "";
-    final Boolean tag = false, group = true;
     String password = "";
     String mode = "";
+    String log = "";
     int folder = 0;
     Button addPass;
-    String log = "";
-    List<String> tags = new ArrayList<>();
+
+    ArrayList<String> tags = new ArrayList<>();
     PasswordModel model;
     PasswordPresenter presenter;
     Intent thisIntent;
@@ -95,7 +97,48 @@ public class PasswordActivity extends AppCompatActivity implements View.OnClickL
         folder = Integer.parseInt(thisIntent.getStringExtra("folder"));
         mode = thisIntent.getStringExtra("mode");
         init();
-        loadDefault();
+        if (savedInstanceState != null)
+            restoreActivityState(savedInstanceState);
+        else
+            loadDefault();
+    }
+
+    private void restoreActivityState(Bundle savedInstanceState) {
+        presenter = savedInstanceState.getParcelable("presenter");
+        assert presenter != null;
+        presenter.attachView(this);
+        name = savedInstanceState.getString("name");
+        url = savedInstanceState.getString("url");
+        login = savedInstanceState.getString("login");
+        password = savedInstanceState.getString("password");
+        log = savedInstanceState.getString("log");
+        tagsListEdit.addAll(savedInstanceState.getStringArrayList("tagsListEdit"));
+        tagsListEditMode.addAll(savedInstanceState.getIntegerArrayList("tagsListEditMode"));
+        tagsList.addAll(savedInstanceState.getStringArrayList("tagsList"));
+        adapter.notifyDataSetChanged();
+        Log.v("testLog", mode);
+        if (mode.equals("0")) {
+            modeEdit(savedInstanceState.getBoolean("mode"), 1);
+            close.setVisibility(View.GONE);
+        }
+    }
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putBoolean("mode", stat);
+        outState.putStringArrayList("tagsListEdit", tagsListEdit);
+        outState.putIntegerArrayList("tagsListEditMode", tagsListEditMode);
+        outState.putStringArrayList("tagsList", tagsList);
+
+        outState.putString("name", name);
+        outState.putString("url", url);
+        outState.putString("login", login);
+        outState.putString("password", password);
+        outState.putString("log", log);
+        outState.putParcelable("presenter", presenter);
     }
 
     public int getCommandId() {
@@ -181,7 +224,7 @@ public class PasswordActivity extends AppCompatActivity implements View.OnClickL
                                 etPassword.getText().toString(), tagsListEdit, tagsListEditMode);
                     }
                 } else {
-                    modeEdit(0);
+                    modeEdit(true, 0);
                 }
             }
         });
@@ -189,7 +232,7 @@ public class PasswordActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onClick(View v) {
                 returnDefault();
-                modeEdit(1);
+                modeEdit(false, 1);
             }
         });
         copyUrl.setOnClickListener(this);
@@ -227,7 +270,7 @@ public class PasswordActivity extends AppCompatActivity implements View.OnClickL
                                                tagAdapter.remove(s);
                                                tagsList.add(s);
                                                adapter.notifyDataSetChanged();
-                                               recyclerView.scrollToPosition(adapter.getItemCount()-1);
+                                               recyclerView.scrollToPosition(adapter.getItemCount() - 1);
                                                addTag.setText("");
                                            }
                                        }
@@ -257,7 +300,6 @@ public class PasswordActivity extends AppCompatActivity implements View.OnClickL
                 popupMesage();
             }
         });
-        setEnabled(false);
         PasswordModel usersModel = new PasswordModel();
         presenter = new PasswordPresenter(usersModel);
         presenter.attachView(this);
@@ -285,9 +327,10 @@ public class PasswordActivity extends AppCompatActivity implements View.OnClickL
         urlAdapter = new ParamsRecyclerViewAdapter(urlItems);
         rvUrl.setAdapter(urlAdapter);
         rvBody.setAdapter(bodyAdapter);
+        close.setVisibility(View.GONE);
         if (mode.equals("1")) {
             addPass.setVisibility(View.GONE);
-            adapter.modeEdit(false);
+            setEnabled(false);
         } else {
             serviceLL.setVisibility(View.VISIBLE);
             presenter.loadService();
@@ -298,7 +341,7 @@ public class PasswordActivity extends AppCompatActivity implements View.OnClickL
             copyLogin.setVisibility(View.GONE);
             copyPassword.setVisibility(View.GONE);
             close.setVisibility(View.GONE);
-            adapter.modeEdit(false);
+            stat = true;
             setEnabled(true);
         }
 
@@ -330,6 +373,7 @@ public class PasswordActivity extends AppCompatActivity implements View.OnClickL
         loginTIL.setEnabled(b);
         urlTIL.setEnabled(b);
         addTag.setEnabled(b);
+        addTagB.setEnabled(b);
         adapter.modeEdit(true);
     }
 
@@ -342,9 +386,9 @@ public class PasswordActivity extends AppCompatActivity implements View.OnClickL
             log = item.getDescription();
             password = NewAes.decrypt(item.getPass(), NewAes.decrypt(item.getClue(), ((AplicationListner) getApplication()).getMasterPass()));
             tags = item.getTags();
-            if (!item.getTags().get(0).equals("")) {
+            if (!tags.get(0).equals("")) {
                 List<String> nameT = new ArrayList<>();
-                nameT.addAll(dbWorker.getTagName(item.getTags()));
+                nameT.addAll(dbWorker.getTagName(tags));
                 for (int i = 0; i < nameT.size(); i++) {
                     tagAdapter.remove(nameT.get(i));
                     tagsList.add(nameT.get(i));
@@ -353,14 +397,12 @@ public class PasswordActivity extends AppCompatActivity implements View.OnClickL
                 tagsListEdit.addAll(tagsList);
             }
             adapter.notifyDataSetChanged();
-        } else {
-
+            etName.setText(name);
+            etUrl.setText(url);
+            etLogin.setText(login);
+            etPassword.setText(password);
+            etComment.setText(log);
         }
-        etName.setText(name);
-        etUrl.setText(url);
-        etLogin.setText(login);
-        etPassword.setText(password);
-        etComment.setText(log);
 
     }
 
@@ -386,38 +428,19 @@ public class PasswordActivity extends AppCompatActivity implements View.OnClickL
         adapter.notifyDataSetChanged();
     }
 
-    private void SwitchEdit(boolean i) {
-        etComment.setEnabled(i);
-        etName.setEnabled(i);
-        etPassword.setEnabled(i);
-        etLogin.setEnabled(i);
-        etUrl.setEnabled(i);
-        addTag.setEnabled(i);
-        addTagB.setEnabled(i);
-
-    }
-
-    public void modeEdit(int i) {
-        refreshL.setVisibility(View.GONE);
-        if (!stat) {
+    public void modeEdit(boolean stat, int i) {
+        this.stat = stat;
+        if (stat) {
             close.setVisibility(View.VISIBLE);
             editOrAccept.setImageResource(R.drawable.accept);
-            adapter.modeEdit(true);
-
+            setEnabled(true);
             adapter.notifyDataSetChanged();
-
-            SwitchEdit(true);
-            stat = true;
         } else {
             close.setVisibility(View.GONE);
             editOrAccept.setImageResource(R.drawable.edit);
-            adapter.modeEdit(false);
-
+            setEnabled(false);
             adapter.notifyDataSetChanged();
-
-            SwitchEdit(false);
             addTag.setText("");
-
             if (i == 0) {
                 name = String.valueOf(etName.getText());
                 url = String.valueOf(etUrl.getText());
@@ -426,7 +449,6 @@ public class PasswordActivity extends AppCompatActivity implements View.OnClickL
                 clearEdit();
                 adapter.notifyDataSetChanged();
             }
-            stat = false;
         }
     }
 
@@ -515,7 +537,6 @@ public class PasswordActivity extends AppCompatActivity implements View.OnClickL
     }
 
 
-
     public void loadService(final List<GetService_Items> list) {
         serviceLL.setVisibility(View.VISIBLE);
         serviceList = list;
@@ -579,13 +600,13 @@ public class PasswordActivity extends AppCompatActivity implements View.OnClickL
     }
 
     public void setExecute() {
-        modeEdit(0);
+        modeEdit(false, 0);
         setResult(RESULT_OK, intent);
     }
 
     public void setError(String error) {
-        if(!error.isEmpty() && error.length()!=0)
-    nameTIL.setError(error);
+        if (!error.isEmpty() && error.length() != 0)
+            nameTIL.setError(error);
     }
 }
 

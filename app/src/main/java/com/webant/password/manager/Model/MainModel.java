@@ -34,7 +34,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainModel {
-    public void moveItem(final MoveItemCallback callback, Context context, List<CutItem> cutItems, int folderId) {
+    public void moveItem(final MoveItemCallback callback, Context context, final List<CutItem> cutItems, final int folderId) {
         final Map<String, String> map = new HashMap<>();
         map.put("Authorization", "Bearer " + LoadText.getText(context, "access_token"));
         PostLogin postLogin = RetrofitClient.getClient(context).create(PostLogin.class);
@@ -42,28 +42,34 @@ public class MainModel {
             if (!cutItems.get(i).getType()) {
                 JsonObject jsonObject = new JsonObject();
                 jsonObject.addProperty("folder", folderId);
+                final int finalI = i;
                 postLogin.MovePass(cutItems.get(i).getStorageid(), map, jsonObject).enqueue(new Callback<GetPass_Item>() {
                     @Override
                     public void onResponse(Call<GetPass_Item> call, Response<GetPass_Item> response) {
+                        if(cutItems.size()== finalI -1);
                         callback.onLoad();
                     }
 
                     @Override
                     public void onFailure(Call<GetPass_Item> call, Throwable t) {
+                        if(cutItems.size()== finalI -1);
                         callback.onLoad();
                     }
                 });
             } else {
                 JsonObject jsonObject = new JsonObject();
                 jsonObject.addProperty("parent", folderId);
+                final int finalI1 = i;
                 postLogin.MoveFolder(cutItems.get(i).getId(), map, jsonObject).enqueue(new Callback<GetFolder_Item>() {
                     @Override
                     public void onResponse(Call<GetFolder_Item> call, Response<GetFolder_Item> response) {
+                        if(cutItems.size()== finalI1 -1);
                         callback.onLoad();
                     }
 
                     @Override
                     public void onFailure(Call<GetFolder_Item> call, Throwable t) {
+                        if(cutItems.size()== finalI1 -1);
                         callback.onLoad();
                     }
                 });

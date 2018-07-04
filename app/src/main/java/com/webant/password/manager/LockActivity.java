@@ -53,8 +53,28 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
             logout();
         }
         init();
+        if (savedInstanceState != null)
+            restoreActivityState(savedInstanceState);
+        setTitle();
     }
 
+    private void restoreActivityState(Bundle savedInstanceState) {
+        mode = savedInstanceState.getInt("mode");
+        pin = savedInstanceState.getString("pin");
+        doublePin = savedInstanceState.getString("doublePin");
+        for (int i = 0; i < pin.length(); i++)
+            stars.get(i).setTextColor(ContextCompat.getColor(this, R.color.colorPrimary));
+
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt("mode", mode);
+        outState.putString("pin", pin);
+        outState.putString("doublePin", doublePin);
+
+    }
 
     private void init() {
         actionTextView = findViewById(R.id.actionTextView);
@@ -86,7 +106,6 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         tvb9.setOnClickListener(this);
         tvbClear.setOnClickListener(this);
         if (!LoadText.getMasterPass(this).isEmpty()) {
-            actionTextView.setText(R.string.write_pin);
             mode = 2;
         }
         tvbLogout.setOnClickListener(new View.OnClickListener() {
@@ -118,21 +137,42 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    private void setTitle() {
+        switch (mode) {
+            case 0:
+                actionTextView.setText(R.string.create_pin);
+                break;
+            case 1:
+                actionTextView.setText(R.string.confirm_pin);
+                break;
+            case 2:
+                actionTextView.setText(R.string.write_pin);
+                break;
+            case 3:
+                setMasterPassDialog();
+                break;
+            case 4:
+                sendMasterPassDialog();
+                break;
+        }
+    }
+
     public void checkPin() {
         switch (mode) {
             case 0:
-                actionTextView.setText(R.string.confirm_pin);
                 doublePin = pin;
                 editPin(-1);
                 mode = 1;
+                setTitle();
                 break;
             case 1:
                 if (pin.equals(doublePin)) {
+                    mode = 3;
                     setMasterPassDialog();
                 } else {
                     editPin(-1);
-                    actionTextView.setText(R.string.create_pin);
                     mode = 0;
+                    setTitle();
                 }
                 break;
             case 2:
@@ -360,6 +400,7 @@ public class LockActivity extends AppCompatActivity implements View.OnClickListe
                 if (input.getText().toString().length() <= 4)
                     Toast.makeText(LockActivity.this, "Слишком короткий", Toast.LENGTH_SHORT).show();
                 else {
+                    mode = 4;
                     LoadText.setMasterPass(LockActivity.this, NewAes.encrypt(input.getText().toString(), pin));
                     ((AplicationListner) getApplication()).setPin(pin);
                     savePin(pin);
